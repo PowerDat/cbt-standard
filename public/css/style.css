@@ -105,7 +105,7 @@ html {
 body {
   font-size: 14px;
   overflow-x: hidden;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Prompt", sans-serif;
   color: #242934;
   background-color: #f5f7fb;
 }
@@ -12261,7 +12261,7 @@ body {
 .landing-wrraper .landing-header ul.landing-menu li.nav-item a.nav-link {
   font-size: 16px;
   font-weight: 600;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Prompt", sans-serif;
   color: #2b2b2b;
   padding: 10px 20px;
 }
@@ -29230,7 +29230,7 @@ span.twitter-typeahead .tt-suggestion.active, span.twitter-typeahead .tt-suggest
 .activity-sec .activity-timeline.update-line .media .media-body .tomorrow-sec {
   margin: auto;
   font-weight: 500;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Prompt", sans-serif;
   position: relative;
   z-index: 1;
 }

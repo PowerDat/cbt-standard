@@ -5,11 +5,12 @@
             <div id="mainnav">
                 <ul class="nav-menu custom-scrollbar">
                     <li class="back-btn">
-                        <div class="mobile-back text-end"><span>Back</span><i class="fa fa-angle-right ps-2"
-                                aria-hidden="true"></i></div>
+                        <div class="mobile-back text-end">
+                            <span>Back</span><i class="fa fa-angle-right ps-2" aria-hidden="true"></i>
+                        </div>
                     </li>
 
-                    <li class="dropdown">
+                    {{-- <li class="dropdown">
                         <a class="nav-link menu-title" href="javascript:void(0)">
                             <i data-feather="home"></i><span>Dashboard</span>
                         </a>
@@ -17,10 +18,16 @@
                             <li><a href="index.html">Default</a></li>
                             <li><a href="dashboard-02.html">Ecommerce</a></li>
                         </ul>
+                    </li> --}}
+                    <li class="sidebar-main-title">
+                        <div>
+                            <h6>เกณฑ์มาตรฐาน</h6>
+                        </div>
                     </li>
-                    
                     <li>
-                        <a href="{{url('/')}}" class="nav-link menu-title link-nav">Sample Page</a>
+                        <a href="{{route('evaluate.community.index')}}" class="nav-link menu-title link-nav">
+                            <i data-feather="circle"></i>ด้านการบริหารจัดการการท่องเที่ยวโดยชุมชน
+                        </a>
                     </li>
                     
                 </ul>
