@@ -10,6 +10,7 @@
 <script src="{{ asset('js/bootstrap/popper.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
 <!-- Plugins JS start-->
+@stack('scripts')
 <!-- Plugins JS Ends-->
 <!-- Theme js-->
 <script src="{{ asset('js/script.js') }}"></script>

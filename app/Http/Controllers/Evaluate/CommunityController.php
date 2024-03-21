@@ -11,4 +11,9 @@ class CommunityController extends Controller
     {
         return view('evaluate.community.index');
     }
+
+    public function formGoalFirst()
+    {
+        return view('evaluate.community.form_goal_first');
+    }
 }

@@ -19,6 +19,11 @@
                             <li><a href="dashboard-02.html">Ecommerce</a></li>
                         </ul>
                     </li> --}}
+                    <li>
+                        <a href="{{route('dashboard')}}" class="nav-link menu-title link-nav">
+                            <i data-feather="circle"></i>ข้อมูลชุมชนการท่องเที่ยว
+                        </a>
+                    </li>
                     <li class="sidebar-main-title">
                         <div>
                             <h6>เกณฑ์มาตรฐาน</h6>
