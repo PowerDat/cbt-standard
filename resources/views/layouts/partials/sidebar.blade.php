@@ -1,5 +1,5 @@
 <header class="main-nav">
-    <nav class="mt-3"> 
+    <nav class="mt-3">
         <div class="main-navbar">
             <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
             <div id="mainnav">
@@ -10,31 +10,57 @@
                         </div>
                     </li>
 
-                    {{-- <li class="dropdown">
+                    <li class="dropdown">
+                        <a class="nav-link menu-title link-nav" href="{{route('dashboard')}}">
+                            <i data-feather="circle"></i><span>ข้อมูลชุมชนการท่องเที่ยว</span>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="{{route('evaluate.index')}}" class="nav-link menu-title link-nav">
+                            <i data-feather="circle"></i>เกณฑ์มาตรฐาน
+                        </a>
+                    </li>
+                    <li class="dropdown">
                         <a class="nav-link menu-title" href="javascript:void(0)">
-                            <i data-feather="home"></i><span>Dashboard</span>
+                            <i data-feather="circle"></i><span>สรุปรายงาน</span>
                         </a>
                         <ul class="nav-submenu menu-content">
-                            <li><a href="index.html">Default</a></li>
-                            <li><a href="dashboard-02.html">Ecommerce</a></li>
+                            <li>
+                                <a href="">ด้าน 1</a>
+                            </li>
+                            <li>
+                                <a href="">ด้าน 2</a>
+                            </li>
+                            <li>
+                                <a href="">ด้าน 3</a>
+                            </li>
+                            <li>
+                                <a href="">ด้าน 4</a>
+                            </li>
+                            <li>
+                                <a href="">ด้าน 5</a>
+                            </li>
                         </ul>
-                    </li> --}}
-                    <li>
-                        <a href="{{route('dashboard')}}" class="nav-link menu-title link-nav">
-                            <i data-feather="circle"></i>ข้อมูลชุมชนการท่องเที่ยว
+                    </li>
+                    <li class="dropdown">
+                        <a class="nav-link menu-title" href="javascript:void(0)">
+                            <i data-feather="circle"></i><span>ข้อมูลเกณฑ์มาตรฐาน</span>
                         </a>
+                        <ul class="nav-submenu menu-content">
+                            <li>
+                                <a href="{{route('part.index')}}">ข้อมูลด้าน</a>
+                            </li>
+                            <li>
+                                <a href="">ข้อมูลเป้าประสงค์</a>
+                            </li>
+                            <li>
+                                <a href="">ข้อมูลเกณฑ์ย่อย</a>
+                            </li>
+                            <li>
+                                <a href="">ข้อมูลดัชนี</a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="sidebar-main-title">
-                        <div>
-                            <h6>เกณฑ์มาตรฐาน</h6>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="{{route('evaluate.community.index')}}" class="nav-link menu-title link-nav">
-                            <i data-feather="circle"></i>ด้านการบริหารจัดการการท่องเที่ยวโดยชุมชน
-                        </a>
-                    </li>
-                    
                 </ul>
             </div>
             <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

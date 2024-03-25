@@ -15,7 +15,7 @@
     <title>CBT Standard</title>
 
     @include('layouts.partials.css')
-
+    @livewireStyles
 </head>
 
 <body>
@@ -37,6 +37,10 @@
             @include('layouts.partials.sidebar')
             <!-- Page Sidebar Ends-->
             <div class="page-body">
+
+                {{-- flash message --}}
+                @include('flash-message')
+
                 @yield('content')
             </div>
             <!-- footer start-->
@@ -45,7 +49,7 @@
     </div>
 
     @include('layouts.partials.js')
-
+    @livewireScripts
 </body>
 
 </html>
