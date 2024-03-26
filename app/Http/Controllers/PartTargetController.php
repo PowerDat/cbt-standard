@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Part;
 use App\Models\PartTarget;
+use App\Models\PartTargetSub;
 use Illuminate\Http\Request;
 
 class PartTargetController extends Controller
@@ -99,9 +100,14 @@ class PartTargetController extends Controller
      */
     public function destroy(string $id)
     {
-        $model = PartTarget::find($id);
-        $model->delete();
-
-        return redirect()->route('part-target.index')->with('info', 'ลบข้อมูลสำเร็จ');
+        if(PartTargetSub::count() > 0){
+            return redirect()->back()->with('info', 'ไม่สามารถลบข้อมูลได้ เนื่องจากมีข้อมูลเกณฑ์ย่อยใช้งานอยู่');
+        }
+        else{
+            $model = PartTarget::find($id);
+            $model->delete();
+    
+            return redirect()->route('part-target.index')->with('info', 'ลบข้อมูลสำเร็จ');
+        }
     }
 }

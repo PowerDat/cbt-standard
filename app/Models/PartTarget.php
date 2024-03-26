@@ -14,9 +14,15 @@ class PartTarget extends Model
     protected $primaryKey = 'part_target_id';
 
     //1 part_target มี 1 part
-
     public function part()
     {
         return $this->belongsTo(Part::class, 'part_id');
     }
+
+    //1 PartTarget มีหลาย partTargetSub
+    public function partTargetSub()
+    {
+        return $this->hasMany(PartTargetSub::class, 'part_target_id');
+    }
+
 }
