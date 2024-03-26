@@ -8,7 +8,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">ข้อมูลเกณฑ์มาตรฐาน</li>
-                        <li class="breadcrumb-item">ข้อมูลด้าน</li>
+                        <li class="breadcrumb-item">ข้อมูลเป้าประสงค์</li>
                         <li class="breadcrumb-item active">หน้าแรก</li>
                     </ol>
                 </div>
@@ -25,7 +25,7 @@
 
                     <div class="card-header text-end">
                         <div class="col-sm-9 offset-sm-3">
-                            <a href="{{route('part.create')}}" class="btn btn-primary">เพิ่มข้อมูล</a>
+                            <a href="{{route('part-target.create')}}" class="btn btn-primary">เพิ่มข้อมูล</a>
                         </div>
                     </div>
 
@@ -36,7 +36,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th>ด้าน</th>
-                                        <th>จำนวนเป้าประสงค์</th>
+                                        <th>ลำดับ</th>
+                                        <th>เป้าประสงค์</th>
                                         <th>แก้ไข</th>
                                         <th>ลบ</th>
                                     </tr>
@@ -44,16 +45,17 @@
                                 <tbody>
                                     @foreach ($model as $item)
                                     <tr>
-                                        <td class="text-center">{{$item->part_order}}</td>
-                                        <td>{{$item->part_name}}</td>
-                                        <td class="text-center">{{$item->partTarget->count()}}</td>
+                                        <td class="text-center">{{$item->part->part_order}}</td>
+                                        <td class="text-center">{{$item->part->part_name}}</td>
+                                        <td class="text-center">{{$item->part_target_order}}</td>
+                                        <td>{{$item->part_target_name}}</td>
                                         <td class="text-center">
-                                            <a href="{{route('part.edit', $item->part_id)}}" class="btn btn-primary">
+                                            <a href="{{route('part-target.edit', $item->part_target_id)}}" class="btn btn-primary">
                                                 <i data-feather="edit"></i>
                                             </a>
                                         </td>
                                         <td class="text-center">
-                                            <form action="{{route('part.destroy', $item->part_id)}}" method="post"
+                                            <form action="{{route('part-target.destroy', $item->part_target_id)}}" method="post"
                                                 class="delete_form">
                                                 @csrf
                                                 <input type="hidden" name="_method" value="DELETE">

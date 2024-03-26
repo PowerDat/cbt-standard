@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\PartTarget;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Part extends Model
 {
@@ -11,4 +12,11 @@ class Part extends Model
 
     protected $table = 'part';
     protected $primaryKey = 'part_id';
+
+    //one to many 1 part มีหลาย part_target
+    public function partTarget()
+    {
+        return $this->hasMany(PartTarget::class, 'part_id');
+    }
+
 }

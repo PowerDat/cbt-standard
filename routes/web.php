@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Evaluate\CommunityController;
 use App\Http\Controllers\EvaluateController;
 use App\Http\Controllers\PartController;
+use App\Http\Controllers\PartTargetController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,3 +29,4 @@ Route::get('evaluate/community', [CommunityController::class, 'index'])->name('e
 Route::get('evaluate/community/form-goal-first', [CommunityController::class, 'formGoalFirst'])->name('evaluate.community.form-goal-first');
 //ข้อมูลเกณฑ์มาตรฐาน
 Route::resource('part', PartController::class);
+Route::resource('part-target', PartTargetController::class);

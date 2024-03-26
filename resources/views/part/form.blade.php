@@ -40,7 +40,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">ลำดับ</label>
                                     <input class="form-control" id="part_order" name="part_order" type="number" required
-                                    value="{{ isset($model) ? $model->part_order : $count_order}}" >
+                                    value="{{ isset($model) ? $model->part_order : $count_order}}" min="1">
                                     <div class="invalid-feedback">กรอกข้อมูลลำดับ</div>
                                 </div>
                             </div>
