@@ -30,7 +30,7 @@
                     <div class="card-body">
                         <p>{{$item->part_name}}</p>
                         <p class="text-end">
-                            <a href="" class="btn btn-light">ประเมิน</a>
+                            <a href="{{route('evaluate.target', $item->part_id)}}" class="btn btn-light">ประเมิน</a>
                         </p>
                     </div>
 
