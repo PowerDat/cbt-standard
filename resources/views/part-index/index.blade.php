@@ -8,7 +8,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">ข้อมูลเกณฑ์มาตรฐาน</li>
-                        <li class="breadcrumb-item">ข้อมูลเป้าประสงค์</li>
+                        <li class="breadcrumb-item">ข้อมูลดัชนี</li>
                         <li class="breadcrumb-item active">หน้าแรก</li>
                     </ol>
                 </div>
@@ -23,50 +23,29 @@
             <div class="col-sm-12">
                 <div class="card">
 
-                    <div class="card-header text-end">
-                        <div class="col-sm-9 offset-sm-3">
-                            <a href="{{route('part-target.create')}}" class="btn btn-primary">เพิ่มข้อมูล</a>
-                        </div>
-                    </div>
-
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered ">
                                 <thead class="bg-light text-center">
                                     <tr>
                                         <th>ลำดับด้าน</th>
-                                        <th>ด้าน</th>
                                         <th>ลำดับเป้าประสงค์</th>
-                                        <th>เป้าประสงค์</th>
-                                        <th>จำนวนเกณฑ์ย่อย</th>
-                                        <th>แก้ไข</th>
-                                        <th>ลบ</th>
+                                        <th>ลำดับเกณฑ์ย่อย</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($model as $item)
-                                    <tr>
-                                        <td class="text-center">{{$item->part->part_order}}</td>
-                                        <td>{{$item->part->part_name}}</td>
-                                        <td class="text-center">{{$item->part_target_order}}</td>
-                                        <td>{{$item->part_target_name}}</td>
-                                        <td class="text-center">{{$item->partTargetSub->count()}}</td>
-                                        <td class="text-center">
-                                            <a href="{{route('part-target.edit', $item->part_target_id)}}" class="btn btn-primary">
-                                                <i data-feather="edit"></i>
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <form action="{{route('part-target.destroy', $item->part_target_id)}}" method="post"
-                                                class="delete_form">
-                                                @csrf
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="btn btn-light">
-                                                    <i data-feather="delete"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td class="text-center">{{$item->part_order}}</td>
+                                            <td class="text-center">{{$item->part_target_order}}</td>
+                                            <td class="text-center">{{$item->part_target_sub_order}}</td>
+                                            <td class="text-center">
+                                                <a href="{{route('part-index.createById', $item->part_target_sub_id)}}" class="btn btn-primary">
+                                                    <i data-feather="edit"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>

@@ -34,7 +34,7 @@
                             <table class="table table-bordered ">
                                 <thead class="bg-light text-center">
                                     <tr>
-                                        <th>#</th>
+                                        <th>ลำดับ</th>
                                         <th>ด้าน</th>
                                         <th>จำนวนเป้าประสงค์</th>
                                         <th>แก้ไข</th>

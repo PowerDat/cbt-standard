@@ -36,7 +36,7 @@
                                     <tr>
                                         <th>ด้าน</th>
                                         <th>เป้าประสงค์</th>
-                                        <th>ลำดับ</th>
+                                        <th>ลำดับเกณฑ์ย่อย</th>
                                         <th>เกณฑ์ย่อย</th>
                                         <th>แก้ไข</th>
                                         <th>ลบ</th>
@@ -45,8 +45,8 @@
                                 <tbody>
                                     @foreach ($model as $item)
                                     <tr>
-                                        <td>{{$item->part_order}}</td>
-                                        <td>{{$item->part_target_order}}</td>
+                                        <td class="text-center">{{$item->part_order}}</td>
+                                        <td class="text-center">{{$item->part_target_order}}</td>
                                         <td class="text-center">{{$item->part_target_sub_order}}</td>
                                         <td>{{$item->part_target_sub_name}}</td>
                                         <td class="text-center">

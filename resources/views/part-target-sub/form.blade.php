@@ -41,17 +41,6 @@
                         <div class="row">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label">ลำดับ</label>
-                                    <input class="form-control" id="part_target_sub_order" name="part_target_sub_order" type="number" required
-                                        min="1" value="{{isset($model) ? $model->part_target_sub_order : ''}}">
-                                    <div class="invalid-feedback">กรอกข้อมูลลำดับ</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col">
-                                <div class="mb-3">
                                     <label class="form-label">ข้อมูลด้าน-เป้าประสงค์</label>
                                     <select name="part_target_id" id="part_target_id" class="form-control" required>
                                         <option value="" selected disabled>เลือกข้อมูล</option>
@@ -65,6 +54,17 @@
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback">เลือกข้อมูลด้าน-เป้าประสงค์</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label">ลำดับเกณฑ์ย่อย</label>
+                                    <input class="form-control" id="part_target_sub_order" name="part_target_sub_order" type="number" required
+                                        min="1" value="{{isset($model) ? $model->part_target_sub_order : ''}}">
+                                    <div class="invalid-feedback">กรอกข้อมูลลำดับ</div>
                                 </div>
                             </div>
                         </div>

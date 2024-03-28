@@ -38,7 +38,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label">ลำดับ</label>
+                                    <label class="form-label">ลำดับด้าน</label>
                                     <input class="form-control" id="part_order" name="part_order" type="number" required
                                     value="{{ isset($model) ? $model->part_order : $count_order}}" min="1">
                                     <div class="invalid-feedback">กรอกข้อมูลลำดับ</div>

@@ -57,7 +57,7 @@
                                 <a href="{{route('part-target-sub.index')}}">ข้อมูลเกณฑ์ย่อย</a>
                             </li>
                             <li>
-                                <a href="">ข้อมูลดัชนี</a>
+                                <a href="{{route('part-index.index')}}">ข้อมูลดัชนี</a>
                             </li>
                         </ul>
                     </li>
