@@ -17,7 +17,7 @@
                     </li>
                     <li class="dropdown">
                         <a href="{{route('evaluate.index')}}" class="nav-link menu-title link-nav">
-                            <i data-feather="circle"></i>เกณฑ์มาตรฐาน
+                            <i data-feather="circle"></i>แบบประเมิน
                         </a>
                     </li>
                     <li class="dropdown">

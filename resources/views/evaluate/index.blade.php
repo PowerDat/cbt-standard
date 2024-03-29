@@ -7,8 +7,8 @@
             <div class="row">
                 <div class="col-sm-6">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">เกณฑ์การประเมิน</li>
-                        <li class="breadcrumb-item active">ข้อมูลด้าน</li>
+                        <li class="breadcrumb-item">แบบประเมิน</li>
+                        {{-- <li class="breadcrumb-item active">ข้อมูลด้าน</li> --}}
                     </ol>
                 </div>
                 <div class="col-sm-6"></div>

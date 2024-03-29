@@ -26,7 +26,7 @@ class PartTargetController extends Controller
      */
     public function create()
     {
-        $part = Part::select('part_id', 'part_name')->get();
+        $part = Part::select('part_id', 'part_name', 'part_order')->get();
 
         return view('part-target.form', [
             'part' => $part,

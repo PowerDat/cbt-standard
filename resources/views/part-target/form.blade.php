@@ -50,7 +50,7 @@
                                                     @if ($model->part_id == $item->part_id)
                                                         selected
                                                     @endif
-                                                @endif>{{$item->part_name}}</option>
+                                                @endif>{{$item->part_order.' - '.$item->part_name}}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback">เลือกข้อมูลด้าน</div>

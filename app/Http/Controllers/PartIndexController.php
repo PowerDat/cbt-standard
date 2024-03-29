@@ -166,38 +166,6 @@ class PartIndexController extends Controller
             }
         }
         
-
-        // $request->validate([
-        //     'inputs_question.*.name_question' => 'required',
-        //     'inputs_score.*.name_score' => 'required'
-        // ]);
-
-        // foreach ($request->inputs_question as $key => $items) {
-        //     foreach($items as $item){
-        //         $model_question = PartIndexQuestion::where(['part_target_sub_id' => $id, 'part_index_question_order' => ($key + 1)])->get();
-
-        //         foreach ($model_question as $value) {
-        //             $question = PartIndexQuestion::find($value->part_index_question_id);
-        //         $question->part_index_question_order = ($key + 1);
-        //         $question->part_index_question_desc = $item;
-        //         $question->part_target_sub_id = $request->part_target_sub_id;
-        //         $question->save();
-        //         }
-
-                
-        //     }
-        // }
-
-        // foreach ($request->inputs_score as $key => $items) {
-        //     foreach ($items as $item) {
-        //         $score = PartIndexScore::where('part_target_sub_id', $id);
-        //         $score->part_target_sub_id = $request->part_target_sub_id;
-        //         $score->part_index_score_order = ($key + 1);
-        //         $score->part_index_score_desc = $item;
-        //         $score->save();
-        //     }
-        // }
-
         return redirect()->route('part-index.index')->with('info', 'แก้ไขข้อมูลสำเร็จ');
     }
 

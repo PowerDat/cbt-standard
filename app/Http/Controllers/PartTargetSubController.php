@@ -31,7 +31,7 @@ class PartTargetSubController extends Controller
     {
         $part = DB::select("
         SELECT part_target_id
-            ,  CONCAT(part_order, '. ', part_name, ' - ', part_target_order, ' ', part_target_name)  AS part_target_name
+            ,  CONCAT(part_order, ' ', part_name, ' - ', part_target_order, ' ', part_target_name)  AS part_target_name
         FROM part 
         INNER JOIN part_target ON part.part_id = part_target.part_id
         ");

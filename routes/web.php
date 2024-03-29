@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 //เกณฑ์มาตรฐาน
 Route::get('evaluate', [EvaluateController::class, 'index'])->name('evaluate.index');
-Route::get('evaluate/target/{id?}', [EvaluateController::class, 'target'])->name('evaluate.target');
-Route::get('evaluate/form/{id?}', [EvaluateController::class, 'form'])->name('evaluate.form');
+Route::get('evaluate/target/{part_id?}', [EvaluateController::class, 'target'])->name('evaluate.target');
+Route::get('evaluate/form/{part_target_id?}', [EvaluateController::class, 'form'])->name('evaluate.form');
 
 Route::get('evaluate/community', [CommunityController::class, 'index'])->name('evaluate.community.index');
 Route::get('evaluate/community/form-goal-first', [CommunityController::class, 'formGoalFirst'])->name('evaluate.community.form-goal-first');
