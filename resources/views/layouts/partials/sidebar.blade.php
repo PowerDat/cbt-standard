@@ -26,9 +26,9 @@
                         </a>
                         <ul class="nav-submenu menu-content">
                             <li>
-                                <a href="">ด้าน 1</a>
+                                <a href="{{route('report.part')}}">ด้าน 1</a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="">ด้าน 2</a>
                             </li>
                             <li>
@@ -39,7 +39,7 @@
                             </li>
                             <li>
                                 <a href="">ด้าน 5</a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
                     <li class="dropdown">

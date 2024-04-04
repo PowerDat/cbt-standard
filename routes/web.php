@@ -7,6 +7,7 @@ use App\Http\Controllers\PartController;
 use App\Http\Controllers\PartIndexController;
 use App\Http\Controllers\PartTargetController;
 use App\Http\Controllers\PartTargetSubController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -27,3 +28,5 @@ Route::resource('part-target', PartTargetController::class);
 Route::resource('part-target-sub', PartTargetSubController::class);
 Route::resource('part-index', PartIndexController::class);
 Route::get('part-index/createById/{id?}', [PartIndexController::class, 'createById'])->name('part-index.createById');
+//report
+Route::get('report/part', [ReportController::class, 'part'])->name('report.part');

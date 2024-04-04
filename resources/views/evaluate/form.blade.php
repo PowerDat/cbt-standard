@@ -37,8 +37,6 @@
                                 </div>
                             </div>
 
-                            
-
                             @foreach ($part_target_sub as $target_sub)
 
                                 @for ($i=1; $i <= count($part_target_sub); $i++)
