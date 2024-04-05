@@ -23,7 +23,14 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header pb-0">
-                        <h5>{{'ด้าน '.$part->part_order.' '.$part->part_name}}</h5>
+                        <div class="row">
+                            <div class="col-sm-9">
+                                <h5>{{'ด้าน '.$part->part_order.' '.$part->part_name}}</h5>
+                            </div>
+                            <div class="col-sm-3 text-end">
+                                <a href="{{route('evaluate.index')}}" class="btn btn-info ">ย้อนกลับ</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         
@@ -31,8 +38,6 @@
                             <table class="table table-bordered ">
                                 <thead class="bg-primary text-center">
                                     <tr>
-                                        {{-- <th>ลำดับ</th>
-                                        <th>ด้าน</th> --}}
                                         <th>ลำดับ</th>
                                         <th>เป้าประสงค์</th>
                                         <th>ประเมิน</th>
@@ -43,8 +48,6 @@
                                 <tbody>
                                     @foreach ($part_target as $item)
                                     <tr>
-                                        {{-- <td class="text-center">{{$item->part->part_order}}</td>
-                                        <td>{{$item->part->part_name}}</td> --}}
                                         <td class="text-center">{{$item->part_target_order}}</td>
                                         <td>{{$item->part_target_name}}</td>
                                         <td class="text-center">
@@ -54,9 +57,6 @@
                                         </td>
                                         <td class="text-center">
                                             {{-- <span class="badge badge-primary">สำเร็จ</span> --}}
-                                        </td>
-                                        <td class="text-center">
-                                            
                                         </td>
                                     </tr>
                                     @endforeach

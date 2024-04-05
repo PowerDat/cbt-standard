@@ -121,13 +121,24 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-3"></div>
                         <div class="col-sm-6">
                             <div class="chart-container" style="position: relative; height:60vh; width:120vw">
                                 <canvas id="myRadarGraph"></canvas>
                             </div>
                         </div>
-                        <div class="col-sm-3"></div>
+                        <div class="col-sm-6 m-t-50">
+                            <ul class="list-group" style="font-size: 12px;">
+                                <li class="list-group-item"><i class="fa fa-circle"></i> เกณฑ์ 1.1 การบริหารจัดการการท่องเที่ยวโดยชุมชนมีประสิทธิภาพ</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> เกณฑ์ 1.2 ข้อตกลงร่วมกันสำหรับการบริหารจัดการการท่องเที่ยวโดยชุมชนมีประสิทธิภาพ</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> เกณฑ์ 1.3 ข้อควรปฏิบัติสำหรับนักท่องเที่ยวมีประสิทธิภาพ</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> เกณฑ์ 1.4 การพัฒนาบุคลากรในกลุ่มบริหารจัดการการท่องเที่ยวโดยชุมชนมีประสิทธิภาพ</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> เกณฑ์ 1.5 การส่งเสริมการมีส่วนร่วมของทุกฝ่ายมีประสิทธิภาพ</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> เกณฑ์ 1.6 การมีส่วนร่วมของภาคีเครือข่ายต่าง ๆ เป็นไปอย่างมีประสิทธิภาพ</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> เกณฑ์ 1.7 การจัดการการตลาดและประชาสัมพันธ์การท่องเที่ยวโดยชุมชนมีประสิทธิภาพ</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> เกณฑ์ 1.8 ระบบบัญชี การเงินมีประสิทธิภาพ</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> เกณฑ์ 1.9 เยาวชนได้รับการให้ความสำคัญในการท่องเที่ยวโดยชุมชน</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -142,15 +153,15 @@
 <script>
     const data = {
         labels: [
-            'การบริหารจัดการ',
-            'ข้อตกลง',
-            'ข้อปฏิบัตินักท่องเที่ยว',
-            'พัฒนาบุคลากร',
-            'การมีส่วนร่วม',
-            'ภาคี',
-            'การตลาด',
-            'บัญชี',
-            'เยาวชน',
+            'เกณฑ์ 1.1',
+            'เกณฑ์ 1.2',
+            'เกณฑ์ 1.3',
+            'เกณฑ์ 1.4',
+            'เกณฑ์ 1.5',
+            'เกณฑ์ 1.6',
+            'เกณฑ์ 1.7',
+            'เกณฑ์ 1.8',
+            'เกณฑ์ 1.9',
         ],
         datasets: [{
             label: 'ผลคะแนน',

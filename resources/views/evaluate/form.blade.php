@@ -67,7 +67,7 @@
                                                                     <label for="">
                                                                         {{$index_question->part_index_question_desc}}
                                                                     </label>
-                                                                    {{-- <div class="row">
+                                                                    <div class="row">
                                                                         <div class="col-sm-1"></div>
                                                                         <div class="col-sm-2">
                                                                             <p class="text-danger">แนบเอกสาร</p>
@@ -78,7 +78,10 @@
                                                                         <div class="col-sm-2">
                                                                             <p class="text-danger">วีดีโอ</p>
                                                                         </div>
-                                                                    </div> --}}
+                                                                        <div class="col-sm-2">
+                                                                            <p class="text-danger">แนบลิงค์</p>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
         
                                                             </div>

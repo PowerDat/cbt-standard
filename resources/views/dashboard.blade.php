@@ -165,13 +165,22 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-3"></div>
-                        <div class="col-sm-6">
-                            <div class="chart-container" style="position: relative; height:60vh; width:120vw">
+                        <div class="col-sm-12">
+                            <div class="chart-container" 
+                            {{-- style="position: relative; height:60vh; width:120vw" --}}
+                            >
                                 <canvas id="myRadarGraph"></canvas>
                             </div>
                         </div>
-                        <div class="col-sm-3"></div>
+                        {{-- <div class="col-sm-6 m-t-50">
+                            <ul class="list-group" style="font-size: 12px;">
+                                <li class="list-group-item"><i class="fa fa-circle"></i> ด้าน 1 ด้านการบริหารจัดการการท่องเที่ยวโดยชุมชน</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> ด้าน 2 ด้านการจัดการเศรษฐกิจ สังคม และคุณภาพชีวิตที่ดี</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> ด้าน 3 ด้านการอนุรักษ์และส่งเสริมมรดกทางวัฒนธรรม</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> ด้าน 4 ด้านการจัดการทรัพยากรธรรมชาติและสิ่งแวดล้อมอย่างเป็นระบบและยั่งยืน</li>
+                                <li class="list-group-item"><i class="fa fa-circle"></i> ด้าน 5 ด้านบริการและความปลอดภัย</li>
+                            </ul>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -187,11 +196,11 @@
 <script>
     const data = {
         labels: [
-            'ด้าน 1',
-            'ด้าน 2',
-            'ด้าน 3',
-            'ด้าน 4',
-            'ด้าน 5',
+            'ด้าน 1 บริหารจัดการการท่องเที่ยว',
+            'ด้าน 2 จัดการเศรษฐกิจ สังคม และคุณภาพชีวิต' ,
+            'ด้าน 3 อนุรักษ์และส่งเสริมมรดกทางวัฒนธรรม',
+            'ด้าน 4 จัดการทรัพยากรธรรมชาติและสิ่งแวดล้อม',
+            'ด้าน 5 บริการและความปลอดภัย',
         ],
         datasets: [{
             label: 'ผลคะแนน',

@@ -11,12 +11,12 @@
                     </li>
 
                     <li class="dropdown">
-                        <a class="nav-link menu-title link-nav" href="{{route('dashboard')}}">
+                        <a class="nav-link menu-title link-nav active" href="{{route('dashboard')}}">
                             <i data-feather="circle"></i><span>ข้อมูลชุมชนการท่องเที่ยว</span>
                         </a>
                     </li>
                     <li class="dropdown">
-                        <a href="{{route('evaluate.index')}}" class="nav-link menu-title link-nav">
+                        <a class="nav-link menu-title link-nav {{ request()->routeIs('evaluate.index') ? 'avtive' : '' }}" href="{{route('evaluate.index')}}">
                             <i data-feather="circle"></i>แบบประเมิน
                         </a>
                     </li>
