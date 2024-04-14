@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\DB;
 
 class EvaluateController extends Controller
 {
-    public function index()//เกณฑ์การประเมิน ข้อมูลด้าน
+    public function index() //เกณฑ์การประเมิน ข้อมูลด้าน
     {
         $part = Part::all();
+        $partTarget = PartTarget::all();
 
         return view('evaluate.index', [
             'part' => $part,
+            'partTarget' => $partTarget,
         ]);
     }
 
@@ -47,10 +49,10 @@ class EvaluateController extends Controller
         FROM part_target_sub
         WHERE part_target_id = $part_target_id
         ");
-        $part = Part::where('part_id', $part_target[0]->part_id)->get();      
+        $part = Part::where('part_id', $part_target[0]->part_id)->get();
         $part_index_score = PartIndexScore::orderBy('part_index_score_order', 'desc')->get();
         $part_index_question = PartIndexQuestion::orderBy('part_index_question_order', 'asc')->get();
-        
+
 
         return view('evaluate.form', [
             'part' => $part,
@@ -60,5 +62,4 @@ class EvaluateController extends Controller
             'part_index_question' => $part_index_question,
         ]);
     }
-
 }
