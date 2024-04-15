@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('home');
 // });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 //เกณฑ์มาตรฐาน
@@ -30,3 +33,6 @@ Route::resource('part-index', PartIndexController::class);
 Route::get('part-index/createById/{id?}', [PartIndexController::class, 'createById'])->name('part-index.createById');
 //report
 Route::get('report/part', [ReportController::class, 'part'])->name('report.part');
+
+
+
