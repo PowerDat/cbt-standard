@@ -60,6 +60,30 @@ class EvaluateController extends Controller
             'part_target_sub' => $part_target_sub,
             'part_index_score' => $part_index_score,
             'part_index_question' => $part_index_question,
+            'part_target_id' => $part_target_id,
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        dd($request->all());
+        $part_target_id = $request->part_target_id;
+
+        $part_target_sub = DB::select("
+        SELECT 
+            part_target_sub_id
+            , part_target_id
+            , part_target_sub_name
+            , part_target_sub_order
+            , part_target_sub_desc 
+            , ROW_NUMBER() OVER(PARTITION BY part_target_id ORDER BY part_target_sub_id) AS rowNum
+        FROM part_target_sub
+        WHERE part_target_id = $part_target_id
+        ");
+
+        foreach($part_target_sub as $item)
+        {
+            
+        }
     }
 }

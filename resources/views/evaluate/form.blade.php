@@ -23,8 +23,13 @@
                     <div class="card-header pb-0">
                         <p><strong>{{ 'ด้าน ' . $part[0]->part_order . ' ' . $part[0]->part_name }}</strong></p>
                         <p><strong>{{ 'เป้าประสงค์ ' . $part_target[0]->part_target_order . ' ' . $part_target[0]->part_target_name }}</strong></p>
-                      </div>
-                    <form class="" method="post">
+                    </div>
+
+                    <form action="{{route('evaluate.store')}}" method="post">
+                        @csrf
+
+                        <input type="hidden" name="part_target_id" value="{{$part_target_id}}">
+
                         <div class="card-body">
                             
                             <div class="stepwizard">
@@ -61,29 +66,10 @@
                                                     @if ($index_question->part_target_sub_id == $target_sub->part_target_sub_id)
                                                         <div class="col">
                                                             <div class="form-group m-t-15">
-        
-                                                                <div class="checkbox checkbox-primary">
-                                                                    <input id="" name="" type="checkbox" value="{{$index_question->part_index_question_id}}">
-                                                                    <label for="">
-                                                                        {{$index_question->part_index_question_desc}}
-                                                                    </label>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-1"></div>
-                                                                        <div class="col-sm-2">
-                                                                            <p class="text-danger">แนบเอกสาร</p>
-                                                                        </div>
-                                                                        <div class="col-sm-2">
-                                                                            <p class="text-danger">รูปภาพ</p>
-                                                                        </div>
-                                                                        <div class="col-sm-2">
-                                                                            <p class="text-danger">วีดีโอ</p>
-                                                                        </div>
-                                                                        <div class="col-sm-2">
-                                                                            <p class="text-danger">แนบลิงค์</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-        
+                                                                <input type="checkbox" name="chk_question_{{$target_sub->part_target_sub_id}}[]" id="" value="{{$index_question->part_index_question_id}}">
+                                                                <label for="">
+                                                                    {{$index_question->part_index_question_desc}}
+                                                                </label>        
                                                             </div>
                                                         </div>
                                                     @endif
@@ -91,7 +77,7 @@
                                             </div>
                                         </div>
         
-                                        <div class="row mt-3">
+                                        {{-- <div class="row mt-3">
                                             <div class="col-xs-12">
                                                 <h5><span class="badge bg-info">เกณฑ์การให้คะแนน</span></h5>
                                                 @foreach ($part_index_score as $index_score)
@@ -100,43 +86,31 @@
                                                     @endif
                                                 @endforeach
                                             </div>
-                                        </div>
+                                        </div> --}}
         
-                                        <div class="row mt-3">
+                                        {{-- <div class="row mt-3">
                                             <div class="col-xs-12">
                                                 <h5><span class="badge bg-info">คะแนนการประเมิน</span></h5>
                                                 <div class="col">
-                                                    <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml">
-                                                        <div class="radio radio-primary">
-                                                            <input id="radioinline34" type="radio" name=""
-                                                                value="4">
-                                                            <label class="mb-0" for="radioinline34">
-                                                                <span class="digits">4</span></label>
-                                                        </div>
-                                                        <div class="radio radio-primary">
-                                                            <input id="radioinline33" type="radio" name=""
-                                                                value="3">
-                                                            <label class="mb-0" for="radioinline33">
-                                                                <span class="digits">3</span></label>
-                                                        </div>
-                                                        <div class="radio radio-primary">
-                                                            <input id="radioinline32" type="radio" name=""
-                                                                value="2">
-                                                            <label class="mb-0" for="radioinline32">
-                                                                <span class="digits">2</span></label>
-                                                        </div>
-                                                        <div class="radio radio-primary">
-                                                            <input id="radioinline31" type="radio" name=""
-                                                                value="1">
-                                                            <label class="mb-0" for="radioinline31">
-                                                                <span class="digits">1</span></label>
-                                                        </div>
-                                                        <div class="radio radio-primary">
-                                                            <input id="radioinline30" type="radio" name=""
-                                                                value="0">
-                                                            <label class="mb-0" for="radioinline30">
-                                                                <span class="digits">0</span></label>
-                                                        </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="4">
+                                                        <label class="form-check-label" for="inlineRadio1">4</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="3">
+                                                        <label class="form-check-label" for="inlineRadio2">3</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="2">
+                                                        <label class="form-check-label" for="inlineRadio2">2</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="1">
+                                                        <label class="form-check-label" for="inlineRadio2">1</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="0">
+                                                        <label class="form-check-label" for="inlineRadio2">0</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -146,10 +120,10 @@
                                             <div class="col-xs-12">
                                                 <h5><span class="badge bg-info">ความคิดเห็นเพิ่มเติม(เชิงคุณภาพ)</span></h5>
                                                 <div class="col mb-3">
-                                                    <textarea class="form-control" name="" id="" rows="3"></textarea>
+                                                    <textarea class="form-control" name="comment_{{$i}}" id="" rows="3"></textarea>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     @endif
                                 @endfor

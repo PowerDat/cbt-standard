@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('evaluate', [EvaluateController::class, 'index'])->name('evaluate.index');
     Route::get('evaluate/target/{part_id?}', [EvaluateController::class, 'target'])->name('evaluate.target');
     Route::get('evaluate/form/{part_target_id?}', [EvaluateController::class, 'form'])->name('evaluate.form');
+    Route::post('evaluate/store', [EvaluateController::class, 'store'])->name('evaluate.store');
     
     Route::get('evaluate/community', [CommunityController::class, 'index'])->name('evaluate.community.index');
     Route::get('evaluate/community/form-goal-first', [CommunityController::class, 'formGoalFirst'])->name('evaluate.community.form-goal-first');
