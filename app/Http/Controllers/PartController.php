@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class PartController extends Controller
 {
+    public function __construct()
+    {   
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -46,6 +50,8 @@ class PartController extends Controller
         $model = new Part();
         $model->part_order = $request->part_order;
         $model->part_name = $request->part_name;
+        $model->created_by = Auth::user()->id;
+        $model->updated_by = Auth::user()->id;
         $model->save();
 
         return redirect()->route('part.index')->with('success', 'เพิ่มข้อมูลสำเร็จ');
@@ -84,6 +90,7 @@ class PartController extends Controller
         $model = Part::find($id);
         $model->part_order = $request->part_order;
         $model->part_name = $request->part_name;
+        $model->updated_by = Auth::user()->id;
         $model->save();
 
         return redirect()->route('part.index')->with('info', 'แก้ไขข้อมูลสำเร็จ');

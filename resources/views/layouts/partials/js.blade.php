@@ -17,3 +17,5 @@
 <script src="{{ asset('js/theme-customizer/customizer.js') }}"></script>
 <!-- login js-->
 <!-- Plugin used-->
+{{-- toastr --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>

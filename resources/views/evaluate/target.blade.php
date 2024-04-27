@@ -51,12 +51,54 @@
                                         <td class="text-center">{{$item->part_target_order}}</td>
                                         <td>{{$item->part_target_name}}</td>
                                         <td class="text-center">
-                                            <a href="{{route('evaluate.form', $item->part_target_id)}}" class="btn btn-info btn-xs">
-                                                <i data-feather="list"></i>
-                                            </a>
+                                            @php
+                                                $status = DB::select("SELECT appraisal_transaction_status FROM appraisal_transaction WHERE part_target_id = $item->part_target_id");
+                                                if(!empty($status)){
+                                                    foreach ($status as $value) {
+                                                        if($value->appraisal_transaction_status == '2'){
+                                                            echo "<a href='/evaluate/show/$item->part_target_id' class='btn btn-primary btn-xs'><i data-feather='eye'></i></a>";
+                                                        }
+                                                        elseif($value->appraisal_transaction_status == '1'){
+                                                            echo "<a href='/evaluate/form/$item->part_target_id' class='btn btn-info btn-xs'><i data-feather='edit'></i></a>";
+                                                        }
+                                                    }
+                                                }
+                                                else{
+                                                    echo "<a href='/evaluate/form/$item->part_target_id' class='btn btn-warning btn-xs'><i data-feather='edit'></i></a>";
+                                                }
+                                            @endphp
                                         </td>
                                         <td class="text-center">
-                                            {{-- <span class="badge badge-primary">สำเร็จ</span> --}}
+                                            @php
+                                                $status = DB::select("SELECT appraisal_transaction_status FROM appraisal_transaction WHERE part_target_id = $item->part_target_id");
+                                                if(!empty($status)){
+                                                    foreach ($status as $value) {
+                                                        if($value->appraisal_transaction_status == '1'){
+                                                            echo '<span class="badge badge-info">แบบร่าง</span>';
+                                                        }
+                                                        elseif($value->appraisal_transaction_status == '2'){
+                                                            echo "<span class='badge badge-primary'>เรียบร้อย</span>";
+                                                        }
+                                                    }
+                                                }
+                                                else{
+                                                    echo "<span class='badge badge-warning'>ยังไม่ทำ</span>";
+                                                }
+                                            @endphp
+                                        </td>
+                                        <td class="text-center">
+                                            @php
+                                                // if($item->part_target_id == ){
+                                                $value = DB::select("   SELECT sum(appraisal_score_score) as score 
+                                                                        FROM appraisal_score 
+                                                                        INNER JOIN appraisal_transaction ON appraisal_score.part_target_id = appraisal_transaction.part_target_id
+                                                                        WHERE appraisal_score.part_target_id = $item->part_target_id 
+                                                                            AND appraisal_transaction.appraisal_transaction_status = 2
+                                                                    ");
+                                                echo $value[0]->score;
+                                                // }
+                                                
+                                            @endphp 
                                         </td>
                                     </tr>
                                     @endforeach

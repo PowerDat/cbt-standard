@@ -22,3 +22,5 @@
 <link id="color" rel="stylesheet" href="{{ asset('css/color-1.css') }}" media="screen">
 <!-- Responsive css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.css') }}">
+{{-- toastr --}}
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">

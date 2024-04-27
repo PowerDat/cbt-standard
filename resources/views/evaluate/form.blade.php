@@ -19,16 +19,27 @@
         <div class="row">
             <div class="col-sm-12">
 
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <div class="card">
                     <div class="card-header pb-0">
                         <p><strong>{{ 'ด้าน ' . $part[0]->part_order . ' ' . $part[0]->part_name }}</strong></p>
                         <p><strong>{{ 'เป้าประสงค์ ' . $part_target[0]->part_target_order . ' ' . $part_target[0]->part_target_name }}</strong></p>
                     </div>
 
-                    <form action="{{route('evaluate.store')}}" method="post">
+                    <form id="form" action="{{route('evaluate.store')}}" method="post">
                         @csrf
 
                         <input type="hidden" name="part_target_id" value="{{$part_target_id}}">
+                        <input type="hidden" name="part_id" value="{{$part_target[0]->part_id}}">
 
                         <div class="card-body">
                             
@@ -66,7 +77,10 @@
                                                     @if ($index_question->part_target_sub_id == $target_sub->part_target_sub_id)
                                                         <div class="col">
                                                             <div class="form-group m-t-15">
-                                                                <input type="checkbox" name="chk_question_{{$target_sub->part_target_sub_id}}[]" id="" value="{{$index_question->part_index_question_id}}">
+                                                                <input type="checkbox" name="chk_question_{{$target_sub->part_target_sub_id}}[]" value="{{$index_question->part_index_question_id}}"
+                                                                @if (in_array($index_question->part_index_question_id, old("chk_question_$target_sub->part_target_sub_id", [])))
+                                                                    checked
+                                                                @endif>
                                                                 <label for="">
                                                                     {{$index_question->part_index_question_desc}}
                                                                 </label>        
@@ -77,7 +91,7 @@
                                             </div>
                                         </div>
         
-                                        {{-- <div class="row mt-3">
+                                        <div class="row mt-3">
                                             <div class="col-xs-12">
                                                 <h5><span class="badge bg-info">เกณฑ์การให้คะแนน</span></h5>
                                                 @foreach ($part_index_score as $index_score)
@@ -86,30 +100,35 @@
                                                     @endif
                                                 @endforeach
                                             </div>
-                                        </div> --}}
+                                        </div>
         
-                                        {{-- <div class="row mt-3">
+                                        <div class="row mt-3">
                                             <div class="col-xs-12">
                                                 <h5><span class="badge bg-info">คะแนนการประเมิน</span></h5>
                                                 <div class="col">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="4">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="4"
+                                                        @if (old("rdo_{{$i}}")) checked @endif>
                                                         <label class="form-check-label" for="inlineRadio1">4</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="3">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="3"
+                                                        @if (old("rdo_{{$i}}")) checked @endif>
                                                         <label class="form-check-label" for="inlineRadio2">3</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="2">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="2"
+                                                        @if (old("rdo_{{$i}}")) checked @endif>
                                                         <label class="form-check-label" for="inlineRadio2">2</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="1">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="1"
+                                                        @if (old("rdo_{{$i}}")) checked @endif>
                                                         <label class="form-check-label" for="inlineRadio2">1</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="0">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="0"
+                                                        @if (old("rdo_{{$i}}")) checked @endif>
                                                         <label class="form-check-label" for="inlineRadio2">0</label>
                                                     </div>
                                                 </div>
@@ -123,7 +142,7 @@
                                                     <textarea class="form-control" name="comment_{{$i}}" id="" rows="3"></textarea>
                                                 </div>
                                             </div>
-                                        </div> --}}
+                                        </div>
                                     </div>
                                     @endif
                                 @endfor
@@ -132,6 +151,7 @@
                             @endforeach
                         </div>
                         <div class="card-footer text-end">
+                            <a id="draft" class="btn btn-secondary">บันทึกร่าง</a>
                             <button class="btn btn-primary" type="submit">บันทึก</button>
                             <a class="btn btn-light" href="{{route('evaluate.target', $part[0]->part_id)}}">ยกเลิก</a>
                         </div>
@@ -145,4 +165,36 @@
 @push('scripts')
     <script src="{{ asset('js/form-wizard/form-wizard-two.js') }}"></script>
     <script src="{{ asset('js/form-wizard/jquery.backstretch.min.js') }}"></script>
+    <script>
+         $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $(document).ready(function(){
+            $('#draft').click(function(e){
+                e.preventDefault();
+
+                var form = $('#form')[0];
+                let data = new FormData(form);
+
+                $.ajax({
+                    type: 'post',
+                    url: "{{ route('evaluate.save-draft') }}",
+                    data: data,
+                    dataType:"JSON",
+                    processData : false,
+                    contentType:false,
+                    success:function(data){
+                        if(data.success == 'success')
+                        {
+                            window.location = "{{ route('evaluate.target', $part_target[0]->part_id) }}";
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
 @endpush

@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class PartTargetSubController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -58,6 +62,8 @@ class PartTargetSubController extends Controller
         $model->part_target_id = $request->part_target_id;
         $model->part_target_sub_name = $request->part_target_sub_name;
         $model->part_target_sub_desc = $request->part_target_sub_desc;
+        $model->created_by = Auth::user()->id;
+        $model->updated_by = Auth::user()->id;
         $model->save();
 
         return redirect()->route('part-target-sub.index')->with('success', 'เพิ่มข้อมูลสำเร็จ');
@@ -108,6 +114,7 @@ class PartTargetSubController extends Controller
         $model->part_target_id = $request->part_target_id;
         $model->part_target_sub_name = $request->part_target_sub_name;
         $model->part_target_sub_desc = $request->part_target_sub_desc;
+        $model->updated_by = Auth::user()->id;
         $model->save();
 
         return redirect()->route('part-target-sub.index')->with('info', 'แก้ไขข้อมูลสำเร็จ');
