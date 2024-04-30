@@ -14,7 +14,7 @@
                         <div class="form-group">
                             <label>อีเมล</label>
                             <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
-                                <input class="form-control" name="email" type="email" required autofocus>
+                                <input class="form-control" name="email" type="email" required>
                             </div>
                         </div>
                         <div class="form-group">
