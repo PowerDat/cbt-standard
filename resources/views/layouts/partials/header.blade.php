@@ -30,10 +30,10 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        {{ Auth::user()->name }}
+                        {{-- {{ Auth::user()->name }} --}}
                     </a>
 
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    {{-- <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ route('logout') }}"
                            onclick="event.preventDefault();
                                          document.getElementById('logout-form').submit();">
@@ -43,15 +43,8 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
-                    </div>
+                    </div> --}}
                 </li>
-                {{-- <li class="onhover-dropdown p-0">
-                    <button class="btn btn-primary-light" type="button">
-                        <a href="../template/login_two.html">
-                            <i data-feather="log-out"></i>Log out
-                        </a>
-                    </button>
-                </li> --}}
             </ul>
         </div>
         <div class="d-lg-none mobile-toggle pull-right w-auto">

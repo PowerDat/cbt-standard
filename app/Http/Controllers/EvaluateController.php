@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Auth;
 
 class EvaluateController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     
     public function index() //เกณฑ์การประเมิน ข้อมูลด้าน
     {
