@@ -160,8 +160,8 @@ class EvaluateController extends Controller
                     $question->part_target_sub_id = $item->part_target_sub_id;
                     $question->part_index_question_id = $value;
                     $question->part_target_id = $part_target_id;
-                    $question->created_by = Auth::user()->id;
-                    $question->updated_by = Auth::user()->id;
+                    // $question->created_by = Auth::user()->id;
+                    // $question->updated_by = Auth::user()->id;
                     $question->save();
                 }
             }
@@ -172,8 +172,8 @@ class EvaluateController extends Controller
                 $score->appraisal_score_score = $request->input($rdo);
                 $score->appraisal_score_comment = $request->input($comment);
                 $score->part_target_id = $part_target_id;
-                $score->created_by = Auth::user()->id;
-                $score->updated_by = Auth::user()->id;
+                // $score->created_by = Auth::user()->id;
+                // $score->updated_by = Auth::user()->id;
                 $score->save();
             }
         }
@@ -182,8 +182,8 @@ class EvaluateController extends Controller
         $transaction->part_target_id = $part_target_id;
         $transaction->appraisal_transaction_date = date('Y-m-d');
         $transaction->appraisal_transaction_status = '2';
-        $transaction->created_by = Auth::user()->id;
-        $transaction->updated_by = Auth::user()->id;
+        // $transaction->created_by = Auth::user()->id;
+        // $transaction->updated_by = Auth::user()->id;
         $transaction->save();
 
         return redirect()->route('evaluate.target', $part_id)->with('success', 'เพิ่มข้อมูลสำเร็จ');
@@ -232,8 +232,8 @@ class EvaluateController extends Controller
                     $question->part_target_sub_id = $item->part_target_sub_id;
                     $question->part_index_question_id = $value;
                     $question->part_target_id = $part_target_id;
-                    $question->created_by = Auth::user()->id;
-                    $question->updated_by = Auth::user()->id;
+                    // $question->created_by = Auth::user()->id;
+                    // $question->updated_by = Auth::user()->id;
                     $question->save();
                 }
             }
@@ -244,8 +244,8 @@ class EvaluateController extends Controller
                 $score->appraisal_score_score = $request->input($rdo);
                 $score->appraisal_score_comment = $request->input($comment);
                 $score->part_target_id = $part_target_id;
-                $score->created_by = Auth::user()->id;
-                $score->updated_by = Auth::user()->id;
+                // $score->created_by = Auth::user()->id;
+                // $score->updated_by = Auth::user()->id;
                 $score->save();
             // }
         }       
@@ -254,8 +254,8 @@ class EvaluateController extends Controller
         $transaction->part_target_id = $part_target_id;
         $transaction->appraisal_transaction_date = date('Y-m-d');
         $transaction->appraisal_transaction_status = '1';
-        $transaction->created_by = Auth::user()->id;
-        $transaction->updated_by = Auth::user()->id;
+        // $transaction->created_by = Auth::user()->id;
+        // $transaction->updated_by = Auth::user()->id;
         $transaction->save();
 
         session()->flash('success', 'บันทึกร่างสำเร็จ');
