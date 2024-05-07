@@ -40,11 +40,7 @@
                             <div class="tab-pane fade {{ ($key === 0) ? 'show active' : '' }}" id="pills-{{$key}}" role="tabpanel"
                                 aria-labelledby="pills-{{$key}}-tab">
                                 <p class="mt-3 mb-3"><strong>{{'ด้าน '.$value->part_order.' : '.$value->part_name}}</strong></p>
-                                {{-- @foreach ($partTarget as $target)
-                                    @if ($value->part_id === $target->part_id)
-                                        <p>{{'เป้าประสงค์ '.$target->part_target_order.' : '.$target->part_target_name}}</p>
-                                    @endif
-                                @endforeach --}}
+                                <p>{{$value->part_detail}}</p>
                                 <a href="{{route('evaluate.target', $value->part_id)}}" class="btn btn-light">
                                     ประเมิน
                                 </a>

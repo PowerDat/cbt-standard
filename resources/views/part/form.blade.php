@@ -55,6 +55,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label">รายละเอียด</label>
+                                    <textarea class="form-control" id="part_detail" name="part_detail" rows="3">{{isset($model) ? $model->part_detail : ''}}</textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-footer text-end">
                         <button class="btn btn-primary" type="submit">บันทึก</button>

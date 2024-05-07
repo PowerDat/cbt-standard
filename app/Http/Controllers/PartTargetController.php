@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Part;
 use App\Models\PartTarget;
-use App\Models\PartTargetSub;
 use Illuminate\Http\Request;
+use App\Models\PartTargetSub;
+use Illuminate\Support\Facades\Auth;
 
 class PartTargetController extends Controller
 {
@@ -52,8 +53,8 @@ class PartTargetController extends Controller
         $model->part_target_order = $request->part_target_order;
         $model->part_id = $request->part_id;
         $model->part_target_name = $request->part_target_name;
-        // $model->created_by = Auth::user()->id;
-        // $model->updated_by = Auth::user()->id;
+        $model->created_by = '';
+        $model->updated_by = '';
         $model->save();
 
         return redirect()->route('part-target.index')->with('success', 'เพิ่มข้อมูลสำเร็จ');
@@ -96,7 +97,7 @@ class PartTargetController extends Controller
         $model->part_target_order = $request->part_target_order;
         $model->part_id = $request->part_id;
         $model->part_target_name = $request->part_target_name;
-        // $model->updated_by = Auth::user()->id;
+        $model->updated_by = '';
         $model->save();
 
         return redirect()->route('part-target.index')->with('info', 'แก้ไขข้อมูลสำเร็จ');

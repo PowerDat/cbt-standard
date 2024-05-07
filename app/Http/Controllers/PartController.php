@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Part;
 use App\Models\PartTarget;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PartController extends Controller
 {
@@ -50,8 +51,9 @@ class PartController extends Controller
         $model = new Part();
         $model->part_order = $request->part_order;
         $model->part_name = $request->part_name;
-        // $model->created_by = Auth::user()->id;
-        // $model->updated_by = Auth::user()->id;
+        $model->part_detail = $request->part_detail;
+        $model->created_by = '';
+        $model->updated_by = '';
         $model->save();
 
         return redirect()->route('part.index')->with('success', 'เพิ่มข้อมูลสำเร็จ');
@@ -90,7 +92,8 @@ class PartController extends Controller
         $model = Part::find($id);
         $model->part_order = $request->part_order;
         $model->part_name = $request->part_name;
-        // $model->updated_by = Auth::user()->id;
+        $model->part_detail = $request->part_detail;
+        $model->updated_by = '';
         $model->save();
 
         return redirect()->route('part.index')->with('info', 'แก้ไขข้อมูลสำเร็จ');

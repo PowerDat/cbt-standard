@@ -19,27 +19,22 @@
         <div class="row">
             <div class="col-sm-12">
 
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                <form id="form" enctype="multipart/form-data">
+                    @csrf
 
-                <div class="card">
-                    <div class="card-header pb-0">
-                        <p><strong>{{ 'ด้าน ' . $part[0]->part_order . ' ' . $part[0]->part_name }}</strong></p>
-                        <p><strong>{{ 'เป้าประสงค์ ' . $part_target[0]->part_target_order . ' ' . $part_target[0]->part_target_name }}</strong></p>
+                    <div class="alert alert-danger print-error-msg" style="display:none">
+                        <ul></ul>
                     </div>
 
-                    <form id="form" action="{{route('evaluate.store')}}" method="post">
-                        @csrf
+                    <input type="hidden" name="part_target_id" value="{{$part_target_id}}">
+                    <input type="hidden" name="part_id" value="{{$part_target[0]->part_id}}">
 
-                        <input type="hidden" name="part_target_id" value="{{$part_target_id}}">
-                        <input type="hidden" name="part_id" value="{{$part_target[0]->part_id}}">
+                    <div class="card">
+
+                        <div class="card-header pb-0">
+                            <p><strong>{{ 'ด้าน ' . $part[0]->part_order . ' ' . $part[0]->part_name }}</strong></p>
+                            <p><strong>{{ 'เป้าประสงค์ ' . $part_target[0]->part_target_order . ' ' . $part_target[0]->part_target_name }}</strong></p>
+                        </div>
 
                         <div class="card-body">
                             
@@ -84,6 +79,26 @@
                                                                 <label for="">
                                                                     {{$index_question->part_index_question_desc}}
                                                                 </label>        
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-4">
+                                                                <div>
+                                                                    <label class="form-label text-danger">แนบเอกสาร (นามสกุล .pdf เท่านั้น)</label>
+                                                                    <input type="file" class="form-control" name="file_{{$index_question->part_index_question_id}}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div>
+                                                                    <label class="form-label text-danger">รูปภาพ (นามสกุล .png, .jpg เท่านั้น)</label>
+                                                                    <input type="file" class="form-control" name="image_{{$index_question->part_index_question_id}}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div>
+                                                                    <label class="form-label text-danger">ลิงค์วีดีโอ (youtube เท่านั้น)</label>
+                                                                    <input type="text" class="form-control" name="link_url_{{$index_question->part_index_question_id}}">
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     @endif
@@ -147,7 +162,6 @@
                                     @endif
                                 @endfor
 
-                                
                             @endforeach
                         </div>
                         <div class="card-footer text-end">
@@ -155,8 +169,11 @@
                             <button class="btn btn-primary" type="submit">บันทึก</button>
                             <a class="btn btn-light" href="{{route('evaluate.target', $part[0]->part_id)}}">ยกเลิก</a>
                         </div>
-                    </form>
-                </div>
+
+                    </div>
+
+                </form>
+
             </div>
         </div>
     </div>
@@ -173,6 +190,36 @@
         });
 
         $(document).ready(function(){
+
+            $('#form').submit(function(e){
+                e.preventDefault();
+       
+                var url = $(this).attr("action");
+                let formData = new FormData(this);
+
+                $.ajax({
+                    type: 'post',
+                    url: "{{route('evaluate.store')}}",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: (response) => {
+                        if(data.success == 'success')
+                        {
+                            window.location = "{{ route('evaluate.target', $part_target[0]->part_id) }}";
+                        }
+                    },
+                    error: function(response){
+                        $('#form').find(".print-error-msg").find("ul").html('');
+                        $('#form').find(".print-error-msg").css('display','block');
+                        $.each( response.responseJSON.errors, function( key, value ) {
+                            // alert(value)
+                            $('#form').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                        });
+                    }
+                });
+            });
+
             $('#draft').click(function(e){
                 e.preventDefault();
 
@@ -191,6 +238,13 @@
                         {
                             window.location = "{{ route('evaluate.target', $part_target[0]->part_id) }}";
                         }
+                    },
+                    error: function(response){
+                        $('#form').find(".print-error-msg").find("ul").html('');
+                        $('#form').find(".print-error-msg").css('display','block');
+                        $.each( response.responseJSON.errors, function( key, value ) {
+                            $('#form').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                        });
                     }
                 });
             });

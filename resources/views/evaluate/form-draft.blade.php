@@ -19,15 +19,9 @@
         <div class="row">
             <div class="col-sm-12">
 
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+                </div>
 
                 <div class="card">
                     <div class="card-header pb-0">
@@ -100,6 +94,26 @@
                                                                 <label for="">
                                                                     {{$index_question->part_index_question_desc}}
                                                                 </label>        
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-4">
+                                                                <div>
+                                                                    <label class="form-label text-danger">แนบเอกสาร (นามสกุล .pdf เท่านั้น)</label>
+                                                                    <input type="file" class="form-control" name="file_{{$index_question->part_index_question_id}}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div>
+                                                                    <label class="form-label text-danger">รูปภาพ (นามสกุล .png, .jpg เท่านั้น)</label>
+                                                                    <input type="file" class="form-control" name="image_{{$index_question->part_index_question_id}}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div>
+                                                                    <label class="form-label text-danger">ลิงค์วีดีโอ (youtube เท่านั้น)</label>
+                                                                    <input type="text" class="form-control" name="link_url_{{$index_question->part_index_question_id}}">
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     @endif
@@ -244,6 +258,35 @@
         });
 
         $(document).ready(function(){
+
+            $('#form').submit(function(e){
+                e.preventDefault();
+       
+                var url = $(this).attr("action");
+                let formData = new FormData(this);
+
+                $.ajax({
+                    type: 'post',
+                    url: "{{route('evaluate.store')}}",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: (response) => {
+                        if(data.success == 'success')
+                        {
+                            window.location = "{{ route('evaluate.target', $part_target[0]->part_id) }}";
+                        }
+                    },
+                    error: function(response){
+                        $('#form').find(".print-error-msg").find("ul").html('');
+                        $('#form').find(".print-error-msg").css('display','block');
+                        $.each( response.responseJSON.errors, function( key, value ) {
+                            $('#form').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                        });
+                    }
+                });
+            });
+
             $('#draft').click(function(e){
                 e.preventDefault();
 
@@ -262,6 +305,13 @@
                         {
                             window.location = "{{ route('evaluate.target', $part_target[0]->part_id) }}";
                         }
+                    },
+                    error: function(response){
+                        $('#form').find(".print-error-msg").find("ul").html('');
+                        $('#form').find(".print-error-msg").css('display','block');
+                        $.each( response.responseJSON.errors, function( key, value ) {
+                            $('#form').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                        });
                     }
                 });
             });

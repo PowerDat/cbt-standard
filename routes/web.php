@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Evaluate\CommunityController;
-use App\Http\Controllers\EvaluateController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PartController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\EvaluateController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PartIndexController;
 use App\Http\Controllers\PartTargetController;
 use App\Http\Controllers\PartTargetSubController;
-use App\Http\Controllers\ReportController;
-use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -16,7 +16,7 @@ Route::get('/', function () {
 // Auth::routes();
 
 // Route::middleware(['auth'])->group(function(){
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     //เกณฑ์มาตรฐาน
@@ -26,9 +26,7 @@ Route::get('/', function () {
     Route::get('evaluate/show/{part_target_id?}', [EvaluateController::class, 'show'])->name('evaluate.show');
     Route::post('evaluate/store', [EvaluateController::class, 'store'])->name('evaluate.store');
     Route::post('evaluate/save-draft', [EvaluateController::class, 'saveDraft'])->name('evaluate.save-draft');
-    
-    Route::get('evaluate/community', [CommunityController::class, 'index'])->name('evaluate.community.index');
-    Route::get('evaluate/community/form-goal-first', [CommunityController::class, 'formGoalFirst'])->name('evaluate.community.form-goal-first');
+
     //ข้อมูลเกณฑ์มาตรฐาน
     Route::resource('part', PartController::class);
     Route::resource('part-target', PartTargetController::class);
