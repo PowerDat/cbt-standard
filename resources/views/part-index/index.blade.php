@@ -8,7 +8,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">ข้อมูลเกณฑ์มาตรฐาน</li>
-                        <li class="breadcrumb-item">ข้อมูลดัชนี</li>
+                        <li class="breadcrumb-item">ข้อมูลเกณฑ์การให้คะแน</li>
                         <li class="breadcrumb-item active">หน้าแรก</li>
                     </ol>
                 </div>
@@ -41,7 +41,7 @@
                                             <td class="text-center">{{$item->part_target_order}}</td>
                                             <td class="text-center">{{$item->part_target_sub_order}}</td>
                                             <td class="text-center">
-                                                <a href="{{route('part-index.createById', $item->part_target_sub_id)}}" class="btn btn-primary">
+                                                <a href="{{route('part-index.create-by-id', $item->part_target_sub_id)}}" class="btn btn-primary">
                                                     <i data-feather="edit"></i>
                                                 </a>
                                             </td>

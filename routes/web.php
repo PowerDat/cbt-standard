@@ -29,10 +29,12 @@ Route::get('/', function () {
 
     //ข้อมูลเกณฑ์มาตรฐาน
     Route::resource('part', PartController::class);
+    Route::get('part-target/create-by-id/{id?}', [PartTargetController::class, 'createById'])->name('part-target.create-by-id');
     Route::resource('part-target', PartTargetController::class);
+    Route::get('part-target-sub/create-by-id/{id?}', [PartTargetSubController::class, 'createById'])->name('part-target-sub.create-by-id');
     Route::resource('part-target-sub', PartTargetSubController::class);
     Route::resource('part-index', PartIndexController::class);
-    Route::get('part-index/createById/{id?}', [PartIndexController::class, 'createById'])->name('part-index.createById');
+    Route::get('part-index/create-by-id/{id?}', [PartIndexController::class, 'createById'])->name('part-index.create-by-id');
     //report
     Route::get('report/part', [ReportController::class, 'part'])->name('report.part');
 // });

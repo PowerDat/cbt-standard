@@ -35,10 +35,11 @@
                                 <thead class="bg-light text-center">
                                     <tr>
                                         <th>ลำดับด้าน</th>
-                                        <th>ด้าน</th>
+                                        {{-- <th>ด้าน</th> --}}
                                         <th>ลำดับเป้าประสงค์</th>
                                         <th>เป้าประสงค์</th>
-                                        <th>จำนวนเกณฑ์ย่อย</th>
+                                        <th>จำนวนเกณฑ์พิจารณา</th>
+                                        <th>เกณฑ์พิจารณา</th>
                                         <th>แก้ไข</th>
                                         <th>ลบ</th>
                                     </tr>
@@ -47,10 +48,15 @@
                                     @foreach ($model as $item)
                                     <tr>
                                         <td class="text-center">{{$item->part->part_order}}</td>
-                                        <td>{{$item->part->part_name}}</td>
+                                        {{-- <td>{{$item->part->part_name}}</td> --}}
                                         <td class="text-center">{{$item->part_target_order}}</td>
                                         <td>{{$item->part_target_name}}</td>
                                         <td class="text-center">{{$item->partTargetSub->count()}}</td>
+                                        <td class="text-center">
+                                            <a href="{{route('part-target-sub.create-by-id', $item->part_target_id)}}" class="btn btn-light">
+                                                <i data-feather="plus-circle"></i>
+                                            </a>
+                                        </td>
                                         <td class="text-center">
                                             <a href="{{route('part-target.edit', $item->part_target_id)}}" class="btn btn-primary">
                                                 <i data-feather="edit"></i>

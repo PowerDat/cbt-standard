@@ -8,7 +8,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">ข้อมูลเกณฑ์มาตรฐาน</li>
-                        <li class="breadcrumb-item">ข้อมูลด้าน</li>
+                        <li class="breadcrumb-item">ข้อมูลด้านเกณฑ์มาตรฐาน</li>
                         <li class="breadcrumb-item active">หน้าแรก</li>
                     </ol>
                 </div>
@@ -35,8 +35,9 @@
                                 <thead class="bg-light text-center">
                                     <tr>
                                         <th>ลำดับ</th>
-                                        <th>ด้าน</th>
+                                        <th>ด้านเกณฑ์มาตรฐาน</th>
                                         <th>จำนวนเป้าประสงค์</th>
+                                        <th>เป้าประสงค์</th>
                                         <th>แก้ไข</th>
                                         <th>ลบ</th>
                                     </tr>
@@ -48,7 +49,12 @@
                                         <td>{{$item->part_name}}</td>
                                         <td class="text-center">{{$item->partTarget->count()}}</td>
                                         <td class="text-center">
-                                            <a href="{{route('part.edit', $item->part_id)}}" class="btn btn-primary">
+                                            <a href="{{route('part-target.create-by-id', $item->part_id)}}" class="btn btn-light btn-sm">
+                                                <i data-feather="plus-circle"></i>
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{{route('part.edit', $item->part_id)}}" class="btn btn-primary btn-sm">
                                                 <i data-feather="edit"></i>
                                             </a>
                                         </td>
@@ -57,7 +63,7 @@
                                                 class="delete_form">
                                                 @csrf
                                                 <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="btn btn-light">
+                                                <button type="submit" class="btn btn-light btn-sm">
                                                     <i data-feather="delete"></i>
                                                 </button>
                                             </form>

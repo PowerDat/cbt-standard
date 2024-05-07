@@ -8,7 +8,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">ข้อมูลเกณฑ์มาตรฐาน</li>
-                        <li class="breadcrumb-item">ข้อมูลเกณฑ์ย่อย</li>
+                        <li class="breadcrumb-item">ข้อมูลเกณฑ์พิจารณา</li>
                         <li class="breadcrumb-item active">หน้าแรก</li>
                     </ol>
                 </div>
@@ -36,8 +36,9 @@
                                     <tr>
                                         <th>ด้าน</th>
                                         <th>เป้าประสงค์</th>
-                                        <th>ลำดับเกณฑ์ย่อย</th>
-                                        <th>เกณฑ์ย่อย</th>
+                                        <th>ลำดับเกณฑ์พิจารณา</th>
+                                        <th>เกณฑ์พิจารณา</th>
+                                        <th>เกณฑ์การให้คะแนน</th>
                                         <th>แก้ไข</th>
                                         <th>ลบ</th>
                                     </tr>
@@ -49,6 +50,11 @@
                                         <td class="text-center">{{$item->part_target_order}}</td>
                                         <td class="text-center">{{$item->part_target_sub_order}}</td>
                                         <td>{{$item->part_target_sub_name}}</td>
+                                        <td class="text-center">
+                                            <a href="{{route('part-index.create-by-id', $item->part_target_sub_id)}}" class="btn btn-light">
+                                                <i data-feather="plus-circle"></i>
+                                            </a>
+                                        </td>
                                         <td class="text-center">
                                             <a href="{{route('part-target-sub.edit', $item->part_target_sub_id)}}" class="btn btn-primary">
                                                 <i data-feather="edit"></i>

@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">ข้อมูลเกณฑ์มาตรฐาน</li>
-                    <li class="breadcrumb-item">ข้อมูลดัชนี</li>
+                    <li class="breadcrumb-item">ข้อมูลเกณฑ์การให้คะแน</li>
                     <li class="breadcrumb-item active">
                         แก้ไขข้อมูล
                     </li>

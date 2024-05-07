@@ -56,7 +56,11 @@ class PartController extends Controller
         $model->updated_by = '';
         $model->save();
 
-        return redirect()->route('part.index')->with('success', 'เพิ่มข้อมูลสำเร็จ');
+        session()->flash('success', 'เพิ่มข้อมูลสำเร็จ');
+
+        return redirect()->route('part.edit', $model->part_id);
+
+        // return redirect()->route('part.index')->with('success', 'เพิ่มข้อมูลสำเร็จ');
     }
 
     /**
@@ -96,7 +100,9 @@ class PartController extends Controller
         $model->updated_by = '';
         $model->save();
 
-        return redirect()->route('part.index')->with('info', 'แก้ไขข้อมูลสำเร็จ');
+        session()->flash('info', 'แก้ไขข้อมูลสำเร็จ');
+        return redirect()->back();
+        // return redirect()->route('part.index')->with('info', 'แก้ไขข้อมูลสำเร็จ');
     }
 
     /**

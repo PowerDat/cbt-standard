@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">ข้อมูลเกณฑ์มาตรฐาน</li>
-                    <li class="breadcrumb-item">ข้อมูลเกณฑ์ย่อย</li>
+                    <li class="breadcrumb-item">ข้อมูลเกณฑ์พิจารณา</li>
                     <li class="breadcrumb-item active">
                         @if (isset($model))
                         แก้ไขข้อมูล
@@ -36,6 +36,15 @@
                     @if (isset($model))
                         @method('put')
                     @endif
+                    @if (isset($model))
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col text-end">
+                                <a href="{{route('part-index.create-by-id', $model->part_target_sub_id)}}" class="btn btn-primary">เพิ่มข้อมูลเกณฑ์การให้คะแนน</a>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                     <div class="card-body">
 
                         <div class="row">
@@ -50,7 +59,12 @@
                                                     @if ($model->part_target_id == $item->part_target_id)
                                                         selected
                                                     @endif
-                                                @endif>{{$item->part_target_name}}</option>
+                                                @elseif (isset($id))
+                                                    @if ($id == $item->part_target_id)
+                                                        selected
+                                                    @endif
+                                                @endif
+                                                >{{$item->part_target_name}}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback">เลือกข้อมูลด้าน-เป้าประสงค์</div>
@@ -61,7 +75,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label">ลำดับเกณฑ์ย่อย</label>
+                                    <label class="form-label">ลำดับเกณฑ์พิจารณา</label>
                                     <input class="form-control" id="part_target_sub_order" name="part_target_sub_order" type="number" required
                                         min="1" value="{{isset($model) ? $model->part_target_sub_order : ''}}">
                                     <div class="invalid-feedback">กรอกข้อมูลลำดับ</div>
@@ -72,10 +86,10 @@
                         <div class="row">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label">ข้อมูลเกณฑ์ย่อย</label>
+                                    <label class="form-label">ข้อมูลเกณฑ์พิจารณา</label>
                                     <input class="form-control" id="part_target_sub_name" name="part_target_sub_name" type="text" required
                                     value="{{isset($model) ? $model->part_target_sub_name : ''}}">
-                                    <div class="invalid-feedback">กรอกข้อมูลเกณฑ์ย่อย</div>
+                                    <div class="invalid-feedback">กรอกข้อมูลเกณฑ์พิจารณา</div>
                                 </div>
                             </div>
                         </div>

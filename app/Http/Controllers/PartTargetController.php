@@ -38,6 +38,16 @@ class PartTargetController extends Controller
         ]);
     }
 
+    public function createById($id)
+    {
+        $part = Part::select('part_id', 'part_name', 'part_order')->get();
+
+        return view('part-target.form', [
+            'part' => $part,
+            'id' => $id,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

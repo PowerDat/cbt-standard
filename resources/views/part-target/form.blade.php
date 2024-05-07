@@ -36,6 +36,15 @@
                     @if (isset($model))
                         @method('put')
                     @endif
+                    @if (isset($model))
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col text-end">
+                                <a href="{{route('part-target-sub.create-by-id', $model->part_target_id)}}" class="btn btn-primary">เพิ่มข้อมูลเกณฑ์พิจารณา</a>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                     <div class="card-body">
                        
                         <div class="row">
@@ -50,7 +59,12 @@
                                                     @if ($model->part_id == $item->part_id)
                                                         selected
                                                     @endif
-                                                @endif>{{$item->part_order.' - '.$item->part_name}}</option>
+                                                @elseif(isset($id))
+                                                    @if ($id == $item->part_id)
+                                                        selected
+                                                    @endif
+                                                @endif
+                                                >{{$item->part_order.' - '.$item->part_name}}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback">เลือกข้อมูลด้าน</div>
