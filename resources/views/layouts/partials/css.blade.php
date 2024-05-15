@@ -14,6 +14,7 @@
 <!-- Feather icon-->
 <link rel="stylesheet" type="text/css" href="{{ asset('css/feather-icon.css') }}">
 <!-- Plugins css start-->
+@stack('css')
 <!-- Plugins css Ends-->
 <!-- Bootstrap css-->
 <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.css') }}">

@@ -51,6 +51,9 @@
                                 <a href="{{route('part.index')}}">ข้อมูลด้านเกณฑ์มาตรฐาน</a>
                             </li>
                             <li>
+                                <a href="{{route('part-target.index')}}">ข้อมูลรายละเอียด</a>
+                            </li>
+                            <li>
                                 <a href="{{route('part-target.index')}}">ข้อมูลเป้าประสงค์</a>
                             </li>
                             <li>

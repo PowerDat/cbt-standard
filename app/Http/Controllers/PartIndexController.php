@@ -158,7 +158,7 @@ class PartIndexController extends Controller
             $model->save();
         }
 
-        //delete old data question
+        //delete old data score
         $score_count = DB::table('part_index_score')->select('part_index_score_desc')->where('part_target_sub_id', $request->part_target_sub_id)->get();
 
         if($score_count->count() > 0){

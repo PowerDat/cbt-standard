@@ -34,17 +34,18 @@
                     @if (isset($model))
                         @method('put')
                     @endif
-                    @if (isset($model))
-                    <div class="card-header">
+
+                    <div class="card-body">
+                        {{-- @if (isset($model))
                         <div class="row">
                             <div class="col text-end">
-                                <a href="{{route('part-target.create-by-id', $model->part_id)}}" class="btn btn-primary">เพิ่มข้อมูลเป้าประสงค์</a>
+                                <a href="{{route('part-target.create-from-part', $model->part_id)}}" class="btn btn-primary">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> รายละเอียด
+                                </a>
                             </div>
                         </div>
-                    </div>
-                    @endif
-                    <div class="card-body">
-                        <div class="row">
+                        @endif --}}
+                        <div class="row mt-3">
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label">ลำดับด้านเกณฑ์มาตรฐาน</label>

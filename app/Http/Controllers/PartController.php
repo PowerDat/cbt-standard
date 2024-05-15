@@ -18,11 +18,7 @@ class PartController extends Controller
      */
     public function index()
     {
-        $model = Part::paginate(15);
-
-        return view('part.index', [
-            'model' => $model,
-        ]);
+        return view('part.index');
     }
 
     /**

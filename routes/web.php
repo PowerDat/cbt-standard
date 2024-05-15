@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PartIndexController;
 use App\Http\Controllers\PartTargetController;
 use App\Http\Controllers\PartTargetSubController;
+use App\Models\PartTarget;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -29,7 +30,11 @@ Route::get('/', function () {
 
     //ข้อมูลเกณฑ์มาตรฐาน
     Route::resource('part', PartController::class);
-    Route::get('part-target/create-by-id/{id?}', [PartTargetController::class, 'createById'])->name('part-target.create-by-id');
+    //สร้างจากหน้า part
+    Route::get('part-target/create-from-part/{part_id?}', [PartTargetController::class, 'createFromPart'])->name('part-target.create-from-part');
+    //สร้างจากหน้า part target
+    Route::get('part-target/create-by-id/{part_target_id?}', [PartTargetController::class, 'createById'])->name('part-target.create-by-id');
+    Route::post('part-target/updated/{id?}', [PartTargetController::class, 'updated'])->name('part-target.updated');
     Route::resource('part-target', PartTargetController::class);
     Route::get('part-target-sub/create-by-id/{id?}', [PartTargetSubController::class, 'createById'])->name('part-target-sub.create-by-id');
     Route::resource('part-target-sub', PartTargetSubController::class);
