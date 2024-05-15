@@ -100,7 +100,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-12 col-xl-6 xl-100">
+            <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header pb-0">
                         <h5>ผลการประเมิน</h5>
