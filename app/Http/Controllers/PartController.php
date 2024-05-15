@@ -40,8 +40,12 @@ class PartController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'part_order' => 'required',
+            'part_order' => 'required|numeric',
             'part_name' => 'required',
+        ], [
+            'part_order.required' => 'กรอกลำดับด้านเกณฑ์มาตรฐาน',
+            'part_order.numeric' => 'กรอกลำดับด้านเกณฑ์มาตรฐาน(เฉพาะตัวเลข)',
+            'part_name.required' => 'กรอกข้อมูลด้านเกณฑ์มาตรฐาน',
         ]);
 
         $model = new Part();
@@ -54,9 +58,12 @@ class PartController extends Controller
 
         session()->flash('success', 'เพิ่มข้อมูลสำเร็จ');
 
-        return redirect()->route('part.edit', $model->part_id);
+        return response()->json([
+            'success'  => 'success',
+            'part_id' => $model->part_id,
+        ]);
 
-        // return redirect()->route('part.index')->with('success', 'เพิ่มข้อมูลสำเร็จ');
+        // return redirect()->route('part.edit', $model->part_id);
     }
 
     /**
@@ -74,7 +81,7 @@ class PartController extends Controller
     {
         $model = Part::find($id);
 
-        return view('part.form', [
+        return view('part.form-edit', [
             'model' => $model,
         ]);
     }
@@ -85,8 +92,12 @@ class PartController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'part_order' => 'required',
+            'part_order' => 'required|numeric',
             'part_name' => 'required',
+        ], [
+            'part_order.required' => 'กรอกลำดับด้านเกณฑ์มาตรฐาน',
+            'part_order.numeric' => 'กรอกลำดับด้านเกณฑ์มาตรฐาน(เฉพาะตัวเลข)',
+            'part_name.required' => 'กรอกข้อมูลด้านเกณฑ์มาตรฐาน',
         ]);
 
         $model = Part::find($id);
@@ -97,8 +108,10 @@ class PartController extends Controller
         $model->save();
 
         session()->flash('info', 'แก้ไขข้อมูลสำเร็จ');
-        return redirect()->back();
-        // return redirect()->route('part.index')->with('info', 'แก้ไขข้อมูลสำเร็จ');
+
+        return response()->json([
+            'success'  => 'success',
+        ]);
     }
 
     /**

@@ -9,7 +9,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">ข้อมูลเกณฑ์มาตรฐาน</li>
                     <li class="breadcrumb-item">ข้อมูลด้านเกณฑ์มาตรฐาน</li>
-                    <li class="breadcrumb-item active">เพิ่มข้อมูล</li>
+                    <li class="breadcrumb-item active">แก้ไขข้อมูล</li>
                 </ol>
             </div>
             <div class="col-sm-6"></div>
@@ -23,6 +23,9 @@
         <div class="col-sm-12">
             <form id="form" method="POST">
                 @csrf
+                @if (isset($model))
+                    @method('put')
+                @endif
 
                 <div class="alert alert-danger print-error-msg" style="display:none">
                     <ul></ul>
@@ -35,7 +38,8 @@
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label">ลำดับด้านเกณฑ์มาตรฐาน</label>
-                                    <input class="form-control" id="part_order" name="part_order" type="text">
+                                    <input class="form-control" id="part_order" name="part_order" type="text" 
+                                        value="{{ $model->part_order}}">
                                 </div>
                             </div>
                         </div>
@@ -43,7 +47,8 @@
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label">ข้อมูลด้านเกณฑ์มาตรฐาน</label>
-                                    <input class="form-control" id="part_name" name="part_name" type="text">
+                                    <input class="form-control" id="part_name" name="part_name" type="text" 
+                                        value="{{$model->part_name}}">
                                 </div>
                             </div>
                         </div>
@@ -51,7 +56,7 @@
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label">รายละเอียด(เพิ่มเติม)</label>
-                                    <textarea class="form-control" id="part_detail" name="part_detail"rows="3"></textarea>
+                                    <textarea class="form-control" id="part_detail" name="part_detail"rows="3">{{$model->part_detail}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -98,16 +103,13 @@
 
             $.ajax({
                 type: 'post',
-                url: "{{ route('part.store') }}",
+                url: "{{ route('part.update', $model->part_id) }}",
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: (response) => {
                     if (response.success == 'success') {
-                        let id = response.part_id;
-                        let url = "{{route('part.edit', ':id')}}";
-                        url = url.replace(':id', id);
-                        window.location = url;
+                        window.location.reload();
                     }
                 },
                 error: function(response) {
