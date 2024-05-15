@@ -57,10 +57,9 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label class="form-label">ลำดับเป้าประสงค์(เฉพาะตัวเลข)</label>
+                                        <label class="form-label">ลำดับเป้าประสงค์</label>
                                         <input class="form-control" id="part_target_order" name="part_target_order"
-                                            type="text"
-                                            value="{{isset($partTarget) ? $partTarget->part_target_order : ''}}">
+                                            type="text">
                                     </div>
                                 </div>
                             </div>
@@ -70,8 +69,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">ข้อมูลเป้าประสงค์</label>
                                         <input class="form-control" id="part_target_name" name="part_target_name"
-                                            type="text"
-                                            value="{{isset($partTarget) ? $partTarget->part_target_name : ''}}">
+                                            type="text">
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +111,10 @@
                 success: (response) => {
                     if(response.success == 'success')
                     {
-                        window.location = "{{ route('part-target.index') }}";
+                        let id = response.part_target_id;
+                        let url = "{{route('part-target.edit', ':id')}}";
+                        url = url.replace(':id', id);
+                        window.location = url;
                     }
                 },
                 error: function(response){

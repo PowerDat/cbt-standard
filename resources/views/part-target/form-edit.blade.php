@@ -118,7 +118,7 @@
                 success: (response) => {
                     if(response.success == 'success')
                     {
-                        window.location = "{{ route('part-target.index') }}";
+                        window.location.reload();
                     }
                 },
                 error: function(response){

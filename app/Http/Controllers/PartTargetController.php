@@ -6,10 +6,6 @@ use App\Models\Part;
 use App\Models\PartTarget;
 use Illuminate\Http\Request;
 use App\Models\PartTargetSub;
-use App\Models\PartIndexScore;
-use App\Models\PartIndexQuestion;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
 class PartTargetController extends Controller
 {
@@ -49,7 +45,7 @@ class PartTargetController extends Controller
         ], [
             'part_id.required' => 'กรอกข้อมูลด้านเกณฑ์มาตรฐาน',
             'part_target_order.required' => 'กรอกข้อมูลลำดับเป้าประสงค์',
-            'part_target_order.numeric' => 'ลำดับเป้าประสงค์ เฉพาะตัวเลขเท่านั้น',
+            'part_target_order.numeric' => 'กรอกลำดับเป้าประสงค์(เฉพาะตัวเลข)',
             'part_target_name.required' => 'กรอกข้อมูลข้อมูลเป้าประสงค์',
         ]);
 
@@ -65,7 +61,8 @@ class PartTargetController extends Controller
         session()->flash('success', 'เพิ่มข้อมูลสำเร็จ');
 
         return response()->json([
-            'success'  => 'success'
+            'success'  => 'success',
+            'part_target_id'  => $model->part_target_id,
         ]);
     }
 
@@ -102,7 +99,7 @@ class PartTargetController extends Controller
         ], [
             'part_id.required' => 'กรอกข้อมูลด้านเกณฑ์มาตรฐาน',
             'part_target_order.required' => 'กรอกข้อมูลลำดับเป้าประสงค์',
-            'part_target_order.numeric' => 'ลำดับเป้าประสงค์ เฉพาะตัวเลขเท่านั้น',
+            'part_target_order.numeric' => 'กรอกลำดับเป้าประสงค์(เฉพาะตัวเลข)',
             'part_target_name.required' => 'กรอกข้อมูลข้อมูลเป้าประสงค์',
         ]);
 
