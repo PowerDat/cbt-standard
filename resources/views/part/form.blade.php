@@ -36,15 +36,7 @@
                     @endif
 
                     <div class="card-body">
-                        {{-- @if (isset($model))
-                        <div class="row">
-                            <div class="col text-end">
-                                <a href="{{route('part-target.create-from-part', $model->part_id)}}" class="btn btn-primary">
-                                    <i class="fa fa-plus" aria-hidden="true"></i> รายละเอียด
-                                </a>
-                            </div>
-                        </div>
-                        @endif --}}
+                        
                         <div class="row mt-3">
                             <div class="col">
                                 <div class="mb-3">
@@ -74,10 +66,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer text-end">
-                        <button class="btn btn-primary" type="submit">บันทึก</button>
-                        <a class="btn btn-light" href="{{route('part.index')}}">ยกเลิก</a>
-                      </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-6">
+                                {{-- @if (isset($model))
+                                <a href="{{route('part-detail.create-from-part', $model->part_id)}}" class="btn btn-secondary">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> รายละเอียด
+                                </a>
+                                @endif --}}
+                            </div>
+                            <div class="col-6 text-end">
+                                <button class="btn btn-primary" type="submit">บันทึก</button>
+                            <a class="btn btn-light" href="{{route('part.index')}}">ยกเลิก</a>
+                            </div>
+                        </div>
+                    </div>
                 </form>
 
             </div>

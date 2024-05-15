@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="left-menu-header col">
-            ระบบเก็บข้อมูลเกณฑ์การพัฒนาการท่องเที่ยวโดยชุมชน
+            
         </div>
         <div class="nav-right col pull-right right-menu p-0 box-col-6">
             <ul class="nav-menus">
