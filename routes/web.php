@@ -36,15 +36,16 @@ Route::get('/', function () {
     // Route::get('part-target/create-by-id/{part_target_id?}', [PartTargetController::class, 'createById'])->name('part-target.create-by-id');
     // Route::post('part-target/updated/{id?}', [PartTargetController::class, 'updated'])->name('part-target.updated');
     Route::resource('part-target', PartTargetController::class);
+    Route::get('part-target/createByPartId/{id?}', [PartTargetController::class, 'createByPartId'])->name('part-target.createByPartId');
     // Route::get('part-target-sub/create-by-id/{id?}', [PartTargetSubController::class, 'createById'])->name('part-target-sub.create-by-id');
     Route::resource('part-target-sub', PartTargetSubController::class);
     Route::resource('part-index', PartIndexController::class);
     Route::get('part-index/create-by-id/{id?}', [PartIndexController::class, 'createById'])->name('part-index.create-by-id');
     //รายละเอียดของแต่ละด้าน
+    Route::get('part-detail/createByTargetId/{id?}', [PartDetailController::class, 'createByTargetId'])->name('part-detail.createByTargetId');
     Route::post('part-detail/fetchPartTargetById', [PartDetailController::class, 'fetchPartTargetById'])->name('part-detail.fetchPartTargetById');
     Route::resource('part-detail', PartDetailController::class);
-    //สร้างจากหน้า part
-    Route::get('part-detail/create-from-part/{part_id?}', [PartDetailController::class, 'createFromPart'])->name('part-detail.create-from-part');
+    
     //report
     Route::get('report/part', [ReportController::class, 'part'])->name('report.part');
 // });

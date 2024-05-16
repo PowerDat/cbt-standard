@@ -42,13 +42,14 @@ class PartDetailController extends Controller
         ]);
     }
 
-    public function createFromPart($part_id)
+    public function createByTargetId($id)
     {
-        $part = Part::all();
-
+        $partTarget = PartTarget::find($id);
+        $part = Part::where('part_id', $partTarget->part_id)->get();
+        // dd($part);
         return view('part-detail.form', [
             'part' => $part,
-            'part_id' => $part_id,
+            'partTarget' => $partTarget,
         ]);
     }
 
@@ -62,13 +63,14 @@ class PartDetailController extends Controller
             $request->validate([
                 'part_id' => 'required',
                 'part_target_id' => 'required',
-                'part_target_sub_order' => 'required|numeric',
+                'part_target_sub_order' => 'required|numeric|unique:part_target_sub',
                 'name_question' => 'required',
                 'inputs_score.*.name_score' => 'required'
             ], [
                 'part_id.required' => 'เลือกข้อมูลด้าน',
                 'part_target_id.required' => 'เลือกข้อมูลเป้าประสงค์',
                 'part_target_sub_order.numeric' => 'ลำดับเกณฑ์พิจารณา ต้องใส่เป็นตัวเลขเท่านั้น',
+                'part_target_sub_order.unique' => 'ลำดับเกณฑ์พิจารณามีอยู่แล้วในระบบ(ห้ามซ้ำ)',
             ]);
 
             //ข้อมูลเกณฑ์พิจารณา

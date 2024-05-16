@@ -33,6 +33,18 @@ class PartTargetController extends Controller
         ]);
     }
 
+    public function createByPartId($id)
+    {
+        $part = Part::all();
+        $partTargetByPartId = PartTarget::where('part_id', $id)->paginate(5);
+
+        return view('part-target.form', [
+            'part' => $part,
+            'part_id' => $id,
+            'partTargetByPartId' => $partTargetByPartId,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -40,12 +52,13 @@ class PartTargetController extends Controller
     {
         $request->validate([
             'part_id' => 'required',
-            'part_target_order' => 'required|numeric',
+            'part_target_order' => 'required|numeric|unique:part_target',
             'part_target_name' => 'required',
         ], [
             'part_id.required' => 'กรอกข้อมูลด้านเกณฑ์มาตรฐาน',
             'part_target_order.required' => 'กรอกข้อมูลลำดับเป้าประสงค์',
             'part_target_order.numeric' => 'กรอกลำดับเป้าประสงค์(เฉพาะตัวเลข)',
+            'part_target_order.unique' => 'ลำดับเป้าประสงค์มีอยู่แล้วในระบบ(ห้ามซ้ำ)',
             'part_target_name.required' => 'กรอกข้อมูลข้อมูลเป้าประสงค์',
         ]);
 
@@ -80,10 +93,12 @@ class PartTargetController extends Controller
     {
         $part = Part::all();
         $partTarget = PartTarget::find($id);
+        $partTargetByPartId = PartTarget::where('part_id', $partTarget->part_id)->paginate(5);
 
         return view('part-target.form-edit', [
             'part' => $part,
             'partTarget' => $partTarget,
+            'partTargetByPartId' => $partTargetByPartId,
         ]);
     }
 

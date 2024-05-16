@@ -40,11 +40,12 @@ class PartController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'part_order' => 'required|numeric',
+            'part_order' => 'required|numeric|unique:part',
             'part_name' => 'required',
         ], [
             'part_order.required' => 'กรอกลำดับด้านเกณฑ์มาตรฐาน',
             'part_order.numeric' => 'กรอกลำดับด้านเกณฑ์มาตรฐาน(เฉพาะตัวเลข)',
+            'part_order.unique' => 'ลำดับด้านเกณฑ์มาตรฐานมีอยู่แล้วในระบบ(ห้ามซ้ำ)',
             'part_name.required' => 'กรอกข้อมูลด้านเกณฑ์มาตรฐาน',
         ]);
 

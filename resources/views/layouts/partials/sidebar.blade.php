@@ -43,6 +43,11 @@
                         </ul>
                     </li>
                     <li class="dropdown">
+                        <a class="nav-link menu-title link-nav" href="{{route('part.index')}}">
+                            <i data-feather="circle"></i>ข้อมูลเกณฑ์มาตรฐาน
+                        </a>
+                    </li>
+                    {{-- <li class="dropdown">
                         <a class="nav-link menu-title" href="javascript:void(0)">
                             <i data-feather="circle"></i><span>ข้อมูลเกณฑ์มาตรฐาน</span>
                         </a>
@@ -56,7 +61,7 @@
                             <li>
                                 <a href="{{route('part-detail.index')}}">ข้อมูลรายละเอียด</a>
                             </li>
-                            {{-- <li>
+                            <li>
                                 <a href="{{route('part-target.index')}}">ข้อมูลเป้าประสงค์</a>
                             </li>
                             <li>
@@ -64,9 +69,9 @@
                             </li>
                             <li>
                                 <a href="{{route('part-index.index')}}">ข้อมูลเกณฑ์การให้คะแนน</a>
-                            </li> --}}
+                            </li>
                         </ul>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
             <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>
