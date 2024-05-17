@@ -61,14 +61,10 @@ class PartDetailController extends Controller
         if ($request->ajax()) {
 
             $request->validate([
-                'part_id' => 'required',
-                'part_target_id' => 'required',
                 'part_target_sub_order' => 'required|numeric|unique:part_target_sub',
                 'name_question' => 'required',
                 'inputs_score.*.name_score' => 'required'
             ], [
-                'part_id.required' => 'เลือกข้อมูลด้าน',
-                'part_target_id.required' => 'เลือกข้อมูลเป้าประสงค์',
                 'part_target_sub_order.numeric' => 'ลำดับเกณฑ์พิจารณา ต้องใส่เป็นตัวเลขเท่านั้น',
                 'part_target_sub_order.unique' => 'ลำดับเกณฑ์พิจารณามีอยู่แล้วในระบบ(ห้ามซ้ำ)',
             ]);
@@ -128,23 +124,20 @@ class PartDetailController extends Controller
      */
     public function edit(string $id)
     {
-        $part = Part::all();
-        $partTarget = PartTarget::all();
-        $partTargetSub = PartTargetSub::find($id);
-        $question = PartIndexQuestion::where('part_target_sub_id', $id)->get();
-        $score = PartIndexScore::where('part_target_sub_id', $id)
+        $partTarget = PartTarget::find($id);
+        $part = Part::where('part_id', $partTarget->part_id)->get();
+        $partTargetSub = PartTargetSub::where('part_target_id', $partTarget->part_target_id)->get();
+        $question = PartIndexQuestion::where('part_target_sub_id', $partTargetSub[0]->part_target_sub_id)->get();
+        $score = PartIndexScore::where('part_target_sub_id', $partTargetSub[0]->part_target_sub_id)
             ->orderBy('part_index_score_id', 'desc')
             ->get();
-        $partTargetById = PartTarget::select('part_id')->where('part_target_id', $partTargetSub->part_target_id)->get();
-        $part_id = $partTargetById[0]->part_id;
-
+        // dd($partTargetSub);
         return view('part-detail.form-edit', [
-            'part' => $part,
             'partTarget' => $partTarget,
             'partTargetSub' => $partTargetSub,
             'question' => $question,
             'score' => $score,
-            'part_id' => $part_id,
+            'part' => $part,
         ]);
     }
 
@@ -156,14 +149,10 @@ class PartDetailController extends Controller
         if ($request->ajax()) {
 
             $request->validate([
-                'part_id' => 'required',
-                'part_target_id' => 'required',
                 'part_target_sub_order' => 'required|numeric',
                 'name_question' => 'required',
                 'inputs_score.*.name_score' => 'required'
             ], [
-                'part_id.required' => 'เลือกข้อมูลด้าน',
-                'part_target_id.required' => 'เลือกข้อมูลเป้าประสงค์',
                 'part_target_sub_order.numeric' => 'ลำดับเกณฑ์พิจารณา ต้องใส่เป็นตัวเลขเท่านั้น',
             ]);
 

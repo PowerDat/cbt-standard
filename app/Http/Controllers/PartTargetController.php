@@ -6,6 +6,7 @@ use App\Models\Part;
 use App\Models\PartTarget;
 use Illuminate\Http\Request;
 use App\Models\PartTargetSub;
+use Illuminate\Support\Facades\DB;
 
 class PartTargetController extends Controller
 {
@@ -36,12 +37,18 @@ class PartTargetController extends Controller
     public function createByPartId($id)
     {
         $part = Part::all();
-        $partTargetByPartId = PartTarget::where('part_id', $id)->paginate(5);
+        // $partTargetByPartId = PartTarget::where('part_id', $id)->paginate(5);
+        // $partTargetByPartId = DB::table('part')
+        //     ->join('part_target', 'part.part_id', '=', 'part_target.part_id')
+        //     ->join('part_target_sub', 'part_target.part_target_id', '=', 'part_target_sub.part_target_id')
+        //     ->select('part_order', 'part_target.part_target_id', 'part_target_order', 'part_target_sub.part_target_sub_id', 'part_target_sub_order')
+        //     ->where('part.part_id', $id)
+        //     ->paginate(10);
 
         return view('part-target.form', [
             'part' => $part,
             'part_id' => $id,
-            'partTargetByPartId' => $partTargetByPartId,
+            // 'partTargetByPartId' => $partTargetByPartId,
         ]);
     }
 
@@ -93,7 +100,12 @@ class PartTargetController extends Controller
     {
         $part = Part::all();
         $partTarget = PartTarget::find($id);
-        $partTargetByPartId = PartTarget::where('part_id', $partTarget->part_id)->paginate(5);
+        $partTargetByPartId = DB::table('part')
+            ->join('part_target', 'part.part_id', '=', 'part_target.part_id')
+            ->join('part_target_sub', 'part_target.part_target_id', '=', 'part_target_sub.part_target_id')
+            ->select('part_order', 'part_target.part_target_id', 'part_target_order', 'part_target_sub.part_target_sub_id', 'part_target_sub_order')
+            ->where('part_target.part_target_id', $id)
+            ->paginate(10);
 
         return view('part-target.form-edit', [
             'part' => $part,

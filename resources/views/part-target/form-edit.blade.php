@@ -45,6 +45,7 @@
                                             name="part_id" 
                                             id="part_id" 
                                             class="form-control" 
+                                            disabled
                                         >
                                             <option value="" selected disabled>เลือกข้อมูล</option>
                                             @foreach ($part as $item)
@@ -62,7 +63,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label class="form-label">ลำดับเป้าประสงค์(เฉพาะตัวเลข)</label>
+                                        <label class="form-label">ลำดับเป้าประสงค์</label>
                                         <input class="form-control" id="part_target_order" name="part_target_order"
                                             type="text"
                                             value="{{isset($partTarget) ? $partTarget->part_target_order : ''}}">
@@ -83,9 +84,19 @@
                         </fieldset>
 
                     </div>
-                    <div class="card-footer text-end">
-                        <button class="btn btn-primary" type="submit">บันทึก</button>
-                        <a class="btn btn-light" href="{{route('part-target.index')}}">ยกเลิก</a>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-6">
+                                <a href="{{route('part-detail.createByTargetId', $partTarget->part_target_id)}}"
+                                    class="btn btn-secondary">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> คำถามการประเมินและเกณฑ์การให้คะแนน
+                                </a>
+                            </div>
+                            <div class="col-6 text-end">
+                                <button class="btn btn-primary" type="submit">บันทึก</button>
+                                <a class="btn btn-light" href="{{route('part.edit', $partTarget->part_id)}}">กลับหน้าเกณฑ์มาตรฐาน</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -94,39 +105,50 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="row">
+                        <h5>รายการเกณฑ์พิจารณา</h5>
+                    </div>
+                    <div class="table-responsive mt-3">
                         <table class="table table-bordered text-center">
                             <thead>
                                 <tr>
-                                    <th scope="col">เกณฑ์มาตรฐาน</th>
-                                    <th scope="col">เป้าประสงค์</th>
-                                    <th scope="col">รายละเอียด</th>
-                                    <th scope="col">แก้ไข</th>
-                                    <th scope="col">ลบ</th>
+                                    <th>ลำดับเกณฑ์มาตรฐาน</th>
+                                    <th>ลำดับเป้าประสงค์</th>
+                                    <th>ลำดับเกณฑ์พิจารณา</th>
+                                    <th>แก้ไข</th>
+                                    {{-- <th>ลบ</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
+                                @if ($partTargetByPartId->count() > 0)
                                 @foreach ($partTargetByPartId as $item)
                                 <tr>
-                                    <td>{{$item->part->part_order}}</td>
-                                    <td>{{$item->part_target_order}}</td>
-                                    <td>
-                                        <a href="{{route('part-detail.createByTargetId', $item->part_target_id)}}" class="btn btn-secondary">
-                                            <i class="fa fa-plus"></i>
+                                    <td class="text-center">{{$item->part_order}}</td>
+                                    <td class="text-center">{{$item->part_target_order}}</td>
+                                    <td class="text-center">{{$item->part_target_sub_order}}</td>
+                                    <td class="text-center">
+                                        @if (isset($item->part_target_sub_id))
+                                        <a href="{{route('part-detail.edit', $item->part_target_id)}}"
+                                            class="btn btn-primary btn-sm">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
+                                        @endif
+                                        
                                     </td>
-                                    <td>
-                                        <a href="{{route('part-target.edit', $item->part_target_id)}}" class="btn btn-primary">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="{{route('part-target.destroy', $item->part_target_id)}}" class="btn btn-light ">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                    </td>
+                                    {{-- <td class="text-center">
+                                        <form action="{{route('part-target.destroy', $item->part_target_id)}}"
+                                            method="post" class="delete_form">
+                                            @csrf
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button type="submit" class="btn btn-light btn-sm">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                    </td> --}}
                                 </tr>
-                                @endforeach
+                                @endforeach 
+                                @endif
+                                
                             </tbody>
                         </table>
                     </div>

@@ -81,9 +81,11 @@ class PartController extends Controller
     public function edit(string $id)
     {
         $model = Part::find($id);
+        $partTarget = PartTarget::where('part_id', $id)->get();
 
         return view('part.form-edit', [
             'model' => $model,
+            'partTarget' => $partTarget,
         ]);
     }
 

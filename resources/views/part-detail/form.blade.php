@@ -115,6 +115,7 @@
                                             <h6>{{'ด้าน '.$part[0]->part_order.' : '.$part[0]->part_name}}</h6>
                                             <h6>{{'เป้าประสงค์ '.$partTarget->part_target_order.' : '.$partTarget->part_target_name}}</h6>
                                         </div>
+                                        <input type="hidden" name="part_target_id" value="{{$partTarget->part_target_id}}">
                                     </div>
                                 </div>
 
@@ -266,52 +267,6 @@
                 </form>
             </div>
 
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered text-center">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">เกณฑ์มาตรฐาน</th>
-                                        <th scope="col">เป้าประสงค์</th>
-                                        <th scope="col">รายละเอียด</th>
-                                        <th scope="col">แก้ไข</th>
-                                        <th scope="col">ลบ</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{-- @foreach ($partTargetByPartId as $item)
-                                    <tr>
-                                        <td>{{$item->part->part_order}}</td>
-                                        <td>{{$item->part_target_order}}</td>
-                                        <td>
-                                            <a href="{{route('part-detail.createByTargetId', $item->part_target_id)}}" class="btn btn-secondary">
-                                                <i class="fa fa-plus"></i>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="{{route('part-target.edit', $item->part_target_id)}}" class="btn btn-primary">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="{{route('part-target.destroy', $item->part_target_id)}}" class="btn btn-light ">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    @endforeach --}}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="m-t-30 text-end">
-                            {{-- {{$partTargetByPartId->links()}} --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
     <!-- Container-fluid Ends-->
@@ -343,7 +298,10 @@
                     processData: false,
                     success: (response) => {
                         if (response.success == 'success') {
-                            window.location = "{{ route('part-detail.index') }}";
+                            let id = "{{$partTarget->part_target_id}}";
+                            let url = "{{ route('part-target.edit', ':id') }}";
+                            url = url.replace(':id', id);
+                            window.location = url;
                         }
                     },
                     error: function(response) {
@@ -388,10 +346,6 @@
                 $(this).parent().parent().remove();
             });
 
-            //btn 1
-            $('#btn-1').click(function(){
-                alert('btn-1');
-            });
 
         });
     </script>

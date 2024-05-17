@@ -34,26 +34,40 @@
 
                         <div class="card-body">
 
+                            <div class="row">
+                                <div class="col-12 text-end">
+                                    <a href="{{route('part-target.edit', $partTarget->part_target_id)}}" class="btn btn-secondary">
+                                    กลับหน้าเป้าประสงค์
+                                </a>
+                                </div>
+                            </div>
+
                             <div class="f1-steps">
                                 <div class="f1-progress">
-                                    <div class="f1-progress-line" data-now-value="16.66" data-number-of-steps="3"></div>
+                                    <div class="f1-progress-line" data-now-value="16.66" data-number-of-steps="2"></div>
                                 </div>
                                 <div class="f1-step active">
                                     <div class="f1-step-icon">1</div>
-                                    <p>ข้อมูลเป้าประสงค์</p>
-                                </div>
-                                <div class="f1-step">
-                                    <div class="f1-step-icon">2</div>
                                     <p>ข้อมูลเกณฑ์การพิจารณา</p>
                                 </div>
                                 <div class="f1-step">
-                                    <div class="f1-step-icon">3</div>
+                                    <div class="f1-step-icon">2</div>
                                     <p>ข้อมูลเกณฑ์การให้คะแนน</p>
                                 </div>
                             </div>
 
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <h6>{{'ด้าน '.$part[0]->part_order.' : '.$part[0]->part_name}}</h6>
+                                        <h6>{{'เป้าประสงค์ '.$partTarget->part_target_order.' : '.$partTarget->part_target_name}}</h6>
+                                    </div>
+                                    <input type="hidden" name="part_target_id" value="{{$partTarget->part_target_id}}">
+                                </div>
+                            </div>
+
                             {{-- ข้อมูลเป้าประสงค์ --}}
-                            <fieldset>
+                            {{-- <fieldset>
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
@@ -82,7 +96,7 @@
                                                 <option value="" selected disabled>เลือกข้อมูลเป้าประสงค์</option>
                                                 @foreach ($partTarget as $item)
                                                     <option value="{{$item->part_target_id}}"
-                                                        @if ($item->part_target_id == $partTargetSub->part_target_id)
+                                                        @if ($item->part_target_id == $partTargetSub[0]->part_target_id)
                                                             selected
                                                         @endif
                                                         >
@@ -97,17 +111,18 @@
                                 <div class="f1-buttons">
                                     <button class="btn btn-primary btn-next" type="button">ต่อไป</button>
                                 </div>
-                            </fieldset>
+                            </fieldset> --}}
 
                             {{-- ข้อมูลเกณฑ์การพิจารณา --}}
                             <fieldset>
+
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
-                                            <label class="form-label">ลำดับเกณฑ์พิจารณา(เฉพาะตัวเลข)</label>
+                                            <label class="form-label">ลำดับเกณฑ์พิจารณา</label>
                                             <input class="form-control" id="part_target_sub_order"
                                                 name="part_target_sub_order" type="text" required
-                                                value="{{$partTargetSub->part_target_sub_order}}">
+                                                value="{{$partTargetSub[0]->part_target_sub_order}}">
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +131,7 @@
                                     <div class="col">
                                         <div class="mb-3">
                                             <label class="form-label">ข้อมูลเกณฑ์พิจารณา</label>
-                                            <textarea class="form-control" rows="5" id="part_target_sub_name" name="part_target_sub_name" required>{{$partTargetSub->part_target_sub_name}}</textarea>
+                                            <textarea class="form-control" rows="5" id="part_target_sub_name" name="part_target_sub_name" required>{{$partTargetSub[0]->part_target_sub_name}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +140,7 @@
                                     <div class="col">
                                         <div class="mb-3">
                                             <label class="form-label">คำอธิบาย</label>
-                                            <textarea class="form-control" rows="5" id="part_target_sub_desc" name="part_target_sub_desc" required>{{$partTargetSub->part_target_sub_desc}}</textarea>
+                                            <textarea class="form-control" rows="5" id="part_target_sub_desc" name="part_target_sub_desc" required>{{$partTargetSub[0]->part_target_sub_desc}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -138,6 +153,17 @@
 
                             {{-- ข้อมูลเกณฑ์การให้คะแนน --}}
                             <fieldset>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <h6>{{'ลำดับเกณฑ์พิจารณา : '.$partTargetSub[0]->part_target_sub_order}}</h6>
+                                            <h6>{{'ข้อมูลเกณฑ์พิจารณา : '.$partTargetSub[0]->part_target_sub_name}}</h6>
+                                        </div>
+                                        <input type="hidden" name="part_target_id" value="{{$partTarget->part_target_id}}">
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
@@ -279,14 +305,15 @@
 
                 $.ajax({
                     type: 'post',
-                    url: "{{ route('part-detail.update', $partTargetSub->part_target_sub_id) }}",
+                    url: "{{ route('part-detail.update', $partTargetSub[0]->part_target_sub_id) }}",
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: (response) => {
-                        if (response.success == 'success') {
-                            window.location = "{{ route('part-detail.index') }}";
-                        }
+                        let id = "{{$partTarget->part_target_id}}";
+                        let url = "{{ route('part-target.edit', ':id') }}";
+                        url = url.replace(':id', id);
+                        window.location = url;
                     },
                     error: function(response) {
                         $('#form').find(".print-error-msg").find("ul").html('');

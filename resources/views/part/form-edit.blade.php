@@ -20,6 +20,7 @@
 <!-- content -->
 <div class="container-fluid">
     <div class="row">
+
         <div class="col-sm-12">
             <form id="form" method="POST">
                 @csrf
@@ -35,15 +36,6 @@
                     <div class="card-body">
 
                         <div class="row">
-                            <div class="col-12 text-end">
-                                <a href="{{route('part-target.createByPartId', $model->part_id)}}"
-                                    class="btn btn-secondary">
-                                    <i class="fa fa-plus" aria-hidden="true"></i> เป้าประสงค์
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="row mt-3 mb-3">
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label">ลำดับด้านเกณฑ์มาตรฐาน</label>
@@ -70,13 +62,65 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer text-end">
-                        <button class="btn btn-primary" type="submit">บันทึก</button>
-                        <a class="btn btn-light" href="{{route('part.index')}}">ยกเลิก</a>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-6">
+                                <a href="{{route('part-target.createByPartId', $model->part_id)}}"
+                                    class="btn btn-secondary">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> เป้าประสงค์
+                                </a>
+                            </div>
+                            <div class="col-6 text-end">
+                                <button class="btn btn-primary" type="submit">บันทึก</button>
+                                <a class="btn btn-light" href="{{route('part.index')}}">ยกเลิก</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
+
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <h5>รายการเป้าประสงค์</h5>
+                    </div>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-bordered text-center">
+                            <thead class="bg-light text-center">
+                                <tr>
+                                    <th scope="col">เกณฑ์มาตรฐาน</th>
+                                    <th scope="col">เป้าประสงค์</th>
+                                    <th scope="col">แก้ไข</th>
+                                    <th scope="col">ลบ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($partTarget as $item)
+                                <tr>
+                                    <td>{{$item->part->part_order}}</td>
+                                    <td>{{$item->part_target_order}}</td>
+                                    <td>
+                                        <a href="{{route('part-target.edit', $item->part_target_id)}}" class="btn btn-primary">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{{route('part-target.destroy', $item->part_target_id)}}" class="btn btn-light ">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 @endsection
