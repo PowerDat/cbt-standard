@@ -37,8 +37,8 @@
                             <div class="row">
                                 <div class="col-12 text-end">
                                     <a href="{{route('part-target.edit', $partTarget->part_target_id)}}" class="btn btn-secondary">
-                                    กลับหน้าเป้าประสงค์
-                                </a>
+                                        กลับหน้าเป้าประสงค์
+                                    </a>
                                 </div>
                             </div>
 
@@ -258,8 +258,10 @@
                                 <div class="f1-buttons mt-3">
                                     <button class="btn btn-outline-primary btn-previous" type="button">ก่อนหน้า</button>
                                     <button class="btn btn-primary" type="submit">บันทึก</button>
-                                    <a class="btn btn-light" href="{{ route('part-detail.index') }}">ยกเลิก</a>
-                                </div>
+                                    <a href="{{route('part-target.edit', $partTarget->part_target_id)}}" class="btn btn-secondary">
+                                        กลับหน้าเป้าประสงค์
+                                    </a>
+                                 </div>
                             </fieldset>
 
                         </div>

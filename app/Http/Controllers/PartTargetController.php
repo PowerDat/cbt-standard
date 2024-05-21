@@ -103,7 +103,7 @@ class PartTargetController extends Controller
         $partTargetByPartId = DB::table('part')
             ->join('part_target', 'part.part_id', '=', 'part_target.part_id')
             ->join('part_target_sub', 'part_target.part_target_id', '=', 'part_target_sub.part_target_id')
-            ->select('part_order', 'part_target.part_target_id', 'part_target_order', 'part_target_sub.part_target_sub_id', 'part_target_sub_order')
+            ->select('part_order', 'part_name', 'part_target.part_target_id', 'part_target_order', 'part_target_name', 'part_target_sub.part_target_sub_id', 'part_target_sub_order', 'part_target_sub_name')
             ->where('part_target.part_target_id', $id)
             ->paginate(10);
 
@@ -120,11 +120,9 @@ class PartTargetController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'part_id' => 'required',
             'part_target_order' => 'required|numeric',
             'part_target_name' => 'required',
         ], [
-            'part_id.required' => 'กรอกข้อมูลด้านเกณฑ์มาตรฐาน',
             'part_target_order.required' => 'กรอกข้อมูลลำดับเป้าประสงค์',
             'part_target_order.numeric' => 'กรอกลำดับเป้าประสงค์(เฉพาะตัวเลข)',
             'part_target_name.required' => 'กรอกข้อมูลข้อมูลเป้าประสงค์',
@@ -132,7 +130,6 @@ class PartTargetController extends Controller
 
         $model = PartTarget::find($id);
         $model->part_target_order = $request->part_target_order;
-        $model->part_id = $request->part_id;
         $model->part_target_name = $request->part_target_name;
         $model->updated_by = '';
         $model->save();

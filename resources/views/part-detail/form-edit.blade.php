@@ -36,7 +36,7 @@
 
                             <div class="row">
                                 <div class="col-12 text-end">
-                                    <a href="{{route('part-target.edit', $partTarget->part_target_id)}}" class="btn btn-secondary">
+                                    <a href="{{route('part-target.edit', $partTarget[0]->part_target_id)}}" class="btn btn-secondary">
                                     กลับหน้าเป้าประสงค์
                                 </a>
                                 </div>
@@ -60,58 +60,11 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <h6>{{'ด้าน '.$part[0]->part_order.' : '.$part[0]->part_name}}</h6>
-                                        <h6>{{'เป้าประสงค์ '.$partTarget->part_target_order.' : '.$partTarget->part_target_name}}</h6>
+                                        <h6>{{'เป้าประสงค์ '.$partTarget[0]->part_target_order.' : '.$partTarget[0]->part_target_name}}</h6>
                                     </div>
-                                    <input type="hidden" name="part_target_id" value="{{$partTarget->part_target_id}}">
+                                    <input type="hidden" name="part_target_id" value="{{$partTarget[0]->part_target_id}}">
                                 </div>
                             </div>
-
-                            {{-- ข้อมูลเป้าประสงค์ --}}
-                            {{-- <fieldset>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="mb-3">
-                                            <label class="form-label">ข้อมูลด้าน</label>
-                                            <select name="part_id" id="part_id" class="form-control" >
-                                                <option value="" selected disabled>เลือกข้อมูลด้าน</option>
-                                                @foreach ($part as $item)
-                                                    <option value="{{ $item->part_id }}"
-                                                        @if ($item->part_id == $part_id)
-                                                        selected
-                                                        @endif
-                                                        >
-                                                        {{'ด้าน '.$item->part_order.' : '.$item->part_name}}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="mb-3">
-                                            <label class="form-label">ข้อมูลเป้าประสงค์</label>
-                                            <select name="part_target_id" id="part_target_id" class="form-control" >
-                                                <option value="" selected disabled>เลือกข้อมูลเป้าประสงค์</option>
-                                                @foreach ($partTarget as $item)
-                                                    <option value="{{$item->part_target_id}}"
-                                                        @if ($item->part_target_id == $partTargetSub[0]->part_target_id)
-                                                            selected
-                                                        @endif
-                                                        >
-                                                        {{$item->part_target_order . ' : ' . $item->part_target_name}}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="f1-buttons">
-                                    <button class="btn btn-primary btn-next" type="button">ต่อไป</button>
-                                </div>
-                            </fieldset> --}}
 
                             {{-- ข้อมูลเกณฑ์การพิจารณา --}}
                             <fieldset>
@@ -122,7 +75,7 @@
                                             <label class="form-label">ลำดับเกณฑ์พิจารณา</label>
                                             <input class="form-control" id="part_target_sub_order"
                                                 name="part_target_sub_order" type="text" required
-                                                value="{{$partTargetSub[0]->part_target_sub_order}}">
+                                                value="{{$partTargetSub->part_target_sub_order}}">
                                         </div>
                                     </div>
                                 </div>
@@ -131,7 +84,7 @@
                                     <div class="col">
                                         <div class="mb-3">
                                             <label class="form-label">ข้อมูลเกณฑ์พิจารณา</label>
-                                            <textarea class="form-control" rows="5" id="part_target_sub_name" name="part_target_sub_name" required>{{$partTargetSub[0]->part_target_sub_name}}</textarea>
+                                            <textarea class="form-control" rows="5" id="part_target_sub_name" name="part_target_sub_name" required>{{$partTargetSub->part_target_sub_name}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -140,7 +93,7 @@
                                     <div class="col">
                                         <div class="mb-3">
                                             <label class="form-label">คำอธิบาย</label>
-                                            <textarea class="form-control" rows="5" id="part_target_sub_desc" name="part_target_sub_desc" required>{{$partTargetSub[0]->part_target_sub_desc}}</textarea>
+                                            <textarea class="form-control" rows="5" id="part_target_sub_desc" name="part_target_sub_desc" required>{{$partTargetSub->part_target_sub_desc}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -148,6 +101,9 @@
                                 <div class="f1-buttons mt-3">
                                     <button class="btn btn-outline-primary btn-previous" type="button">ก่อนหน้า</button>
                                     <button class="btn btn-primary btn-next" type="button">ต่อไป</button>
+                                    <a class="btn btn-info" id="btn-save">
+                                        บันทึก
+                                    </a>
                                 </div>
                             </fieldset>
 
@@ -157,10 +113,10 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
-                                            <h6>{{'ลำดับเกณฑ์พิจารณา : '.$partTargetSub[0]->part_target_sub_order}}</h6>
-                                            <h6>{{'ข้อมูลเกณฑ์พิจารณา : '.$partTargetSub[0]->part_target_sub_name}}</h6>
+                                            <h6>{{'ลำดับเกณฑ์พิจารณา : '.$partTargetSub->part_target_sub_order}}</h6>
+                                            <h6>{{'ข้อมูลเกณฑ์พิจารณา : '.$partTargetSub->part_target_sub_name}}</h6>
                                         </div>
-                                        <input type="hidden" name="part_target_id" value="{{$partTarget->part_target_id}}">
+                                        <input type="hidden" name="part_target_id" value="{{$partTarget[0]->part_target_id}}">
                                     </div>
                                 </div>
 
@@ -215,7 +171,7 @@
                                             <label for="" class="col-sm-2 col-form-label text-end">คะแนน 4 =</label>
                                             <div class="col-sm-10">
                                                 <input class="form-control" type="text"
-                                                    name="inputs_score[4][name_score]" required value="{{$score[4]->part_index_score_desc}}">
+                                                    name="inputs_score[4][name_score]" required value="{{ ($score->count() > 0) ? $score[4]->part_index_score_desc : '' }}">
                                             </div>
                                         </div>
                                     </div>
@@ -227,7 +183,7 @@
                                             <label for="" class="col-sm-2 col-form-label text-end">คะแนน 3 =</label>
                                             <div class="col-sm-10">
                                                 <input class="form-control" type="text"
-                                                    name="inputs_score[3][name_score]" required value="{{$score[3]->part_index_score_desc}}">
+                                                    name="inputs_score[3][name_score]" required value="{{($score->count() > 0) ? $score[3]->part_index_score_desc : ''}}">
                                             </div>
                                         </div>
                                     </div>
@@ -239,7 +195,7 @@
                                             <label for="" class="col-sm-2 col-form-label text-end">คะแนน 2 =</label>
                                             <div class="col-sm-10">
                                                 <input class="form-control" type="text"
-                                                    name="inputs_score[2][name_score]" required value="{{$score[2]->part_index_score_desc}}">
+                                                    name="inputs_score[2][name_score]" required value="{{($score->count() > 0) ? $score[2]->part_index_score_desc : ''}}">
                                             </div>
                                         </div>
                                     </div>
@@ -251,7 +207,7 @@
                                             <label for="" class="col-sm-2 col-form-label text-end">คะแนน 1 =</label>
                                             <div class="col-sm-10">
                                                 <input class="form-control" type="text"
-                                                    name="inputs_score[1][name_score]" required value="{{$score[1]->part_index_score_desc}}">
+                                                    name="inputs_score[1][name_score]" required value="{{($score->count() > 0) ? $score[1]->part_index_score_desc : ''}}">
                                             </div>
                                         </div>
                                     </div>
@@ -263,7 +219,7 @@
                                             <label for="" class="col-sm-2 col-form-label text-end">คะแนน 0 =</label>
                                             <div class="col-sm-10">
                                                 <input class="form-control" type="text"
-                                                    name="inputs_score[0][name_score]" required value="{{$score[0]->part_index_score_desc}}">
+                                                    name="inputs_score[0][name_score]" required value="{{($score->count() > 0) ? $score[0]->part_index_score_desc : ''}}">
                                             </div>
                                         </div>
                                     </div>
@@ -272,7 +228,9 @@
                                 <div class="f1-buttons mt-3">
                                     <button class="btn btn-outline-primary btn-previous" type="button">ก่อนหน้า</button>
                                     <button class="btn btn-primary" type="submit">บันทึก</button>
-                                    <a class="btn btn-light" href="{{ route('part-detail.index') }}">ยกเลิก</a>
+                                    <a href="{{route('part-target.edit', $partTarget[0]->part_target_id)}}" class="btn btn-secondary">
+                                        กลับหน้าเป้าประสงค์
+                                    </a>
                                 </div>
                             </fieldset>
 
@@ -305,12 +263,12 @@
 
                 $.ajax({
                     type: 'post',
-                    url: "{{ route('part-detail.update', $partTargetSub[0]->part_target_sub_id) }}",
+                    url: "{{ route('part-detail.update', $partTargetSub->part_target_sub_id) }}",
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: (response) => {
-                        let id = "{{$partTarget->part_target_id}}";
+                        let id = "{{$partTarget[0]->part_target_id}}";
                         let url = "{{ route('part-target.edit', ':id') }}";
                         url = url.replace(':id', id);
                         window.location = url;
@@ -356,6 +314,17 @@
             $('#tbody_question').on('click', '.deleteRow', function() {
                 $(this).parent().parent().remove();
             });
+
+            //บันทึกข้อมูลเกณฑ์การพิจารณา
+            $('#btn-save').click(function(){
+                let sub_order = $('#part_target_sub_order').val();
+                let sub_name = $('#part_target_sub_name').val();
+                let sub_desc = $('#part_target_sub_desc').val();
+                let sub_id = "{{$partTargetSub->part_target_sub_id}}";
+
+                
+            });
+
         });
     </script>
 @endpush

@@ -124,14 +124,15 @@ class PartDetailController extends Controller
      */
     public function edit(string $id)
     {
-        $partTarget = PartTarget::find($id);
-        $part = Part::where('part_id', $partTarget->part_id)->get();
-        $partTargetSub = PartTargetSub::where('part_target_id', $partTarget->part_target_id)->get();
-        $question = PartIndexQuestion::where('part_target_sub_id', $partTargetSub[0]->part_target_sub_id)->get();
-        $score = PartIndexScore::where('part_target_sub_id', $partTargetSub[0]->part_target_sub_id)
+        
+        $partTargetSub = PartTargetSub::find($id);
+        $question = PartIndexQuestion::where('part_target_sub_id', $id)->get();
+        $score = PartIndexScore::where('part_target_sub_id', $id)
             ->orderBy('part_index_score_id', 'desc')
             ->get();
-        // dd($partTargetSub);
+        $partTarget = PartTarget::where('part_target_id', $partTargetSub->part_target_id)->get();
+        $part = Part::where('part_id', $partTarget[0]->part_id)->get();
+
         return view('part-detail.form-edit', [
             'partTarget' => $partTarget,
             'partTargetSub' => $partTargetSub,
@@ -234,5 +235,10 @@ class PartDetailController extends Controller
         }
 
         echo $output;
+    }
+
+    public function saveTargetSub(Request $request)
+    {
+
     }
 }

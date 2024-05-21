@@ -105,18 +105,51 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <h5>รายการเกณฑ์พิจารณา</h5>
-                    </div>
+                    <h5>รายการเกณฑ์พิจารณา</h5>
+                    <p class="card-text">
+                        <strong>เกณฑ์มาตรฐาน</strong> {{$partTargetByPartId[0]->part_order.' '.$partTargetByPartId[0]->part_name}}
+                    </p>
+                    <p class="card-text">
+                        <strong>เป้าประสงค์</strong> {{$partTargetByPartId[0]->part_target_order.' '.$partTargetByPartId[0]->part_target_name}}
+                    </p>
+                    @if ($partTargetByPartId->count() > 0)
+                        @foreach ($partTargetByPartId as $item)
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <strong>เกณฑ์พิจารณา</strong> {{$item->part_target_sub_order.' '.$item->part_target_sub_name}}
+                                    </div>
+                                    <div class="col-sm-2 text-end">
+                                        @if (isset($item->part_target_sub_id))
+                                        <a href="{{route('part-detail.edit', $item->part_target_sub_id)}}"
+                                            class="btn btn-primary btn-sm">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+            
+            {{-- <div class="card">
+                <div class="card-body">
+                    
                     <div class="table-responsive mt-3">
-                        <table class="table table-bordered text-center">
-                            <thead>
+                        <table class="table table-bordered">
+                            <thead class="text-center">
                                 <tr>
                                     <th>ลำดับเกณฑ์มาตรฐาน</th>
+                                    <th>ชื่อลำดับเกณฑ์มาตรฐาน</th>
                                     <th>ลำดับเป้าประสงค์</th>
+                                    <th>ชื่อลำดับเป้าประสงค์</th>
                                     <th>ลำดับเกณฑ์พิจารณา</th>
+                                    <th>ชื่อลำดับเกณฑ์พิจารณา</th>
                                     <th>แก้ไข</th>
-                                    {{-- <th>ลบ</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -124,8 +157,11 @@
                                 @foreach ($partTargetByPartId as $item)
                                 <tr>
                                     <td class="text-center">{{$item->part_order}}</td>
+                                    <td>{{$item->part_name}}</td>
                                     <td class="text-center">{{$item->part_target_order}}</td>
+                                    <td>{{$item->part_target_name}}</td>
                                     <td class="text-center">{{$item->part_target_sub_order}}</td>
+                                    <td>{{$item->part_target_sub_name}}</td>
                                     <td class="text-center">
                                         @if (isset($item->part_target_sub_id))
                                         <a href="{{route('part-detail.edit', $item->part_target_id)}}"
@@ -133,18 +169,7 @@
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
                                         @endif
-                                        
                                     </td>
-                                    {{-- <td class="text-center">
-                                        <form action="{{route('part-target.destroy', $item->part_target_id)}}"
-                                            method="post" class="delete_form">
-                                            @csrf
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <button type="submit" class="btn btn-light btn-sm">
-                                                <i class="fa fa-trash" aria-hidden="true"></i>
-                                            </button>
-                                        </form>
-                                    </td> --}}
                                 </tr>
                                 @endforeach 
                                 @endif
@@ -156,7 +181,8 @@
                         {{$partTargetByPartId->links()}}
                     </div>
                 </div>
-            </div>
+            </div> --}}
+
         </div>
 
     </div>

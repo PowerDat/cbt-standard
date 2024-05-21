@@ -81,7 +81,40 @@
         </div>
 
         <div class="col-sm-12">
+
             <div class="card">
+                <div class="card-body">
+                    <h5>รายการเป้าประสงค์</h5>
+                    <p class="card-text">
+                        <strong>เกณฑ์มาตรฐาน</strong> {{$partTarget[0]->part->part_order.' '.$partTarget[0]->part->part_name}}
+                    </p>
+                    @if ($partTarget->count() > 0)
+                        @foreach ($partTarget as $item)
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <strong>เป้าประสงค์</strong> {{$item->part_target_order.' '.$item->part_target_name}}
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <a href="{{route('part-target.edit', $item->part_target_id)}}" class="btn btn-primary">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <a href="{{route('part-target.destroy', $item->part_target_id)}}" class="btn btn-light ">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+
+            {{-- <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <h5>รายการเป้าประสงค์</h5>
@@ -121,7 +154,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
 
