@@ -268,6 +268,8 @@
                     contentType: false,
                     processData: false,
                     success: (response) => {
+                        alert('แก้ไขข้อมูลสำเร็จ');
+
                         let id = "{{$partTarget[0]->part_target_id}}";
                         let url = "{{ route('part-target.edit', ':id') }}";
                         url = url.replace(':id', id);
@@ -322,7 +324,27 @@
                 let sub_desc = $('#part_target_sub_desc').val();
                 let sub_id = "{{$partTargetSub->part_target_sub_id}}";
 
-                
+                $.ajax({
+                    type: 'post',
+                    url: "{{ route('part-detail.saveTargetSub') }}",
+                    data: {
+                        sub_order: sub_order,
+                        sub_name: sub_name,
+                        sub_desc: sub_desc,
+                        sub_id: sub_id,
+                    },
+                    success: (response) => {
+                        if(response.success)
+                        {
+                            alert('แก้ไขข้อมูลสำเร็จ');
+                            
+                            window.location.reload();
+                        }
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    }
+                });
             });
 
         });

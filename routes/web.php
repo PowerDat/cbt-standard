@@ -45,6 +45,7 @@ Route::get('/', function () {
     Route::get('part-detail/createByTargetId/{id?}', [PartDetailController::class, 'createByTargetId'])->name('part-detail.createByTargetId');
     Route::post('part-detail/fetchPartTargetById', [PartDetailController::class, 'fetchPartTargetById'])->name('part-detail.fetchPartTargetById');
     Route::resource('part-detail', PartDetailController::class);
+    Route::post('part-detail/saveTargetSub', [PartDetailController::class, 'saveTargetSub'])->name('part-detail.saveTargetSub');
     
     //report
     Route::get('report/part', [ReportController::class, 'part'])->name('report.part');

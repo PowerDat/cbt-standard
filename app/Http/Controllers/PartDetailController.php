@@ -239,6 +239,21 @@ class PartDetailController extends Controller
 
     public function saveTargetSub(Request $request)
     {
+        $sub_order = $request->sub_order;
+        $sub_name = $request->sub_name;
+        $sub_desc = $request->sub_desc;
+        $sub_id = $request->sub_id;
 
+        //ข้อมูลเกณฑ์พิจารณา
+        $partTargetSub = PartTargetSub::find($sub_id);
+        $partTargetSub->part_target_sub_order = $sub_order;
+        $partTargetSub->part_target_sub_name = $sub_name;
+        $partTargetSub->part_target_sub_desc = $sub_desc;
+        $partTargetSub->updated_by = '';
+        $partTargetSub->save();
+
+        return response()->json([
+            'success' => 'success',
+        ]);
     }
 }
