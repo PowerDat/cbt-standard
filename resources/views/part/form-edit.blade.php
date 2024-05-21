@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">ข้อมูลเกณฑ์มาตรฐาน</li>
-                    <li class="breadcrumb-item">ข้อมูลด้านเกณฑ์มาตรฐาน</li>
+                    <li class="breadcrumb-item">ข้อมูลลำดับเกณฑ์มาตรฐาน</li>
                     <li class="breadcrumb-item active">แก้ไขข้อมูล</li>
                 </ol>
             </div>
@@ -38,7 +38,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label">ลำดับด้านเกณฑ์มาตรฐาน</label>
+                                    <label class="form-label">ลำดับเกณฑ์มาตรฐาน</label>
                                     <input class="form-control" id="part_order" name="part_order" type="text" 
                                         value="{{ $model->part_order}}">
                                 </div>
@@ -47,7 +47,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label">ข้อมูลด้านเกณฑ์มาตรฐาน</label>
+                                    <label class="form-label">ชื่อลำดับเกณฑ์มาตรฐาน</label>
                                     <input class="form-control" id="part_name" name="part_name" type="text" 
                                         value="{{$model->part_name}}">
                                 </div>
@@ -56,7 +56,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label">รายละเอียด(เพิ่มเติม)</label>
+                                    <label class="form-label">รายละเอียดลำดับเกณฑ์มาตรฐาน(เพิ่มเติม)</label>
                                     <textarea class="form-control" id="part_detail" name="part_detail"rows="3">{{$model->part_detail}}</textarea>
                                 </div>
                             </div>
@@ -87,11 +87,13 @@
                         <h5>รายการเป้าประสงค์</h5>
                     </div>
                     <div class="table-responsive mt-3">
-                        <table class="table table-bordered text-center">
+                        <table class="table table-bordered">
                             <thead class="bg-light text-center">
                                 <tr>
                                     <th scope="col">เกณฑ์มาตรฐาน</th>
+                                    <th scope="col">ชื่อลำดับเกณฑ์มาตรฐาน</th>
                                     <th scope="col">เป้าประสงค์</th>
+                                    <th scope="col">ชื่อเป้าประสงค์</th>
                                     <th scope="col">แก้ไข</th>
                                     <th scope="col">ลบ</th>
                                 </tr>
@@ -99,14 +101,16 @@
                             <tbody>
                                 @foreach ($partTarget as $item)
                                 <tr>
-                                    <td>{{$item->part->part_order}}</td>
-                                    <td>{{$item->part_target_order}}</td>
-                                    <td>
+                                    <td class="text-center">{{$item->part->part_order}}</td>
+                                    <td>{{$item->part->part_name}}</td>
+                                    <td class="text-center">{{$item->part_target_order}}</td>
+                                    <td>{{$item->part_target_name}}</td>
+                                    <td class="text-center">
                                         <a href="{{route('part-target.edit', $item->part_target_id)}}" class="btn btn-primary">
                                             <i class="fa fa-pencil"></i>
                                         </a>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <a href="{{route('part-target.destroy', $item->part_target_id)}}" class="btn btn-light ">
                                             <i class="fa fa-trash"></i>
                                         </a>
