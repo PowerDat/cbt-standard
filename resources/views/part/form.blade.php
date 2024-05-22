@@ -35,16 +35,18 @@
                         <div class="row mt-3">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label">ลำดับเกณฑ์มาตรฐาน</label>
-                                    <input class="form-control" id="part_order" name="part_order" type="text">
+                                    <label class="form-label">ลำดับเกณฑ์มาตรฐาน <span class="text-danger" style="font-size: 20px;">*</span></label>
+                                    <input class="form-control" id="part_order" name="part_order" type="text"> 
+                                    <span class="text-danger error-text part_order_error"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label">ชื่อลำดับเกณฑ์มาตรฐาน</label>
+                                    <label class="form-label">ชื่อลำดับเกณฑ์มาตรฐาน <span class="text-danger" style="font-size: 20px;">*</span></label>
                                     <input class="form-control" id="part_name" name="part_name" type="text">
+                                    <span class="text-danger error-text part_name_error"></span>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +71,7 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/form-validation-custom.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script>
     $.ajaxSetup({
         headers: {
@@ -91,22 +93,32 @@
                 data: formData,
                 contentType: false,
                 processData: false,
+                dataType:'json',
+                beforeSend:function(){
+                    $(document).find('span.error-text').text('');
+                },
                 success: (response) => {
-                    if (response.success == 'success') {
+                    if(response.status == 0){
+                        $.each(response.error, function(prefix, val){
+                            $('span.'+prefix+'_error').text(val[0]);
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            title: 'สำเร็จ',
+                            text: response.msg,
+                            icon: 'success',
+                            width: '450px',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+
                         let id = response.part_id;
                         let url = "{{route('part.edit', ':id')}}";
                         url = url.replace(':id', id);
                         window.location = url;
                     }
                 },
-                error: function(response) {
-                    $('#form').find(".print-error-msg").find("ul").html('');
-                    $('#form').find(".print-error-msg").css('display', 'block');
-                    $.each(response.responseJSON.errors, function(key, value) {
-                        $('#form').find(".print-error-msg").find("ul").append(
-                            '<li>' + '- ' + value + '</li>');
-                    });
-                }
             });
         });
     });

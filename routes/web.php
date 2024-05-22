@@ -30,6 +30,7 @@ Route::get('/', function () {
     Route::post('evaluate/save-draft', [EvaluateController::class, 'saveDraft'])->name('evaluate.save-draft');
 
     //ข้อมูลเกณฑ์มาตรฐาน
+    Route::post('part/delete', [PartController::class, 'delete'])->name('part.delete');
     Route::resource('part', PartController::class);
     
     //สร้างจากหน้า part target

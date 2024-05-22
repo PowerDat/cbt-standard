@@ -6,6 +6,7 @@ use App\Models\Part;
 use App\Models\PartTarget;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PartController extends Controller
 {
@@ -16,6 +17,7 @@ class PartController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         return view('part.index');
@@ -39,32 +41,37 @@ class PartController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'part_order' => 'required|numeric|unique:part',
             'part_name' => 'required',
         ], [
-            'part_order.required' => 'กรอกลำดับด้านเกณฑ์มาตรฐาน',
-            'part_order.numeric' => 'กรอกลำดับด้านเกณฑ์มาตรฐาน(เฉพาะตัวเลข)',
-            'part_order.unique' => 'ลำดับด้านเกณฑ์มาตรฐานมีอยู่แล้วในระบบ(ห้ามซ้ำ)',
-            'part_name.required' => 'กรอกข้อมูลด้านเกณฑ์มาตรฐาน',
+            'part_order.required' => 'กรอกลำดับเกณฑ์มาตรฐาน',
+            'part_order.numeric' => 'กรอกลำดับเกณฑ์มาตรฐาน(เฉพาะตัวเลข)',
+            'part_order.unique' => 'ลำดับเกณฑ์มาตรฐานมีอยู่แล้วในระบบ(ห้ามซ้ำ)',
+            'part_name.required' => 'กรอกชื่อลำดับเกณฑ์มาตรฐาน',
         ]);
 
-        $model = new Part();
-        $model->part_order = $request->part_order;
-        $model->part_name = $request->part_name;
-        $model->part_detail = $request->part_detail;
-        $model->created_by = '';
-        $model->updated_by = '';
-        $model->save();
+        if (!$validator->passes()) {
+            return response()->json([
+                'status' => 0,
+                'error' => $validator->errors()->toArray()
+            ]);
+        } 
+        else {
+            $model = new Part();
+            $model->part_order = $request->part_order;
+            $model->part_name = $request->part_name;
+            $model->part_detail = $request->part_detail;
+            $model->created_by = '';
+            $model->updated_by = '';
+            $model->save();
 
-        session()->flash('success', 'เพิ่มข้อมูลสำเร็จ');
-
-        return response()->json([
-            'success'  => 'success',
-            'part_id' => $model->part_id,
-        ]);
-
-        // return redirect()->route('part.edit', $model->part_id);
+            return response()->json([
+                'status' => 1,
+                'msg' => 'เพิ่มข้อมูลสำเร็จ',
+                'part_id' => $model->part_id,
+            ]);
+        }
     }
 
     /**
@@ -94,42 +101,58 @@ class PartController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'part_order' => 'required|numeric',
             'part_name' => 'required',
         ], [
-            'part_order.required' => 'กรอกลำดับด้านเกณฑ์มาตรฐาน',
-            'part_order.numeric' => 'กรอกลำดับด้านเกณฑ์มาตรฐาน(เฉพาะตัวเลข)',
-            'part_name.required' => 'กรอกข้อมูลด้านเกณฑ์มาตรฐาน',
+            'part_order.required' => 'กรอกลำดับเกณฑ์มาตรฐาน',
+            'part_order.numeric' => 'กรอกลำดับเกณฑ์มาตรฐาน(เฉพาะตัวเลข)',
+            'part_name.required' => 'กรอกชื่อลำดับเกณฑ์มาตรฐาน',
         ]);
 
-        $model = Part::find($id);
-        $model->part_order = $request->part_order;
-        $model->part_name = $request->part_name;
-        $model->part_detail = $request->part_detail;
-        $model->updated_by = '';
-        $model->save();
+        if (!$validator->passes()) {
+            return response()->json([
+                'status' => 0,
+                'error' => $validator->errors()->toArray()
+            ]);
+        } 
+        else {
+            $model = Part::find($id);
+            $model->part_order = $request->part_order;
+            $model->part_name = $request->part_name;
+            $model->part_detail = $request->part_detail;
+            $model->updated_by = '';
+            $model->save();
 
-        session()->flash('info', 'แก้ไขข้อมูลสำเร็จ');
-
-        return response()->json([
-            'success'  => 'success',
-        ]);
+            return response()->json([
+                'status' => 1,
+                'msg' => 'แก้ไขข้อมูลสำเร็จ',
+            ]);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete(Request $request)
     {
-        if(PartTarget::where('part_id', $id)->count() > 0){
-            return redirect()->back()->with('info', 'ไม่สามารถลบข้อมูลได้ เนื่องจากมีข้อมูลเป้าประสงค์ใช้งานอยู่');
-        }
-        else{
+        $id = $request->part_id;
+        
+        if (PartTarget::where('part_id', $id)->count() > 0) {
+            
+            return response()->json([
+                'status' => 0,
+                'msg' => 'ไม่สามารถลบข้อมูลได้ เนื่องจากมีข้อมูลเป้าประสงค์ใช้งานอยู่',
+            ]);
+        } 
+        else {
             $model = Part::find($id);
             $model->delete();
-    
-            return redirect()->route('part.index')->with('info', 'ลบข้อมูลสำเร็จ');
+
+            return response()->json([
+                'status' => 1,
+                'msg' => 'ลบข้อมูลสำเร็จ',
+            ]);
         }
     }
 }
