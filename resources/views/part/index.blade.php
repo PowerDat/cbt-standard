@@ -31,18 +31,6 @@
         }
     });
 
-    // $(document).ready(function(){
-    //     $('#btn-delete').on('click', function() {
-    //         if (confirm("ต้องการลบข้อมูลหรือไม่?")) {
-    //             return true;        
-    //         } 
-    //         else 
-    //         {
-    //             return false;
-    //         }
-    //     });
-    // });
-
     function deleteById(id)
     {
         Swal.fire({

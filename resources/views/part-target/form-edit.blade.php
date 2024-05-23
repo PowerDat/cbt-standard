@@ -40,7 +40,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label class="form-label">ข้อมูลด้าน</label>
+                                        <label class="form-label">ข้อมูลด้าน <span class="text-danger" style="font-size: 20px;">*</span></label>
                                         <select 
                                             name="part_id" 
                                             id="part_id" 
@@ -63,10 +63,11 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label class="form-label">ลำดับเป้าประสงค์</label>
+                                        <label class="form-label">ลำดับเป้าประสงค์ <span class="text-danger" style="font-size: 20px;">*</span></label>
                                         <input class="form-control" id="part_target_order" name="part_target_order"
                                             type="text"
                                             value="{{isset($partTarget) ? $partTarget->part_target_order : ''}}">
+                                        <span class="text-danger error-text part_target_order_error"></span>
                                     </div>
                                 </div>
                             </div>
@@ -74,10 +75,11 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label class="form-label">ข้อมูลเป้าประสงค์</label>
+                                        <label class="form-label">ข้อมูลเป้าประสงค์ <span class="text-danger" style="font-size: 20px;">*</span></label>
                                         <input class="form-control" id="part_target_name" name="part_target_name"
                                             type="text"
                                             value="{{isset($partTarget) ? $partTarget->part_target_name : ''}}">
+                                        <span class="text-danger error-text part_target_name_error"></span>
                                     </div>
                                 </div>
                             </div>
@@ -191,6 +193,7 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script>
     $.ajaxSetup({
         headers: {
@@ -212,18 +215,24 @@
                 contentType: false,
                 processData: false,
                 success: (response) => {
-                    if(response.success == 'success')
-                    {
+                    if(response.status == 0){
+                            $.each(response.error, function(prefix, val){
+                                $('span.'+prefix+'_error').text(val[0]);
+                            });
+                        }
+                    else{
+                        Swal.fire({
+                            title: 'สำเร็จ',
+                            text: response.msg,
+                            icon: 'success',
+                            width: '450px',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+
                         window.location.reload();
                     }
                 },
-                error: function(response){
-                    $('#form').find(".print-error-msg").find("ul").html('');
-                    $('#form').find(".print-error-msg").css('display','block');
-                    $.each( response.responseJSON.errors, function( key, value ) {
-                        $('#form').find(".print-error-msg").find("ul").append('<li>'+ '- ' + value +'</li>');
-                    });
-                }
             });
         });
     });

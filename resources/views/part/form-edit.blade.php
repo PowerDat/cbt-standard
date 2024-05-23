@@ -109,10 +109,13 @@
                                     </a>
                                 </div>
                                 <div class="col-sm-1">
-                                    <a href="{{route('part-target.destroy', $item->part_target_id)}}"
+                                    <a onclick="deleteById({{$item->part_target_id}})" class="btn btn-light">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </a>
+                                    {{-- <a href="{{route('part-target.destroy', $item->part_target_id)}}"
                                         class="btn btn-light ">
                                         <i class="fa fa-trash"></i>
-                                    </a>
+                                    </a> --}}
                                 </div>
                             </div>
                         </li>
@@ -179,5 +182,50 @@
             });
         });
     });
+
+    function deleteById(id)
+    {
+        Swal.fire({
+            title: "ต้องการลบข้อมูลหรือไม่?",
+            showCancelButton: true,
+            confirmButtonText: "ลบข้อมูล",
+            cancelButtonText: `ยกเลิก`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'post',
+                    url: "{{ route('part-target.delete') }}",
+                    data: {
+                        part_target_id: id,
+                    },
+                    success: (result) => {
+                        if(result.status == 0){
+                            Swal.fire({
+                                title: 'ไม่สำเร็จ',
+                                text: result.msg,
+                                icon: 'error',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 5000
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                title: 'สำเร็จ',
+                                text: result.msg,
+                                icon: 'success',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+
+                            window.location.reload();
+                        }
+                    },
+                });
+            } 
+        });
+    }
+
 </script>
 @endpush

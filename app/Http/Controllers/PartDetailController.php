@@ -9,6 +9,7 @@ use App\Models\PartTargetSub;
 use App\Models\PartIndexScore;
 use App\Models\PartIndexQuestion;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class PartDetailController extends Controller
 {
@@ -58,18 +59,27 @@ class PartDetailController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax()) 
+        {
 
-            $request->validate([
-                'part_target_sub_order' => 'required|numeric|unique:part_target_sub',
+            $validator = Validator::make($request->all(), [
+                'part_target_sub_order' => 'required|numeric',
                 'name_question' => 'required',
                 'inputs_score.*.name_score' => 'required'
             ], [
                 'part_target_sub_order.numeric' => 'ลำดับเกณฑ์พิจารณา ต้องใส่เป็นตัวเลขเท่านั้น',
-                'part_target_sub_order.unique' => 'ลำดับเกณฑ์พิจารณามีอยู่แล้วในระบบ(ห้ามซ้ำ)',
             ]);
-
-            //ข้อมูลเกณฑ์พิจารณา
+    
+            if (!$validator->passes()) 
+            {
+                return response()->json([
+                    'status' => 0,
+                    'error' => $validator->errors()->toArray()
+                ]);
+            } 
+            else 
+            {
+                //ข้อมูลเกณฑ์พิจารณา
             $partTargetSub = new PartTargetSub();
             $partTargetSub->part_target_sub_order = $request->part_target_sub_order;
             $partTargetSub->part_target_id = $request->part_target_id;
@@ -80,7 +90,8 @@ class PartDetailController extends Controller
             $partTargetSub->save();
 
             // คำถามในการประเมิน
-            foreach ($request->name_question as $key => $value) {
+            foreach ($request->name_question as $key => $value) 
+            {
                 $question = new PartIndexQuestion();
                 $question->part_index_question_order = ($key + 1);
                 $question->part_index_question_desc = $value;
@@ -91,8 +102,10 @@ class PartDetailController extends Controller
             }
 
             //เกณฑ์การให้คะแนน
-            foreach ($request->inputs_score as $key => $items) {
-                foreach ($items as $item) {
+            foreach ($request->inputs_score as $key => $items) 
+            {
+                foreach ($items as $item) 
+                {
                     $score = new PartIndexScore();
                     $score->part_target_sub_id = $question->part_target_sub_id;
                     $score->part_index_score_order = ($key + 1);
@@ -102,12 +115,61 @@ class PartDetailController extends Controller
                     $score->save();
                 }
             }
+    
+                return response()->json([
+                    'status' => 1,
+                    'msg' => 'เพิ่มข้อมูลสำเร็จ',
+                ]);
+            }
 
-            session()->flash('success', 'เพิ่มข้อมูลสำเร็จ');
+            // $request->validate([
+            //     'part_target_sub_order' => 'required|numeric',
+            //     'name_question' => 'required',
+            //     'inputs_score.*.name_score' => 'required'
+            // ], [
+            //     'part_target_sub_order.numeric' => 'ลำดับเกณฑ์พิจารณา ต้องใส่เป็นตัวเลขเท่านั้น',
+            //     // 'part_target_sub_order.unique' => 'ลำดับเกณฑ์พิจารณามีอยู่แล้วในระบบ(ห้ามซ้ำ)',
+            // ]);
 
-            return response()->json([
-                'success'  => 'success'
-            ]);
+            // //ข้อมูลเกณฑ์พิจารณา
+            // $partTargetSub = new PartTargetSub();
+            // $partTargetSub->part_target_sub_order = $request->part_target_sub_order;
+            // $partTargetSub->part_target_id = $request->part_target_id;
+            // $partTargetSub->part_target_sub_name = $request->part_target_sub_name;
+            // $partTargetSub->part_target_sub_desc = $request->part_target_sub_desc;
+            // $partTargetSub->created_by = '';
+            // $partTargetSub->updated_by = '';
+            // $partTargetSub->save();
+
+            // // คำถามในการประเมิน
+            // foreach ($request->name_question as $key => $value) {
+            //     $question = new PartIndexQuestion();
+            //     $question->part_index_question_order = ($key + 1);
+            //     $question->part_index_question_desc = $value;
+            //     $question->part_target_sub_id = $partTargetSub->part_target_sub_id;
+            //     $question->created_by = '';
+            //     $question->updated_by = '';
+            //     $question->save();
+            // }
+
+            // //เกณฑ์การให้คะแนน
+            // foreach ($request->inputs_score as $key => $items) {
+            //     foreach ($items as $item) {
+            //         $score = new PartIndexScore();
+            //         $score->part_target_sub_id = $question->part_target_sub_id;
+            //         $score->part_index_score_order = ($key + 1);
+            //         $score->part_index_score_desc = $item;
+            //         $score->created_by = '';
+            //         $score->updated_by = '';
+            //         $score->save();
+            //     }
+            // }
+
+            // session()->flash('success', 'เพิ่มข้อมูลสำเร็จ');
+
+            // return response()->json([
+            //     'success'  => 'success'
+            // ]);
         }
     }
 

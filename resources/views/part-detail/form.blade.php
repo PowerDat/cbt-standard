@@ -122,8 +122,9 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
-                                            <label class="form-label">ลำดับเกณฑ์พิจารณา</label>
+                                            <label class="form-label">ลำดับเกณฑ์พิจารณา <span class="text-danger" style="font-size: 20px;">*</span></label>
                                             <input class="form-control" id="part_target_sub_order" name="part_target_sub_order" type="text" required>
+                                            <span class="text-danger error-text part_target_sub_order_error"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -131,8 +132,9 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
-                                            <label class="form-label">ข้อมูลเกณฑ์พิจารณา</label>
+                                            <label class="form-label">ข้อมูลเกณฑ์พิจารณา <span class="text-danger" style="font-size: 20px;">*</span></label>
                                             <textarea class="form-control" rows="2" id="part_target_sub_name" name="part_target_sub_name" required></textarea>
+                                            <span class="text-danger error-text part_target_sub_name_error"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -140,14 +142,14 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
-                                            <label class="form-label">คำอธิบาย</label>
+                                            <label class="form-label">คำอธิบาย <span class="text-danger" style="font-size: 20px;">*</span></label>
                                             <textarea class="form-control" rows="3" id="part_target_sub_desc" name="part_target_sub_desc" required></textarea>
+                                            <span class="text-danger error-text part_target_sub_desc_error"></span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="f1-buttons mt-3">
-                                    {{-- <button class="btn btn-outline-primary btn-previous" type="button">ก่อนหน้า</button> --}}
                                     <button class="btn btn-primary btn-next" id="btn-1" type="button">ต่อไป</button>
                                 </div>
                             </fieldset>
@@ -183,7 +185,7 @@
                                                     <tbody id="tbody_question">
                                                         <tr>
                                                             <td>
-                                                                <input class="form-control" type="text" name="name_question[]" required>
+                                                                <input class="form-control" type="text" name="name_question[]">
                                                             </td>
                                                             <td style="width: 50px;"></td>
                                                         </tr>
@@ -205,7 +207,7 @@
                                         <div class="row">
                                             <label for="" class="col-sm-2 col-form-label text-end">คะแนน 4 =</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="inputs_score[4][name_score]" required>
+                                                <input class="form-control" type="text" name="inputs_score[4][name_score]">
                                             </div>
                                         </div>
                                     </div>
@@ -216,7 +218,7 @@
                                         <div class="row">
                                             <label for="" class="col-sm-2 col-form-label text-end">คะแนน 3 =</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="inputs_score[3][name_score]" required>
+                                                <input class="form-control" type="text" name="inputs_score[3][name_score]" >
                                             </div>
                                         </div>
                                     </div>
@@ -227,7 +229,7 @@
                                         <div class="row">
                                             <label for="" class="col-sm-2 col-form-label text-end">คะแนน 2 =</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="inputs_score[2][name_score]" required>
+                                                <input class="form-control" type="text" name="inputs_score[2][name_score]" >
                                             </div>
                                         </div>
                                     </div>
@@ -238,7 +240,7 @@
                                         <div class="row">
                                             <label for="" class="col-sm-2 col-form-label text-end">คะแนน 1 =</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="inputs_score[1][name_score]" required>
+                                                <input class="form-control" type="text" name="inputs_score[1][name_score]" >
                                             </div>
                                         </div>
                                     </div>
@@ -249,7 +251,7 @@
                                         <div class="row">
                                             <label for="" class="col-sm-2 col-form-label text-end">คะแนน 0 =</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" name="inputs_score[0][name_score]" required>
+                                                <input class="form-control" type="text" name="inputs_score[0][name_score]" >
                                             </div>
                                         </div>
                                     </div>
@@ -277,6 +279,7 @@
 @push('scripts')
     <script src="{{ asset('js/form-wizard/form-wizard-three.js') }}"></script>
     <script src="{{ asset('js/form-wizard/jquery.backstretch.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script>
         $.ajaxSetup({
             headers: {
@@ -298,22 +301,32 @@
                     data: formData,
                     contentType: false,
                     processData: false,
+                    beforeSend:function(){
+                        $(document).find('span.error-text').text('');
+                    },
                     success: (response) => {
-                        if (response.success == 'success') {
+                        if(response.status == 0){
+                            $.each(response.error, function(prefix, val){
+                                $('span.'+prefix+'_error').text(val[0]);
+                            });
+                        }
+                        else
+                        {
+                            Swal.fire({
+                                title: 'สำเร็จ',
+                                text: response.msg,
+                                icon: 'success',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+
                             let id = "{{$partTarget->part_target_id}}";
                             let url = "{{ route('part-target.edit', ':id') }}";
                             url = url.replace(':id', id);
                             window.location = url;
                         }
                     },
-                    error: function(response) {
-                        $('#form').find(".print-error-msg").find("ul").html('');
-                        $('#form').find(".print-error-msg").css('display', 'block');
-                        $.each(response.responseJSON.errors, function(key, value) {
-                            $('#form').find(".print-error-msg").find("ul").append(
-                                '<li>' + '- ' + value + '</li>');
-                        });
-                    }
                 });
             });
 
@@ -335,7 +348,7 @@
             $('thead').on('click', '.addRow', function() {
                 var tr = `
                 <tr>
-                    <td><input class="form-control" type="text" name="name_question[]" required></td>
+                    <td><input class="form-control" type="text" name="name_question[]"></td>
                     <td><a href="javascript:void(0)" class="btn btn-danger btn-sm deleteRow">ลบ</a></td>
                 </tr>
             `;

@@ -37,7 +37,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label class="form-label">ข้อมูลด้านเกณฑ์มาตรฐาน</label>
+                                        <label class="form-label">ข้อมูลด้านเกณฑ์มาตรฐาน <span class="text-danger" style="font-size: 20px;">*</span></label>
                                         <select disabled class="form-control">
                                             <option value="" selected disabled>เลือกข้อมูล</option>
                                             @foreach ($part as $item)
@@ -58,9 +58,10 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label class="form-label">ลำดับเป้าประสงค์</label>
+                                        <label class="form-label">ลำดับเป้าประสงค์ <span class="text-danger" style="font-size: 20px;">*</span></label>
                                         <input class="form-control" id="part_target_order" name="part_target_order"
                                             type="text">
+                                        <span class="text-danger error-text part_target_order_error"></span>
                                     </div>
                                 </div>
                             </div>
@@ -68,9 +69,10 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <label class="form-label">ข้อมูลเป้าประสงค์</label>
+                                        <label class="form-label">ข้อมูลเป้าประสงค์ <span class="text-danger" style="font-size: 20px;">*</span></label>
                                         <input class="form-control" id="part_target_name" name="part_target_name"
                                             type="text">
+                                        <span class="text-danger error-text part_target_name_error"></span>
                                     </div>
                                 </div>
                             </div>
@@ -85,62 +87,12 @@
             </form>
         </div>
 
-        {{-- <div class="col-sm-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6"><h5>รายละเอียดเกณฑ์พิจารณา</h5></div>
-                        <div class="col-sm-6 text-end"></div>
-                    </div>
-                    <div class="table-responsive mt-3">
-                        <table class="table table-bordered ">
-                            <thead class="bg-light text-center">
-                                <tr>
-                                    <th>ลำดับเกณฑ์มาตรฐาน</th>
-                                    <th>ลำดับเป้าประสงค์</th>
-                                    <th>ลำดับเกณฑ์พิจารณา</th>
-                                    <th>แก้ไข</th>
-                                    <th>ลบ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($partTargetByPartId as $item)
-                                <tr>
-                                    <td class="text-center">{{$item->part_order}}</td>
-                                    <td class="text-center">{{$item->part_target_order}}</td>
-                                    <td class="text-center">{{$item->part_target_sub_order}}</td>
-                                    <td class="text-center">
-                                        <a href="{{route('part-detail.edit', $item->part_target_sub_id)}}"
-                                            class="btn btn-primary btn-sm">
-                                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                                        </a>
-                                    </td>
-                                    <td class="text-center">
-                                        <form action="{{route('part-target.destroy', $item->part_target_id)}}"
-                                            method="post" class="delete_form">
-                                            @csrf
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <button type="submit" class="btn btn-light btn-sm">
-                                                <i class="fa fa-trash" aria-hidden="true"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="m-t-30 text-end">
-                        {{ $partTargetByPartId->links() }}
-                    </div>
-                </div>
-            </div>
-        </div> --}}
     </div>
 </div>
 <!-- Container-fluid Ends-->
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script>
     $.ajaxSetup({
             headers: {
@@ -162,20 +114,26 @@
                     contentType: false,
                     processData: false,
                     success: (response) => {
-                        if (response.success == 'success') {
+                        if(response.status == 0){
+                            $.each(response.error, function(prefix, val){
+                                $('span.'+prefix+'_error').text(val[0]);
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                title: 'สำเร็จ',
+                                text: response.msg,
+                                icon: 'success',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+
                             let id = response.part_target_id;
                             let url = "{{ route('part-target.edit', ':id') }}";
                             url = url.replace(':id', id);
                             window.location = url;
                         }
-                    },
-                    error: function(response) {
-                        $('#form').find(".print-error-msg").find("ul").html('');
-                        $('#form').find(".print-error-msg").css('display', 'block');
-                        $.each(response.responseJSON.errors, function(key, value) {
-                            $('#form').find(".print-error-msg").find("ul").append(
-                                '<li>' + '- ' + value + '</li>');
-                        });
                     }
                 });
             });
