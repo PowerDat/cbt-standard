@@ -1,26 +1,29 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PartController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EvaluateController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PartDetailController;
 use App\Http\Controllers\PartIndexController;
+use App\Http\Controllers\PartDetailController;
 use App\Http\Controllers\PartTargetController;
 use App\Http\Controllers\PartTargetSubController;
-use App\Models\PartTarget;
 
 Route::get('/', function () {
-    return view('dashboard');
+    return redirect()->route('login');
 });
-// Auth::routes();
+// Route::get('/', function () {
+//     return view('dashboard');
+// });
+Auth::routes();
 
-// Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth'])->group(function(){
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     //เกณฑ์มาตรฐาน
     Route::get('evaluate', [EvaluateController::class, 'index'])->name('evaluate.index');
     Route::get('evaluate/target/{part_id?}', [EvaluateController::class, 'target'])->name('evaluate.target');
@@ -38,6 +41,7 @@ Route::get('/', function () {
     // Route::post('part-target/updated/{id?}', [PartTargetController::class, 'updated'])->name('part-target.updated');
     Route::resource('part-target', PartTargetController::class);
     Route::get('part-target/createByPartId/{id?}', [PartTargetController::class, 'createByPartId'])->name('part-target.createByPartId');
+    Route::post('part-target/delete', [PartTargetController::class, 'delete'])->name('part-target.delete');
     // Route::get('part-target-sub/create-by-id/{id?}', [PartTargetSubController::class, 'createById'])->name('part-target-sub.create-by-id');
     Route::resource('part-target-sub', PartTargetSubController::class);
     Route::resource('part-index', PartIndexController::class);
@@ -50,9 +54,13 @@ Route::get('/', function () {
     
     //report
     Route::get('report/part', [ReportController::class, 'part'])->name('report.part');
-// });
+});
 
 
 
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

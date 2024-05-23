@@ -67,8 +67,7 @@ class PartTargetController extends Controller
                 'status' => 0,
                 'error' => $validator->errors()->toArray()
             ]);
-        } 
-        else {
+        } else {
             //PartTarget
             $model = new PartTarget();
             $model->part_target_order = $request->part_target_order;
@@ -133,8 +132,7 @@ class PartTargetController extends Controller
                 'status' => 0,
                 'error' => $validator->errors()->toArray()
             ]);
-        } 
-        else {
+        } else {
             $model = PartTarget::find($id);
             $model->part_target_order = $request->part_target_order;
             $model->part_target_name = $request->part_target_name;
@@ -161,5 +159,46 @@ class PartTargetController extends Controller
 
             return redirect()->route('part-target.index')->with('info', 'ลบข้อมูลสำเร็จ');
         }
+    }
+
+    public function delete(Request $request)
+    {
+        $id = $request->part_target_id;
+
+        if (PartTargetSub::count() > 0) 
+        {
+            return response()->json([
+                'status' => 0,
+                'msg' => 'ไม่สามารถลบข้อมูลได้ เนื่องจากมีรายการเกณฑ์พิจารณาใช้งานอยู่',
+            ]);
+            // return redirect()->back()->with('info', 'ไม่สามารถลบข้อมูลได้ เนื่องจากมีข้อมูลเกณฑ์ย่อยใช้งานอยู่');
+        } 
+        else 
+        {
+            $model = PartTarget::find($id);
+            $model->delete();
+
+            return response()->json([
+                'status' => 1,
+                'msg' => 'ลบข้อมูลสำเร็จ',
+            ]);
+        }
+
+        // if (PartTarget::where('part_id', $id)->count() > 0) {
+
+        //     return response()->json([
+        //         'status' => 0,
+        //         'msg' => 'ไม่สามารถลบข้อมูลได้ เนื่องจากมีข้อมูลเป้าประสงค์ใช้งานอยู่',
+        //     ]);
+        // } 
+        // else {
+        //     $model = Part::find($id);
+        //     $model->delete();
+
+        //     return response()->json([
+        //         'status' => 1,
+        //         'msg' => 'ลบข้อมูลสำเร็จ',
+        //     ]);
+        // }
     }
 }

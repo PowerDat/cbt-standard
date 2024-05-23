@@ -64,10 +64,15 @@ class PartDetailController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'part_target_sub_order' => 'required|numeric',
+                'part_target_sub_name' => 'required',
+                'part_target_sub_desc' => 'required',
                 'name_question' => 'required',
                 'inputs_score.*.name_score' => 'required'
             ], [
                 'part_target_sub_order.numeric' => 'ลำดับเกณฑ์พิจารณา ต้องใส่เป็นตัวเลขเท่านั้น',
+                'part_target_sub_order.required' => 'กรอกลำดับเกณฑ์พิจารณา',
+                'part_target_sub_name.required' => 'กรอกข้อมูลเกณฑ์พิจารณา',
+                'part_target_sub_desc.required' => 'กรอกคำอธิบาย',
             ]);
     
             if (!$validator->passes()) 
@@ -79,7 +84,7 @@ class PartDetailController extends Controller
             } 
             else 
             {
-                //ข้อมูลเกณฑ์พิจารณา
+            //ข้อมูลเกณฑ์พิจารณา
             $partTargetSub = new PartTargetSub();
             $partTargetSub->part_target_sub_order = $request->part_target_sub_order;
             $partTargetSub->part_target_id = $request->part_target_id;
@@ -121,55 +126,6 @@ class PartDetailController extends Controller
                     'msg' => 'เพิ่มข้อมูลสำเร็จ',
                 ]);
             }
-
-            // $request->validate([
-            //     'part_target_sub_order' => 'required|numeric',
-            //     'name_question' => 'required',
-            //     'inputs_score.*.name_score' => 'required'
-            // ], [
-            //     'part_target_sub_order.numeric' => 'ลำดับเกณฑ์พิจารณา ต้องใส่เป็นตัวเลขเท่านั้น',
-            //     // 'part_target_sub_order.unique' => 'ลำดับเกณฑ์พิจารณามีอยู่แล้วในระบบ(ห้ามซ้ำ)',
-            // ]);
-
-            // //ข้อมูลเกณฑ์พิจารณา
-            // $partTargetSub = new PartTargetSub();
-            // $partTargetSub->part_target_sub_order = $request->part_target_sub_order;
-            // $partTargetSub->part_target_id = $request->part_target_id;
-            // $partTargetSub->part_target_sub_name = $request->part_target_sub_name;
-            // $partTargetSub->part_target_sub_desc = $request->part_target_sub_desc;
-            // $partTargetSub->created_by = '';
-            // $partTargetSub->updated_by = '';
-            // $partTargetSub->save();
-
-            // // คำถามในการประเมิน
-            // foreach ($request->name_question as $key => $value) {
-            //     $question = new PartIndexQuestion();
-            //     $question->part_index_question_order = ($key + 1);
-            //     $question->part_index_question_desc = $value;
-            //     $question->part_target_sub_id = $partTargetSub->part_target_sub_id;
-            //     $question->created_by = '';
-            //     $question->updated_by = '';
-            //     $question->save();
-            // }
-
-            // //เกณฑ์การให้คะแนน
-            // foreach ($request->inputs_score as $key => $items) {
-            //     foreach ($items as $item) {
-            //         $score = new PartIndexScore();
-            //         $score->part_target_sub_id = $question->part_target_sub_id;
-            //         $score->part_index_score_order = ($key + 1);
-            //         $score->part_index_score_desc = $item;
-            //         $score->created_by = '';
-            //         $score->updated_by = '';
-            //         $score->save();
-            //     }
-            // }
-
-            // session()->flash('success', 'เพิ่มข้อมูลสำเร็จ');
-
-            // return response()->json([
-            //     'success'  => 'success'
-            // ]);
         }
     }
 
@@ -186,7 +142,6 @@ class PartDetailController extends Controller
      */
     public function edit(string $id)
     {
-        
         $partTargetSub = PartTargetSub::find($id);
         $question = PartIndexQuestion::where('part_target_sub_id', $id)->get();
         $score = PartIndexScore::where('part_target_sub_id', $id)
@@ -211,15 +166,29 @@ class PartDetailController extends Controller
     {
         if ($request->ajax()) {
 
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'part_target_sub_order' => 'required|numeric',
+                'part_target_sub_name' => 'required',
+                'part_target_sub_desc' => 'required',
                 'name_question' => 'required',
                 'inputs_score.*.name_score' => 'required'
             ], [
                 'part_target_sub_order.numeric' => 'ลำดับเกณฑ์พิจารณา ต้องใส่เป็นตัวเลขเท่านั้น',
+                'part_target_sub_order.required' => 'กรอกลำดับเกณฑ์พิจารณา',
+                'part_target_sub_name.required' => 'กรอกข้อมูลเกณฑ์พิจารณา',
+                'part_target_sub_desc.required' => 'กรอกคำอธิบาย',
             ]);
-
-            //ข้อมูลเกณฑ์พิจารณา
+    
+            if (!$validator->passes()) 
+                {
+                    return response()->json([
+                        'status' => 0,
+                        'error' => $validator->errors()->toArray()
+                    ]);
+                } 
+            else
+            {
+                //ข้อมูลเกณฑ์พิจารณา
             $partTargetSub = PartTargetSub::find($id);
             $partTargetSub->part_target_sub_order = $request->part_target_sub_order;
             $partTargetSub->part_target_id = $request->part_target_id;
@@ -268,12 +237,12 @@ class PartDetailController extends Controller
                     $score->save();
                 }
             }
-
-            session()->flash('info', 'แก้ไขข้อมูลสำเร็จ');
-
-            return response()->json([
-                'success'  => 'success'
-            ]);
+        
+                return response()->json([
+                    'status' => 1,
+                    'msg' => 'แก้ไขข้อมูลสำเร็จ',
+                ]);
+            }
         }
     }
 
@@ -301,21 +270,44 @@ class PartDetailController extends Controller
 
     public function saveTargetSub(Request $request)
     {
-        $sub_order = $request->sub_order;
-        $sub_name = $request->sub_name;
-        $sub_desc = $request->sub_desc;
-        $sub_id = $request->sub_id;
+        $part_target_sub_order = $request->part_target_sub_order;
+        $part_target_sub_name = $request->part_target_sub_name;
+        $part_target_sub_desc = $request->part_target_sub_desc;
+        $part_target_sub_id = $request->part_target_sub_id;
 
-        //ข้อมูลเกณฑ์พิจารณา
-        $partTargetSub = PartTargetSub::find($sub_id);
-        $partTargetSub->part_target_sub_order = $sub_order;
-        $partTargetSub->part_target_sub_name = $sub_name;
-        $partTargetSub->part_target_sub_desc = $sub_desc;
-        $partTargetSub->updated_by = '';
-        $partTargetSub->save();
-
-        return response()->json([
-            'success' => 'success',
+        // dd($request->all());
+        $validator = Validator::make($request->all(), [
+            "part_target_sub_order" => 'required|numeric',
+            'part_target_sub_name' => 'required',
+            'part_target_sub_desc' => 'required',
+        ], [
+            'part_target_sub_order.numeric' => 'ลำดับเกณฑ์พิจารณา ต้องใส่เป็นตัวเลขเท่านั้น',
+            'part_target_sub_order.required' => 'กรอกลำดับเกณฑ์พิจารณา',
+            'part_target_sub_name.required' => 'กรอกข้อมูลเกณฑ์พิจารณา',
+            'part_target_sub_desc.required' => 'กรอกคำอธิบาย',
         ]);
+
+        if (!$validator->passes()) 
+            {
+                return response()->json([
+                    'status' => 0,
+                    'error' => $validator->errors()->toArray()
+                ]);
+            } 
+        else
+        {    
+            //ข้อมูลเกณฑ์พิจารณา
+            $partTargetSub = PartTargetSub::find($part_target_sub_id);
+            $partTargetSub->part_target_sub_order = $part_target_sub_order;
+            $partTargetSub->part_target_sub_name = $part_target_sub_name;
+            $partTargetSub->part_target_sub_desc = $part_target_sub_desc;
+            $partTargetSub->updated_by = '';
+            $partTargetSub->save();
+    
+            return response()->json([
+                'status' => 1,
+                'msg' => 'แก้ไขข้อมูลสำเร็จ',
+            ]);
+        }
     }
 }

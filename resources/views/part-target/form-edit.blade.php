@@ -227,7 +227,7 @@
                             icon: 'success',
                             width: '450px',
                             showConfirmButton: false,
-                            timer: 3000
+                            timer: 5000
                         });
 
                         window.location.reload();

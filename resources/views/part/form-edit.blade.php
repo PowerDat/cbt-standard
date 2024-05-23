@@ -90,8 +90,7 @@
                 <div class="card-body">
                     <h5>รายการเป้าประสงค์</h5>
                     <p class="card-text">
-                        <strong>เกณฑ์มาตรฐาน</strong> {{$partTarget[0]->part->part_order.'
-                        '.$partTarget[0]->part->part_name}}
+                        <strong>เกณฑ์มาตรฐาน</strong> {{$partTarget[0]->part->part_order.' '.$partTarget[0]->part->part_name}}
                     </p>
 
                     @foreach ($partTarget as $item)
@@ -185,6 +184,7 @@
 
     function deleteById(id)
     {
+        // console.log('part_target_id: ', id);
         Swal.fire({
             title: "ต้องการลบข้อมูลหรือไม่?",
             showCancelButton: true,
@@ -216,7 +216,7 @@
                                 icon: 'success',
                                 width: '450px',
                                 showConfirmButton: false,
-                                timer: 3000
+                                timer: 5000
                             });
 
                             window.location.reload();

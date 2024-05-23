@@ -76,6 +76,7 @@
                                             <input class="form-control" id="part_target_sub_order"
                                                 name="part_target_sub_order" type="text" required
                                                 value="{{$partTargetSub->part_target_sub_order}}">
+                                            <span class="text-danger error-text part_target_sub_order_error"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -85,6 +86,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">ข้อมูลเกณฑ์พิจารณา</label>
                                             <textarea class="form-control" rows="5" id="part_target_sub_name" name="part_target_sub_name" required>{{$partTargetSub->part_target_sub_name}}</textarea>
+                                            <span class="text-danger error-text part_target_sub_name_error"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -94,12 +96,12 @@
                                         <div class="mb-3">
                                             <label class="form-label">คำอธิบาย</label>
                                             <textarea class="form-control" rows="5" id="part_target_sub_desc" name="part_target_sub_desc" required>{{$partTargetSub->part_target_sub_desc}}</textarea>
+                                            <span class="text-danger error-text part_target_sub_desc_error"></span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="f1-buttons mt-3">
-                                    <button class="btn btn-outline-primary btn-previous" type="button">ก่อนหน้า</button>
                                     <button class="btn btn-primary btn-next" type="button">ต่อไป</button>
                                     <a class="btn btn-info" id="btn-save">
                                         บันทึก
@@ -244,6 +246,7 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="{{ asset('js/form-wizard/form-wizard-three.js') }}"></script>
     <script src="{{ asset('js/form-wizard/jquery.backstretch.min.js') }}"></script>
     <script>
@@ -268,21 +271,28 @@
                     contentType: false,
                     processData: false,
                     success: (response) => {
-                        alert('แก้ไขข้อมูลสำเร็จ');
+                        if(response.status == 0){
+                            $.each(response.error, function(prefix, val){
+                                $('span.'+prefix+'_error').text(val[0]);
+                            });
+                        }
+                        else
+                        {
+                            Swal.fire({
+                                title: 'สำเร็จ',
+                                text: response.msg,
+                                icon: 'success',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 5000
+                            });
 
-                        let id = "{{$partTarget[0]->part_target_id}}";
-                        let url = "{{ route('part-target.edit', ':id') }}";
-                        url = url.replace(':id', id);
-                        window.location = url;
+                            let id = "{{$partTarget[0]->part_target_id}}";
+                            let url = "{{ route('part-target.edit', ':id') }}";
+                            url = url.replace(':id', id);
+                            window.location = url;
+                        }
                     },
-                    error: function(response) {
-                        $('#form').find(".print-error-msg").find("ul").html('');
-                        $('#form').find(".print-error-msg").css('display', 'block');
-                        $.each(response.responseJSON.errors, function(key, value) {
-                            $('#form').find(".print-error-msg").find("ul").append(
-                                '<li>' + '- ' + value + '</li>');
-                        });
-                    }
                 });
             });
 
@@ -328,17 +338,31 @@
                     type: 'post',
                     url: "{{ route('part-detail.saveTargetSub') }}",
                     data: {
-                        sub_order: sub_order,
-                        sub_name: sub_name,
-                        sub_desc: sub_desc,
-                        sub_id: sub_id,
+                        part_target_sub_order: sub_order,
+                        part_target_sub_name: sub_name,
+                        part_target_sub_desc: sub_desc,
+                        part_target_sub_id: sub_id,
                     },
                     success: (response) => {
-                        if(response.success)
-                        {
-                            alert('แก้ไขข้อมูลสำเร็จ');
+                        if(response.status == 0){
+                            $.each(response.error, function(prefix, val){
+                                $('span.'+prefix+'_error').text(val[0]);
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                title: 'สำเร็จ',
+                                text: response.msg,
+                                icon: 'success',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 5000
+                            });
                             
-                            window.location.reload();
+                            let id = "{{$partTarget[0]->part_target_id}}";
+                            let url = "{{ route('part-target.edit', ':id') }}";
+                            url = url.replace(':id', id);
+                            window.location = url;
                         }
                     },
                     error: function(response) {
