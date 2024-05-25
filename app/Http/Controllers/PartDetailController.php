@@ -90,8 +90,8 @@ class PartDetailController extends Controller
             $partTargetSub->part_target_id = $request->part_target_id;
             $partTargetSub->part_target_sub_name = $request->part_target_sub_name;
             $partTargetSub->part_target_sub_desc = $request->part_target_sub_desc;
-            $partTargetSub->created_by = '';
-            $partTargetSub->updated_by = '';
+            $partTargetSub->created_by = Auth::user()->id;
+            $partTargetSub->updated_by = Auth::user()->id;
             $partTargetSub->save();
 
             // คำถามในการประเมิน
@@ -101,8 +101,8 @@ class PartDetailController extends Controller
                 $question->part_index_question_order = ($key + 1);
                 $question->part_index_question_desc = $value;
                 $question->part_target_sub_id = $partTargetSub->part_target_sub_id;
-                $question->created_by = '';
-                $question->updated_by = '';
+                $question->created_by = Auth::user()->id;
+                $question->updated_by = Auth::user()->id;
                 $question->save();
             }
 
@@ -115,8 +115,8 @@ class PartDetailController extends Controller
                     $score->part_target_sub_id = $question->part_target_sub_id;
                     $score->part_index_score_order = ($key + 1);
                     $score->part_index_score_desc = $item;
-                    $score->created_by = '';
-                    $score->updated_by = '';
+                    $score->created_by = Auth::user()->id;
+                    $score->updated_by = Auth::user()->id;
                     $score->save();
                 }
             }
@@ -194,8 +194,8 @@ class PartDetailController extends Controller
             $partTargetSub->part_target_id = $request->part_target_id;
             $partTargetSub->part_target_sub_name = $request->part_target_sub_name;
             $partTargetSub->part_target_sub_desc = $request->part_target_sub_desc;
-            $partTargetSub->created_by = '';
-            $partTargetSub->updated_by = '';
+            $partTargetSub->created_by = Auth::user()->id;
+            $partTargetSub->updated_by = Auth::user()->id;
             $partTargetSub->save();
 
             // คำถามในการประเมิน
@@ -212,8 +212,8 @@ class PartDetailController extends Controller
                 $question->part_index_question_order = ($key + 1);
                 $question->part_index_question_desc = $value;
                 $question->part_target_sub_id = $id;
-                $question->created_by = '';
-                $question->updated_by = '';
+                $question->created_by = Auth::user()->id;
+                $question->updated_by = Auth::user()->id;
                 $question->save();
             }
 
@@ -232,8 +232,8 @@ class PartDetailController extends Controller
                     $score->part_target_sub_id = $id;
                     $score->part_index_score_order = ($key + 1);
                     $score->part_index_score_desc = $item;
-                    $score->created_by = '';
-                    $score->updated_by = '';
+                    $score->created_by = Auth::user()->id;
+                    $score->updated_by = Auth::user()->id;
                     $score->save();
                 }
             }
@@ -301,7 +301,7 @@ class PartDetailController extends Controller
             $partTargetSub->part_target_sub_order = $part_target_sub_order;
             $partTargetSub->part_target_sub_name = $part_target_sub_name;
             $partTargetSub->part_target_sub_desc = $part_target_sub_desc;
-            $partTargetSub->updated_by = '';
+            $partTargetSub->updated_by = Auth::user()->id;
             $partTargetSub->save();
     
             return response()->json([

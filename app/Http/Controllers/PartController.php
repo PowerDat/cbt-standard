@@ -62,8 +62,8 @@ class PartController extends Controller
             $model->part_order = $request->part_order;
             $model->part_name = $request->part_name;
             $model->part_detail = $request->part_detail;
-            $model->created_by = '';
-            $model->updated_by = '';
+            $model->created_by = Auth::user()->id;
+            $model->updated_by = Auth::user()->id;
             $model->save();
 
             return response()->json([
@@ -121,7 +121,7 @@ class PartController extends Controller
             $model->part_order = $request->part_order;
             $model->part_name = $request->part_name;
             $model->part_detail = $request->part_detail;
-            $model->updated_by = '';
+            $model->updated_by = Auth::user()->id;
             $model->save();
 
             return response()->json([

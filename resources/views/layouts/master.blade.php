@@ -43,7 +43,7 @@
             <div class="page-body">
 
                 {{-- flash message --}}
-                @include('flash-message')
+                {{-- @include('flash-message') --}}
 
                 @yield('content')
             </div>

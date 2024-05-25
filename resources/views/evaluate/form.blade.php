@@ -19,12 +19,8 @@
         <div class="row">
             <div class="col-sm-12">
 
-                <form id="form" enctype="multipart/form-data">
+                <form id="form" enctype="multipart/form-data" method="POST">
                     @csrf
-
-                    <div class="alert alert-danger print-error-msg" style="display:none">
-                        <ul></ul>
-                    </div>
 
                     <input type="hidden" name="part_target_id" value="{{$part_target_id}}">
                     <input type="hidden" name="part_id" value="{{$part_target[0]->part_id}}">
@@ -42,7 +38,7 @@
                                 <div class="stepwizard-row setup-panel">
                                     @for ($i=1; $i <= count($part_target_sub); $i++)
                                     <div class="stepwizard-step">
-                                        <a class="btn btn-primary" href="#step-{{$i}}">{{$i}}</a>
+                                        <a id="btn-step-{{$i}}" class="btn btn-primary" href="#step-{{$i}}">ข้อ {{$i}}</a>
                                     </div>
                                     @endfor
                                 </div>
@@ -81,17 +77,19 @@
                                                                 </label>        
                                                             </div>
                                                         </div>
-                                                        <div class="row">
+                                                        {{-- <div class="row">
                                                             <div class="col-sm-4">
                                                                 <div>
                                                                     <label class="form-label text-danger">แนบเอกสาร (นามสกุล .pdf เท่านั้น)</label>
                                                                     <input type="file" class="form-control" name="file_{{$index_question->part_index_question_id}}">
+                                                                    <span class="text-danger error-text file_{{$index_question->part_index_question_id}}_error"></span>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-4">
                                                                 <div>
                                                                     <label class="form-label text-danger">รูปภาพ (นามสกุล .png, .jpg เท่านั้น)</label>
                                                                     <input type="file" class="form-control" name="image_{{$index_question->part_index_question_id}}">
+                                                                    <span class="text-danger error-text image_{{$index_question->part_index_question_id}}_error"></span>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-4">
@@ -100,7 +98,7 @@
                                                                     <input type="text" class="form-control" name="link_url_{{$index_question->part_index_question_id}}">
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                     @endif
                                                 @endforeach
                                             </div>
@@ -122,31 +120,27 @@
                                                 <h5><span class="badge bg-info">คะแนนการประเมิน</span></h5>
                                                 <div class="col">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="4"
-                                                        @if (old("rdo_{{$i}}")) checked @endif>
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="4">
                                                         <label class="form-check-label" for="inlineRadio1">4</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="3"
-                                                        @if (old("rdo_{{$i}}")) checked @endif>
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="3">
                                                         <label class="form-check-label" for="inlineRadio2">3</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="2"
-                                                        @if (old("rdo_{{$i}}")) checked @endif>
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="2">
                                                         <label class="form-check-label" for="inlineRadio2">2</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="1"
-                                                        @if (old("rdo_{{$i}}")) checked @endif>
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="1">
                                                         <label class="form-check-label" for="inlineRadio2">1</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="0"
-                                                        @if (old("rdo_{{$i}}")) checked @endif>
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="0">
                                                         <label class="form-check-label" for="inlineRadio2">0</label>
                                                     </div>
                                                 </div>
+                                                <span class="text-danger error-text rdo_{{$i}}_error"></span>
                                             </div>
                                         </div>
         
@@ -182,6 +176,7 @@
 @push('scripts')
     <script src="{{ asset('js/form-wizard/form-wizard-two.js') }}"></script>
     <script src="{{ asset('js/form-wizard/jquery.backstretch.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script>
          $.ajaxSetup({
             headers: {
@@ -203,19 +198,33 @@
                     data: formData,
                     contentType: false,
                     processData: false,
+                    beforeSend:function(){
+                        $(document).find('span.error-text').text('');
+                    },
                     success: (response) => {
-                        if(data.success == 'success')
-                        {
-                            window.location = "{{ route('evaluate.target', $part_target[0]->part_id) }}";
+                        if(response.status == 0){
+                            $.each(response.error, function(prefix, val){
+                                $('span.'+prefix+'_error').text(val[0]);
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                title: 'สำเร็จ',
+                                text: response.msg,
+                                icon: 'success',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 5000
+                            });
+
+                            let id = "{{$part_target[0]->part_id}}";
+                            let url = "{{route('evaluate.target', ':id')}}";
+                            url = url.replace(':id', id);
+                            window.location = url;
                         }
                     },
                     error: function(response){
-                        $('#form').find(".print-error-msg").find("ul").html('');
-                        $('#form').find(".print-error-msg").css('display','block');
-                        $.each( response.responseJSON.errors, function( key, value ) {
-                            // alert(value)
-                            $('#form').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
-                        });
+                        console.log(response);
                     }
                 });
             });
@@ -230,24 +239,51 @@
                     type: 'post',
                     url: "{{ route('evaluate.save-draft') }}",
                     data: data,
-                    dataType:"JSON",
                     processData : false,
                     contentType:false,
-                    success:function(data){
-                        if(data.success == 'success')
-                        {
-                            window.location = "{{ route('evaluate.target', $part_target[0]->part_id) }}";
+                    beforeSend:function(){
+                        $(document).find('span.error-text').text('');
+                    },
+                    success:function(response){
+                        if(response.status == 0){
+                            $.each(response.error, function(prefix, val){
+                                $('span.'+prefix+'_error').text(val[0]);
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                title: 'สำเร็จ',
+                                text: response.msg,
+                                icon: 'success',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 5000
+                            });
+
+                            let id = "{{$part_target[0]->part_id}}";
+                            let url = "{{route('evaluate.target', ':id')}}";
+                            url = url.replace(':id', id);
+                            window.location = url;
                         }
                     },
                     error: function(response){
-                        $('#form').find(".print-error-msg").find("ul").html('');
-                        $('#form').find(".print-error-msg").css('display','block');
-                        $.each( response.responseJSON.errors, function( key, value ) {
-                            $('#form').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
-                        });
+                        console.log(response);
                     }
                 });
             });
+
+            $('#btn-step-1').removeClass( "btn-primary btn" ).addClass( "btn-primary btn btn-light" );
+            $('#btn-step-2').removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
+            $('#btn-step-3').removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
+            $('#btn-step-4').removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
+            $('#btn-step-5').removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
+
+            $('#step-1').css('display', 'block');
+            $('#step-2').css('display', 'none');
+            $('#step-3').css('display', 'none');
+            $('#step-4').css('display', 'none');
+            $('#step-5').css('display', 'none');
+
         });
 
     </script>

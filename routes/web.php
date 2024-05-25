@@ -15,9 +15,7 @@ use App\Http\Controllers\PartTargetSubController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
-// Route::get('/', function () {
-//     return view('dashboard');
-// });
+
 Auth::routes();
 
 Route::middleware(['auth'])->group(function(){
@@ -54,13 +52,10 @@ Route::middleware(['auth'])->group(function(){
     
     //report
     Route::get('report/part', [ReportController::class, 'part'])->name('report.part');
+    Route::get('report/part-first', [ReportController::class, 'partFirst'])->name('report.part-first');
+    Route::get('report/part-second', [ReportController::class, 'partSecond'])->name('report.part-second');
+    Route::get('report/part-third', [ReportController::class, 'partThird'])->name('report.part-third');
+    Route::get('report/part-fourth', [ReportController::class, 'partFourth'])->name('report.part-fourth');
+    Route::get('report/part-fifth', [ReportController::class, 'partFifth'])->name('report.part-fifth');
 });
 
-
-
-
-
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

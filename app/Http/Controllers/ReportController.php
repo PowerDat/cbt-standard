@@ -15,4 +15,29 @@ class ReportController extends Controller
     {
         return view('report.part');
     }
+
+    public function partFirst()
+    {
+        return view('report.part-first');
+    }
+
+    public function partSecond()
+    {
+        return view('report.part-second');
+    }
+
+    public function partThird()
+    {
+        return view('report.part-third');
+    }
+
+    public function partFourth()
+    {
+        return view('report.part-fourth');
+    }
+
+    public function partFifth()
+    {
+        return view('report.part-fifth');
+    }
 }

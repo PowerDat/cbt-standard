@@ -73,8 +73,8 @@ class PartTargetController extends Controller
             $model->part_target_order = $request->part_target_order;
             $model->part_id = $request->part_id;
             $model->part_target_name = $request->part_target_name;
-            $model->created_by = '';
-            $model->updated_by = '';
+            $model->created_by = Auth::user()->id;
+            $model->updated_by = Auth::user()->id;
             $model->save();
 
             return response()->json([
@@ -136,7 +136,7 @@ class PartTargetController extends Controller
             $model = PartTarget::find($id);
             $model->part_target_order = $request->part_target_order;
             $model->part_target_name = $request->part_target_name;
-            $model->updated_by = '';
+            $model->updated_by = Auth::user()->id;
             $model->save();
 
             return response()->json([

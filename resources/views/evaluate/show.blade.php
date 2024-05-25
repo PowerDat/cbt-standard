@@ -36,7 +36,7 @@
                                 <div class="stepwizard-row setup-panel">
                                     @for ($i=1; $i <= count($part_target_sub); $i++)
                                     <div class="stepwizard-step">
-                                        <a class="btn btn-primary" href="#step-{{$i}}">{{$i}}</a>
+                                        <a id="btn-step-{{$i}}" class="btn btn-primary" href="#step-{{$i}}">ข้อ {{$i}}</a>
                                     </div>
                                     @endfor
                                 </div>
@@ -189,4 +189,22 @@
 @push('scripts')
     <script src="{{ asset('js/form-wizard/form-wizard-two.js') }}"></script>
     <script src="{{ asset('js/form-wizard/jquery.backstretch.min.js') }}"></script>
+    <script>
+        $.ajaxSetup({
+           headers: {
+               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+           }
+       });
+
+       $(document).ready(function(){
+
+           $('#btn-step-1').removeClass( "btn-primary btn" ).addClass( "btn-primary btn btn-light" );
+           $('#btn-step-5').removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
+
+           $('#step-1').css('display', 'block');
+           $('#step-5').css('display', 'none');
+
+       });
+
+   </script>
 @endpush

@@ -85,8 +85,8 @@ class PartIndexController extends Controller
             $model->part_index_question_order = ($key + 1);
             $model->part_index_question_desc = $value;
             $model->part_target_sub_id = $request->part_target_sub_id;
-            $model->created_by = '';
-            $model->updated_by = '';
+            $model->created_by = Auth::user()->id;
+            $model->updated_by = Auth::user()->id;
             $model->save();
         }
 
@@ -96,8 +96,8 @@ class PartIndexController extends Controller
                 $score->part_target_sub_id = $request->part_target_sub_id;
                 $score->part_index_score_order = ($key + 1);
                 $score->part_index_score_desc = $item;
-                $score->created_by = '';
-                $score->updated_by = '';
+                $score->created_by = Auth::user()->id;
+                $score->updated_by = Auth::user()->id;
                 $score->save();
             }
         }
@@ -154,7 +154,7 @@ class PartIndexController extends Controller
             $model->part_index_question_order = ($key + 1);
             $model->part_index_question_desc = $value;
             $model->part_target_sub_id = $request->part_target_sub_id;
-            $model->updated_by = '';
+            $model->updated_by = Auth::user()->id;
             $model->save();
         }
 
@@ -172,7 +172,7 @@ class PartIndexController extends Controller
                 $score->part_target_sub_id = $request->part_target_sub_id;
                 $score->part_index_score_order = ($key + 1);
                 $score->part_index_score_desc = $item;
-                $score->updated_by = '';
+                $score->updated_by = Auth::user()->id;
                 $score->save();
             }
         }
