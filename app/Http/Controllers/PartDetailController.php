@@ -9,6 +9,7 @@ use App\Models\PartTargetSub;
 use App\Models\PartIndexScore;
 use App\Models\PartIndexQuestion;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PartDetailController extends Controller

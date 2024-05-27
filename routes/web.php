@@ -6,16 +6,20 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PartController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EvaluateController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PartIndexController;
 use App\Http\Controllers\PartDetailController;
 use App\Http\Controllers\PartTargetController;
 use App\Http\Controllers\PartTargetSubController;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// });
 
+Route::get('/', [AuthController::class, 'login'])->name('auth.login');
+Route::post('auth/post-login', [AuthController::class, 'postLogin'])->name('auth.post-login'); 
+Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('logs');
 Auth::routes();
 
 Route::middleware(['auth'])->group(function(){

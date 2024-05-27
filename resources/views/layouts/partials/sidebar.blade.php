@@ -10,7 +10,7 @@
                         </div>
                     </li>
                     
-                    @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 3)
+                    @if (Auth::user()->role_id == 1)
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav active" href="{{route('dashboard')}}">
                             <i data-feather="circle"></i><span>ข้อมูลชุมชนการท่องเที่ยว</span>
@@ -18,7 +18,7 @@
                     </li>
                     @endif
 
-                    @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
+                    @if (Auth::user()->role_id == 2)
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav active" href="{{route('dashboard')}}">
                             <i data-feather="circle"></i><span>ข้อมูลกรรมการ</span>
@@ -26,7 +26,15 @@
                     </li>
                     @endif
 
-                    @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
+                    @if (Auth::user()->role_id == 3)
+                    <li class="dropdown">
+                        <a class="nav-link menu-title link-nav active" href="{{route('dashboard')}}">
+                            <i data-feather="circle"></i><span>ข้อมูลผู้ใช้งาน</span>
+                        </a>
+                    </li>
+                    @endif
+
+                    @if (Auth::user()->role_id == 2)
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav {{ request()->routeIs('evaluate.index') ? 'avtive' : '' }}" href="{{route('evaluate.index')}}">
                             <i data-feather="circle"></i>แบบประเมิน

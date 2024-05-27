@@ -77,7 +77,7 @@
                                                             echo '<span class="badge badge-info">แบบร่าง</span>';
                                                         }
                                                         elseif($value->appraisal_transaction_status == '2'){
-                                                            echo "<span class='badge badge-primary'>เรียบร้อย</span>";
+                                                            echo "<span class='badge badge-primary'>สำเร็จ</span>";
                                                         }
                                                     }
                                                 }
