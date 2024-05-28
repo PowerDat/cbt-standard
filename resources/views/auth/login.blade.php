@@ -73,7 +73,7 @@
           $.ajax({
               url: "{{route('auth.post-login')}}",
               data: $(this).serialize(),
-              type: "POST",
+              type: "get",
               dataType: 'json',
               success: function (data) {
   

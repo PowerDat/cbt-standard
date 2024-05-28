@@ -18,7 +18,7 @@ use App\Http\Controllers\PartTargetSubController;
 // });
 
 Route::get('/', [AuthController::class, 'login'])->name('auth.login');
-Route::post('auth/post-login', [AuthController::class, 'postLogin'])->name('auth.post-login'); 
+Route::get('auth/post-login', [AuthController::class, 'postLogin'])->name('auth.post-login'); 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('logs');
 Auth::routes();
 
