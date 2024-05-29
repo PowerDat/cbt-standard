@@ -281,64 +281,64 @@ class EvaluateController extends Controller
             if (!empty($request->input($chk_question))) {
                 foreach ($request->input($chk_question) as $value) {
 
-                    // $file = 'file_'.$value;
-                    // $image = 'image_'.$value;
-                    // $link_url = 'link_url_'.$value;
+                    $file = 'file_'.$value;
+                    $image = 'image_'.$value;
+                    $link_url = 'link_url_'.$value;
 
-                    // $validatorFile = Validator::make($request->all(), [
-                    //     "$file" => 'mimes:pdf|max:2048',
-                    //     "$image" => 'mimes:png,jpg|max:2048',
-                    // ], [
-                    //     "$file.mimes" => 'ไฟล์นามสกุล pdf เท่านั้น',
-                    //     "$file.max" => 'ขนาดไม่เกิน 2 MB',
-                    //     "$image.mimes" => 'ไฟล์นามสกุล png, jpg เท่านั้น',
-                    //     "$image.max" => 'ขนาดไม่เกิน 2 MB',
-                    // ]);
+                    $validatorFile = Validator::make($request->all(), [
+                        "$file" => 'mimes:pdf|max:2048',
+                        "$image" => 'mimes:png,jpg|max:2048',
+                    ], [
+                        "$file.mimes" => 'ไฟล์นามสกุล pdf เท่านั้น',
+                        "$file.max" => 'ขนาดไม่เกิน 2 MB',
+                        "$image.mimes" => 'ไฟล์นามสกุล png, jpg เท่านั้น',
+                        "$image.max" => 'ขนาดไม่เกิน 2 MB',
+                    ]);
 
-                    // if (!$validatorFile->passes()) 
-                    // {
-                    //     return response()->json([
-                    //         'status' => 0,
-                    //         'error' => $validatorFile->errors()->toArray()
-                    //     ]);
-                    // } 
-                    // else
-                    // {
+                    if (!$validatorFile->passes()) 
+                    {
+                        return response()->json([
+                            'status' => 0,
+                            'error' => $validatorFile->errors()->toArray()
+                        ]);
+                    } 
+                    else
+                    {
                         $question = new AppraisalQuestion();
 
                         //upload file 
-                        // if(!empty($request->file($file))){
-                        //     $file = $request->file($file);
-                        //     $destinationPath = "uploads/files";
-                        //     $file->move($destinationPath, $file->getClientOriginalName());
-                        //     $question->file = $file->getClientOriginalName(); //$fileName;
+                        if(!empty($request->file($file))){
+                            $file = $request->file($file);
+                            $destinationPath = "uploads/files";
+                            $file->move($destinationPath, $file->getClientOriginalName());
+                            $question->file = $file->getClientOriginalName(); //$fileName;
 
-                        //     // $fileName = time().'.'.$request->file($file)->extension();
-                        //     // $fileEncoded = File::get($request->input($file));
-                        //     // $request->file->move(public_path('uploads'), $fileName);
-                        //     // Storage::disk('local')->put('uploads'.$fileName, $request->input($file));
-                        // }
+                            // $fileName = time().'.'.$request->file($file)->extension();
+                            // $fileEncoded = File::get($request->input($file));
+                            // $request->file->move(public_path('uploads'), $fileName);
+                            // Storage::disk('local')->put('uploads'.$fileName, $request->input($file));
+                        }
 
                         //upload image
-                        // if(!empty($request->file("$image"))){
-                        //     $file = $request->file($image);
-                        //     $destinationPath = "uploads/images";
-                        //     $file->move($destinationPath, $file->getClientOriginalName());
-                        //     $question->image = $file->getClientOriginalName();
+                        if(!empty($request->file("$image"))){
+                            $file = $request->file($image);
+                            $destinationPath = "uploads/images";
+                            $file->move($destinationPath, $file->getClientOriginalName());
+                            $question->image = $file->getClientOriginalName();
 
-                        //     // $imageName = time().'.'.$request->file("$image")->extension();  
-                        //     // $imageEncoded = File::get($request->input("$image"));
-                        //     // Storage::disk('local')->put('public/uploads/images/'.$imageName, $imageEncoded);
-                        // }
+                            // $imageName = time().'.'.$request->file("$image")->extension();  
+                            // $imageEncoded = File::get($request->input("$image"));
+                            // Storage::disk('local')->put('public/uploads/images/'.$imageName, $imageEncoded);
+                        }
                         
                         $question->part_target_sub_id = $item->part_target_sub_id;
                         $question->part_index_question_id = $value;
                         $question->part_target_id = $part_target_id;
-                        // $question->link_url = $request->input($link_url);
+                        $question->link_url = $request->input($link_url);
                         $question->created_by = Auth::user()->id;
                         $question->updated_by = Auth::user()->id;
                         $question->save();
-                    // }
+                    }
                 }
             }
         }

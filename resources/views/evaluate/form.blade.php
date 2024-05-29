@@ -77,7 +77,7 @@
                                                                 </label>        
                                                             </div>
                                                         </div>
-                                                        {{-- <div class="row">
+                                                        <div class="row">
                                                             <div class="col-sm-4">
                                                                 <div>
                                                                     <label class="form-label text-danger">แนบเอกสาร (นามสกุล .pdf เท่านั้น)</label>
@@ -98,7 +98,7 @@
                                                                     <input type="text" class="form-control" name="link_url_{{$index_question->part_index_question_id}}">
                                                                 </div>
                                                             </div>
-                                                        </div> --}}
+                                                        </div>
                                                     @endif
                                                 @endforeach
                                             </div>
