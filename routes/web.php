@@ -12,6 +12,7 @@ use App\Http\Controllers\PartIndexController;
 use App\Http\Controllers\PartDetailController;
 use App\Http\Controllers\PartTargetController;
 use App\Http\Controllers\PartTargetSubController;
+use App\Http\Controllers\RoleController;
 
 // Route::get('/', function () {
 //     return redirect()->route('login');
@@ -20,12 +21,14 @@ use App\Http\Controllers\PartTargetSubController;
 Route::get('/', [AuthController::class, 'login'])->name('auth.login');
 Route::post('auth/post-login', [AuthController::class, 'postLogin'])->name('auth.post-login'); 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('logs');
+
 Auth::routes();
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
     //เกณฑ์มาตรฐาน
     Route::get('evaluate', [EvaluateController::class, 'index'])->name('evaluate.index');
     Route::get('evaluate/target/{part_id?}', [EvaluateController::class, 'target'])->name('evaluate.target');
@@ -39,15 +42,13 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('part', PartController::class);
     
     //สร้างจากหน้า part target
-    // Route::get('part-target/create-by-id/{part_target_id?}', [PartTargetController::class, 'createById'])->name('part-target.create-by-id');
-    // Route::post('part-target/updated/{id?}', [PartTargetController::class, 'updated'])->name('part-target.updated');
     Route::resource('part-target', PartTargetController::class);
     Route::get('part-target/createByPartId/{id?}', [PartTargetController::class, 'createByPartId'])->name('part-target.createByPartId');
     Route::post('part-target/delete', [PartTargetController::class, 'delete'])->name('part-target.delete');
-    // Route::get('part-target-sub/create-by-id/{id?}', [PartTargetSubController::class, 'createById'])->name('part-target-sub.create-by-id');
     Route::resource('part-target-sub', PartTargetSubController::class);
     Route::resource('part-index', PartIndexController::class);
     Route::get('part-index/create-by-id/{id?}', [PartIndexController::class, 'createById'])->name('part-index.create-by-id');
+
     //รายละเอียดของแต่ละด้าน
     Route::get('part-detail/createByTargetId/{id?}', [PartDetailController::class, 'createByTargetId'])->name('part-detail.createByTargetId');
     Route::post('part-detail/fetchPartTargetById', [PartDetailController::class, 'fetchPartTargetById'])->name('part-detail.fetchPartTargetById');
@@ -61,5 +62,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('report/part-third', [ReportController::class, 'partThird'])->name('report.part-third');
     Route::get('report/part-fourth', [ReportController::class, 'partFourth'])->name('report.part-fourth');
     Route::get('report/part-fifth', [ReportController::class, 'partFifth'])->name('report.part-fifth');
+
+    Route::resource('role', RoleController::class);
 });
 

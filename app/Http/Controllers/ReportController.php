@@ -23,8 +23,7 @@ class ReportController extends Controller
     {
         $part = Part::where('part_id', 1)->get();
         $score = DB::select("
-        WITH 
-        tmp1 AS (
+        WITH tmp1 AS (
             SELECT 
                 part_target_id
                 , part_target_order
@@ -76,8 +75,7 @@ class ReportController extends Controller
     {
         $part = Part::where('part_id', 2)->get();
         $score = DB::select("
-        WITH 
-        tmp1 AS (
+        WITH tmp1 AS (
             SELECT 
                 part_target_id
                 , part_target_order
@@ -129,8 +127,7 @@ class ReportController extends Controller
     {
         $part = Part::where('part_id', 3)->get();
         $score = DB::select("
-        WITH 
-        tmp1 AS (
+        WITH tmp1 AS (
             SELECT 
                 part_target_id
                 , part_target_order
@@ -182,8 +179,7 @@ class ReportController extends Controller
     {
         $part = Part::where('part_id', 4)->get();
         $score = DB::select("
-        WITH 
-        tmp1 AS (
+        WITH tmp1 AS (
             SELECT 
                 part_target_id
                 , part_target_order
@@ -235,8 +231,7 @@ class ReportController extends Controller
     {
         $part = Part::where('part_id', 5)->get();
         $score = DB::select("
-        WITH 
-        tmp1 AS (
+        WITH tmp1 AS (
             SELECT 
                 part_target_id
                 , part_target_order

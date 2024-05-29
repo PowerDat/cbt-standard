@@ -29,7 +29,7 @@
                     @if (Auth::user()->role_id == 3)
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav active" href="{{route('dashboard')}}">
-                            <i data-feather="circle"></i><span>ข้อมูลผู้ใช้งาน</span>
+                            <i data-feather="circle"></i><span>ข้อมูลผู้ดูแลระบบ</span>
                         </a>
                     </li>
                     @endif
@@ -42,6 +42,7 @@
                     </li>
                     @endif
                     
+                    @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2)
                     <li class="dropdown">
                         <a class="nav-link" href="javascript:void(0)">
                             <i data-feather="circle"></i><span>สรุปรายงาน</span>
@@ -74,12 +75,24 @@
                             </li>
                         {{-- </ul> --}}
                     </li>
+                    @endif
 
                     @if (Auth::user()->role_id == 3)
                     <li class="dropdown">
                         <a class="nav-link menu-title link-nav" href="{{route('part.index')}}">
                             <i data-feather="circle"></i>ข้อมูลเกณฑ์มาตรฐาน
                         </a>
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="nav-link" href="javascript:void(0)">
+                            <i data-feather="circle"></i><span>ตั้งค่าระบบ</span>
+                        </a>
+                            <li class="text-center mt-3">
+                                <a href="{{route('role.index')}}">
+                                    <i class="fa fa-circle"></i> จัดการสิทธิ์
+                                </a>
+                            </li>
                     </li>
                     @endif
                 </ul>

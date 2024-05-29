@@ -5,7 +5,7 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header text-center">
-                    <h3>ข้อมูลผู้ใช้งาน</h3>
+                    <h3>ข้อมูลผู้ดูแลระบบ</h3>
                 </div>
                 <div class="card-body">
 
@@ -18,13 +18,13 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="row">
-                                        <label class="col-sm-2 col-form-label">ชื่อ</label>
+                                        <label class="col-sm-2 col-form-label">ชื่อผู้ใช้</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="text" value="พงศ์ภูมิ" readonly>
+                                            <input class="form-control" type="text" value="{{Auth::user()->name}}" readonly>
                                         </div>
-                                        <label class="col-sm-2 col-form-label">นามสกุล</label>
+                                        <label class="col-sm-2 col-form-label">สิทธิ์</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="text" value="แก้วสูงเนิน" readonly>
+                                            <input class="form-control" type="text" value="{{$role_name}}" readonly>
                                         </div>
                                     </div>
                                 </div>

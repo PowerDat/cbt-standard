@@ -3,15 +3,15 @@
 @section('content')
 
         @if (Auth::user()->role_id == 1)
-        @include('dashboard.community-dashboard')
+            @include('dashboard.community-dashboard')
         @endif
 
         @if (Auth::user()->role_id == 2)
-        @include('dashboard.researcher-dashboard')
+            @include('dashboard.researcher-dashboard')
         @endif
 
         @if (Auth::user()->role_id == 3)
-        @include('dashboard.admin-dashboard')
+            @include('dashboard.admin-dashboard')
         @endif
 
 @endsection

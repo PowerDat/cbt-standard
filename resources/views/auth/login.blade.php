@@ -14,17 +14,17 @@
                     <div id="errors-list"></div>
 
                     <div class="form-group">
-                        <label>อีเมล</label>
+                        <label>ชื่อผู้ใช้</label>
                         <div class="input-group">
                             <input 
-                                id="email" 
-                                type="email"
+                                id="user_login" 
+                                type="text"
                                 class="form-control" 
-                                name="email"
+                                name="user_login"
                                 required
                             >
-                            @if ($errors->has('email'))
-                                <span class="text-danger">{{ $errors->first('email') }}</span>
+                            @if ($errors->has('user_login'))
+                                <span class="text-danger">{{ $errors->first('user_login') }}</span>
                             @endif
                         </div>
                     </div>
@@ -79,15 +79,18 @@
   
                 $(e).find("[type='submit']").html("เข้าสู่ระบบ");
   
-                if (data.status) {
+                if (data.status) 
+                {
                     window.location = data.redirect;
-                }else{
+                }
+                else
+                {
                     $(".alert").remove();
-                    $.each(data.errors, function (key, val) {
+                    $.each(data.errors, function (key, val) 
+                    {
                         $("#errors-list").append("<div class='alert alert-danger'>" + val + "</div>");
                     });
                 }
-               
               }
           });
   

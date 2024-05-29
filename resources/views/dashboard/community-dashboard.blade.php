@@ -11,7 +11,7 @@
                         <div class="row">
                             <label class="col-sm-1 col-form-label">ชื่อชุมชน</label>
                             <div class="col-sm-11">
-                                <input class="form-control" type="text" value="ชุมชนบ้านปรางค์" readonly>
+                                <input class="form-control" type="text" value="{{session()->get('community_name')}}" readonly>
                             </div>
                         </div>
                     </div>
@@ -22,15 +22,15 @@
                         <div class="row">
                             <label class="col-sm-1 col-form-label">ตำบล</label>
                             <div class="col-sm-3">
-                                <input class="form-control" type="text" value="หินดาด" readonly>
+                                <input class="form-control" type="text" value="" readonly>
                             </div>
                             <label class="col-sm-1 col-form-label">อำเภอ</label>
                             <div class="col-sm-3">
-                                <input class="form-control" type="text" value="ห้วยแถลง" readonly>
+                                <input class="form-control" type="text" value="" readonly>
                             </div>
                             <label class="col-sm-1 col-form-label">จังหวัด</label>
                             <div class="col-sm-3">
-                                <input class="form-control" type="text" value="นครราชสีมา" readonly>
+                                <input class="form-control" type="text" value="" readonly>
                             </div>
                         </div>
                     </div>
@@ -41,11 +41,11 @@
                         <div class="row">
                             <label class="col-sm-1 col-form-label">ละติจูด</label>
                             <div class="col-sm-5">
-                                <input class="form-control" type="text" value="15.4919163" readonly>
+                                <input class="form-control" type="text" value="{{session()->get('community_latitude')}}" readonly>
                             </div>
                             <label class="col-sm-1 col-form-label">ลองติจูด</label>
                             <div class="col-sm-5">
-                                <input class="form-control" type="text" value="101.4889272" readonly>
+                                <input class="form-control" type="text" value="{{session()->get('community_longitude')}}" readonly>
                             </div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                             <label
                                 class="col-sm-5 col-form-label">เขตพื้นที่องค์กรปกครองส่วนท้องถิ่น(อบต./เทศบาล)</label>
                             <div class="col-sm-7">
-                                <input class="form-control" type="text" value="หินดาด" readonly>
+                                <input class="form-control" type="text" value="" readonly>
                             </div>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                         <div class="row">
                             <label class="col-sm-2 col-form-label">ในเขตพื้นที่พิเศษ</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" value="ชุมชนบ้านปรางค์" readonly>
+                                <input class="form-control" type="text" value="" readonly>
                             </div>
                         </div>
                     </div>
