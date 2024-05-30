@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -34,13 +35,16 @@ class AuthController extends Controller
         } 
         else 
         {
-            $response = Http::post('https://openapi.kims-rmuti.com/api/rcbtsip/signon', [
+            $link = DB::select("select config_value from config where config_key = 'signon'");
+            // dd($link[0]->config_value);
+
+            $response = Http::post($link[0]->config_value, [
                 'username' => $request->user_login,
                 'password' => $request->password,
             ]);
-            
+           
             $user = User::select('role_id', 'email')->where('name', $request->user_login)->get();
-
+            
             if($user->count() > 0)
             {
                 $role_id = $user[0]->role_id;

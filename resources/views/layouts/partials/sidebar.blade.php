@@ -16,6 +16,11 @@
                             <i data-feather="circle"></i><span>ข้อมูลชุมชนการท่องเที่ยว</span>
                         </a>
                     </li>
+                    <li class="dropdown">
+                        <a class="nav-link menu-title link-nav {{ request()->routeIs('evaluate.index') ? 'avtive' : '' }}" href="{{route('evaluate.index')}}">
+                            <i data-feather="circle"></i>แบบประเมิน
+                        </a>
+                    </li>
                     @endif
 
                     @if (Auth::user()->role_id == 2)

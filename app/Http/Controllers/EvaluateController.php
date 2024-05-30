@@ -13,6 +13,7 @@ use App\Models\AppraisalQuestion;
 use App\Models\PartIndexQuestion;
 use Illuminate\Support\Facades\DB;
 use App\Models\AppraisalTransaction;
+use App\Models\PartType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -27,12 +28,24 @@ class EvaluateController extends Controller
 
     public function index() //เกณฑ์การประเมิน ข้อมูลด้าน
     {
+        $part_type = PartType::all();
         $part = Part::all();
-        $partTarget = PartTarget::all();
 
         return view('evaluate.index', [
             'part' => $part,
-            'partTarget' => $partTarget,
+            'part_type' => $part_type,
+        ]);
+    }
+
+    public function getPartType($part_type_id)
+    {
+        $part = Part::where('part_type_id', $part_type_id)->get();
+        $part_type = PartType::where('part_type_id', $part_type_id)->get();
+        $part_type_name = $part_type[0]->part_type_name;
+
+        return view('evaluate.get-part-type', [
+            'part' => $part,
+            'part_type_name' => $part_type_name,
         ]);
     }
 

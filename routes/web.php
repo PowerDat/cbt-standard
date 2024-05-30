@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('evaluate/show/{part_target_id?}', [EvaluateController::class, 'show'])->name('evaluate.show');
     Route::post('evaluate/store', [EvaluateController::class, 'store'])->name('evaluate.store');
     Route::post('evaluate/save-draft', [EvaluateController::class, 'saveDraft'])->name('evaluate.save-draft');
+    Route::get('evaluate/getPartType/{part_type_id?}', [EvaluateController::class, 'getPartType'])->name('evaluate.getPartType');
 
     //ข้อมูลเกณฑ์มาตรฐาน
     Route::post('part/delete', [PartController::class, 'delete'])->name('part.delete');

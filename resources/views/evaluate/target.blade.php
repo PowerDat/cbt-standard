@@ -8,8 +8,11 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">แบบประเมิน</li>
-                        {{-- <li class="breadcrumb-item">{{'ด้าน '.$part->part_order}}</li>
-                        <li class="breadcrumb-item active">{{$part->part_name}}</li> --}}
+                        <li class="breadcrumb-item active">
+                            @if (session()->has('community_name'))
+                            {{'ชุมชน'.session()->get('community_name')}}
+                            @endif
+                        </li>
                     </ol>
                 </div>
                 <div class="col-sm-6"></div>
