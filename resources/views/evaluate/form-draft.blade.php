@@ -52,7 +52,7 @@
                                 <div class="stepwizard-row setup-panel">
                                     @for ($i=1; $i <= count($part_target_sub); $i++)
                                     <div class="stepwizard-step">
-                                        <a id="btn-step-{{$i}}" class="btn btn-primary" href="#step-{{$i}}">ข้อ {{$i}}</a>
+                                        <a id="btn-step-{{$i}}" class="btn btn-primary" href="#step-{{$i}}">ข้อ {{$i + $part_target_sub[0]->part_target_sub_order - 1}}</a>
                                     </div>
                                     @endfor
                                 </div>
@@ -61,7 +61,7 @@
                             @foreach ($part_target_sub as $target_sub)
 
                                 @for ($i=1; $i <= count($part_target_sub); $i++)
-                                    @if ($target_sub->rowNum == $i)
+                                    @if ($target_sub->part_target_sub_order == ($i + $part_target_sub[0]->part_target_sub_order - 1))
                                     <div class="setup-content" id="step-{{$i}}">
                                         <div class="row mt-3">
                                             <div class="col-xs-12">
@@ -104,6 +104,11 @@
                                                                 <div>
                                                                     <label class="form-label text-danger">แนบเอกสาร (นามสกุล .pdf เท่านั้น)</label>
                                                                     <input type="file" class="form-control" name="file_{{$index_question->part_index_question_id}}">
+                                                                    @foreach ($ap_question as $question)
+                                                                        @if ($index_question->part_index_question_id == $question->part_index_question_id)
+                                                                            <p class="text-danger">{{'ไฟล์แนบ : '.$question->file}}</p>
+                                                                        @endif
+                                                                    @endforeach
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-4">
@@ -142,35 +147,35 @@
                                                     @if ($target_sub->part_target_sub_id == $score->part_target_sub_id)
                                                     <div class="col">
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="4"
+                                                            <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="4"
                                                             @if ($score->appraisal_score_score == 4)
                                                                 checked
                                                             @endif>
                                                             <label class="form-check-label" for="inlineRadio1">4</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="3"
+                                                            <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="3"
                                                             @if ($score->appraisal_score_score == 3)
                                                                 checked
                                                             @endif>
                                                             <label class="form-check-label" for="inlineRadio2">3</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="2"
+                                                            <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="2"
                                                             @if ($score->appraisal_score_score == 2)
                                                                 checked
                                                             @endif>
                                                             <label class="form-check-label" for="inlineRadio2">2</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="1"
+                                                            <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="1"
                                                             @if ($score->appraisal_score_score == 1)
                                                                 checked
                                                             @endif>
                                                             <label class="form-check-label" for="inlineRadio2">1</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="0"
+                                                            <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="0"
                                                             @if ($score->appraisal_score_score == 0)
                                                                 checked
                                                             @endif>
@@ -317,11 +322,14 @@
                 });
             });
 
+            let count = "{{count($part_target_sub)}}";
+            // console.log('count: ', count);
+
             $('#btn-step-1').removeClass( "btn-primary btn" ).addClass( "btn-primary btn btn-light" );
-            $('#btn-step-5').removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
+            $('#btn-step-' + count).removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
 
             $('#step-1').css('display', 'block');
-            $('#step-5').css('display', 'none');
+            $('#step-' + count).css('display', 'none');
         });
 
     </script>

@@ -125,27 +125,27 @@
                                                 <h5><span class="badge bg-info">คะแนนการประเมิน</span></h5>
                                                 <div class="col">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="4">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$target_sub->part_target_sub_id}}" value="4">
                                                         <label class="form-check-label" for="inlineRadio1">4</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="3">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$target_sub->part_target_sub_id}}" value="3">
                                                         <label class="form-check-label" for="inlineRadio2">3</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="2">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$target_sub->part_target_sub_id}}" value="2">
                                                         <label class="form-check-label" for="inlineRadio2">2</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="1">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$target_sub->part_target_sub_id}}" value="1">
                                                         <label class="form-check-label" for="inlineRadio2">1</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$i}}" value="0">
+                                                        <input class="form-check-input" type="radio" name="rdo_{{$target_sub->part_target_sub_id}}" value="0">
                                                         <label class="form-check-label" for="inlineRadio2">0</label>
                                                     </div>
                                                 </div>
-                                                <span class="text-danger error-text rdo_{{$i}}_error"></span>
+                                                <span class="text-danger error-text rdo_{{$target_sub->part_target_sub_id}}_error"></span>
                                             </div>
                                         </div>
         
@@ -153,7 +153,7 @@
                                             <div class="col-xs-12">
                                                 <h5><span class="badge bg-info">ความคิดเห็นเพิ่มเติม(เชิงคุณภาพ)</span></h5>
                                                 <div class="col mb-3">
-                                                    <textarea class="form-control" name="comment_{{$i}}" id="" rows="3"></textarea>
+                                                    <textarea class="form-control" name="comment_{{$target_sub->part_target_sub_id}}" id="" rows="3"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -277,17 +277,13 @@
                 });
             });
 
+            let count = "{{count($part_target_sub)}}";
+
             $('#btn-step-1').removeClass( "btn-primary btn" ).addClass( "btn-primary btn btn-light" );
-            $('#btn-step-2').removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
-            $('#btn-step-3').removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
-            $('#btn-step-4').removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
-            $('#btn-step-5').removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
+            $('#btn-step-' + count).removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
 
             $('#step-1').css('display', 'block');
-            $('#step-2').css('display', 'none');
-            $('#step-3').css('display', 'none');
-            $('#step-4').css('display', 'none');
-            $('#step-5').css('display', 'none');
+            $('#step-' + count).css('display', 'none');
 
         });
 

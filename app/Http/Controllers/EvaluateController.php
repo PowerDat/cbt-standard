@@ -94,8 +94,8 @@ class EvaluateController extends Controller
         if (!empty($transaction[0]->appraisal_transaction_status)) {
             if ($transaction[0]->appraisal_transaction_status == '1') {
                 //เรียกข้อมูลแบบร่าง
-                $ap_question = AppraisalQuestion::select('part_target_sub_id', 'part_index_question_id')->where('part_target_id', $part_target_id)->get();
-                $ap_score = AppraisalScore::select('part_target_sub_id', 'appraisal_score_score', 'appraisal_score_comment')->where('part_target_id', $part_target_id)->get();
+                $ap_question = AppraisalQuestion::select('*')->where('part_target_id', $part_target_id)->get();
+                $ap_score = AppraisalScore::select('*')->where('part_target_id', $part_target_id)->get();
                 // dd($ap_score);
                 return view('evaluate.form-draft', [
                     'part' => $part,
@@ -131,7 +131,6 @@ class EvaluateController extends Controller
             , part_target_sub_name
             , part_target_sub_order
             , part_target_sub_desc 
-            , ROW_NUMBER() OVER(PARTITION BY part_target_id ORDER BY part_target_sub_id) AS rowNum
         FROM part_target_sub
         WHERE part_target_id = $part_target_id
         ");
@@ -153,12 +152,9 @@ class EvaluateController extends Controller
 
         //save data
         foreach ($part_target_sub as $key => $item) {
-            $chk_question = "chk_question_" . ($key + 1);
-            $rdo = "rdo_" . ($key + 1);
-            $comment = "comment_" . ($key + 1);
-            // $chk_question = "chk_question_" . $item->part_target_sub_id;
-            // $rdo = "rdo_" . $item->part_target_sub_id;
-            // $comment = "comment_" . $item->part_target_sub_id;
+            $chk_question = "chk_question_" . $item->part_target_sub_id;
+            $rdo = "rdo_" . $item->part_target_sub_id;
+            $comment = "comment_" . $item->part_target_sub_id;
 
             $validator = Validator::make($request->all(), [
                 "$rdo" => ['required'],
@@ -175,54 +171,71 @@ class EvaluateController extends Controller
             } 
             else 
             {
-                // if (!empty($request->input($rdo))) {
-                    $score = new AppraisalScore();
-                    $score->part_target_sub_id = $item->part_target_sub_id;
-                    $score->appraisal_score_score = $request->input($rdo);
-                    $score->appraisal_score_comment = $request->input($comment);
-                    $score->part_target_id = $part_target_id;
-                    $score->created_by = Auth::user()->id;
-                    $score->updated_by = Auth::user()->id;
-                    $score->save();
-                // }
+                $score = new AppraisalScore();
+                $score->part_target_sub_id = $item->part_target_sub_id;
+                $score->appraisal_score_score = $request->input($rdo);
+                $score->appraisal_score_comment = $request->input($comment);
+                $score->part_target_id = $part_target_id;
+                $score->created_by = Auth::user()->id;
+                $score->updated_by = Auth::user()->id;
+                $score->save();
 
                 if (!empty($request->input($chk_question))) {
                     foreach ($request->input($chk_question) as $value) {
     
-                        // $file = 'file_'.$value;
-                        // $image = 'image_'.$value;
-                        // $link_url = 'link_url_'.$value;
+                        $file = 'file_'.$value;
+                        $image = 'image_'.$value;
+                        $link_url = 'link_url_'.$value;
                        
-                        // $validatorFile = Validator::make($request->all(), [
-                        //     "$file" => 'mimes:pdf|max:2048',
-                        //     "$image" => 'mimes:png,jpg|max:2048',
-                        // ], [
-                        //     "$file.mimes" => 'ไฟล์นามสกุล pdf เท่านั้น',
-                        //     "$file.max" => 'ขนาดไม่เกิน 2 MB',
-                        //     "$image.mimes" => 'ไฟล์นามสกุล png, jpg เท่านั้น',
-                        //     "$image.max" => 'ขนาดไม่เกิน 2 MB',
-                        // ]);
+                        $validatorFile = Validator::make($request->all(), [
+                            "$file" => 'mimes:pdf|max:2048',
+                            "$image" => 'mimes:png,jpg|max:2048',
+                        ], [
+                            "$file.mimes" => 'ไฟล์นามสกุล pdf เท่านั้น',
+                            "$file.max" => 'ขนาดไม่เกิน 2 MB',
+                            "$image.mimes" => 'ไฟล์นามสกุล png, jpg เท่านั้น',
+                            "$image.max" => 'ขนาดไม่เกิน 2 MB',
+                        ]);
 
-                        // if (!$validatorFile->passes()) 
-                        // {
-                        //     return response()->json([
-                        //         'status' => 0,
-                        //         'error' => $validatorFile->errors()->toArray()
-                        //     ]);
-                        // } 
-                        // else
-                        // {
+                        if (!$validatorFile->passes()) 
+                        {
+                            return response()->json([
+                                'status' => 0,
+                                'error' => $validatorFile->errors()->toArray()
+                            ]);
+                        } 
+                        else
+                        {
                             $question = new AppraisalQuestion();
+
+                            //upload file 
+                            if(!empty($request->file($file))){
+                                $file = $request->file($file);
+                                $fileName = time().'.'.$file->extension();
+                                // dd($fileName);
+
+                                $destinationPath = "uploads/files";
+                                $file->move($destinationPath, $fileName);
+                                $question->file = $fileName; //$fileName;
+                            }
+
+                            //upload image
+                            if(!empty($request->file("$image"))){
+                                $file = $request->file($image);
+                                $imageName = time().'.'.$file->extension();
+
+                                $destinationPath = "uploads/images";
+                                $file->move($destinationPath, $imageName);
+                                $question->image = $imageName;
+                            }
+
                             $question->part_target_sub_id = $item->part_target_sub_id;
                             $question->part_index_question_id = $value;
                             $question->part_target_id = $part_target_id;
-                            // $question->file = $file;
-                            // $question->image = $image;
-                            // $question->link_url = $link_url;
                             $question->created_by = Auth::user()->id;
                             $question->updated_by = Auth::user()->id;
                             $question->save();
-                        // }
+                        }
                     }
                 }
             }           
@@ -256,7 +269,6 @@ class EvaluateController extends Controller
             , part_target_sub_name
             , part_target_sub_order
             , part_target_sub_desc 
-            , ROW_NUMBER() OVER(PARTITION BY part_target_id ORDER BY part_target_sub_id) AS rowNum
         FROM part_target_sub
         WHERE part_target_id = $part_target_id
         ");
@@ -278,9 +290,9 @@ class EvaluateController extends Controller
 
         //save data
         foreach ($part_target_sub as $key => $item) {
-            $chk_question = "chk_question_" . ($key + 1);
-            $rdo = "rdo_" . ($key + 1);
-            $comment = "comment_" . ($key + 1);
+            $chk_question = "chk_question_" . $item->part_target_sub_id;
+            $rdo = "rdo_" . $item->part_target_sub_id;
+            $comment = "comment_" . $item->part_target_sub_id;
 
             $score = new AppraisalScore();
             $score->part_target_sub_id = $item->part_target_sub_id;
@@ -322,26 +334,22 @@ class EvaluateController extends Controller
                         //upload file 
                         if(!empty($request->file($file))){
                             $file = $request->file($file);
-                            $destinationPath = "uploads/files";
-                            $file->move($destinationPath, $file->getClientOriginalName());
-                            $question->file = $file->getClientOriginalName(); //$fileName;
+                            $fileName = time().'.'.$file->extension();
+                            // dd($fileName);
 
-                            // $fileName = time().'.'.$request->file($file)->extension();
-                            // $fileEncoded = File::get($request->input($file));
-                            // $request->file->move(public_path('uploads'), $fileName);
-                            // Storage::disk('local')->put('uploads'.$fileName, $request->input($file));
+                            $destinationPath = "uploads/files";
+                            $file->move($destinationPath, $fileName);
+                            $question->file = $fileName; //$fileName;
                         }
 
                         //upload image
                         if(!empty($request->file("$image"))){
                             $file = $request->file($image);
-                            $destinationPath = "uploads/images";
-                            $file->move($destinationPath, $file->getClientOriginalName());
-                            $question->image = $file->getClientOriginalName();
+                            $imageName = time().'.'.$file->extension();
 
-                            // $imageName = time().'.'.$request->file("$image")->extension();  
-                            // $imageEncoded = File::get($request->input("$image"));
-                            // Storage::disk('local')->put('public/uploads/images/'.$imageName, $imageEncoded);
+                            $destinationPath = "uploads/images";
+                            $file->move($destinationPath, $imageName);
+                            $question->image = $imageName;
                         }
                         
                         $question->part_target_sub_id = $item->part_target_sub_id;
@@ -375,7 +383,7 @@ class EvaluateController extends Controller
     public function show($part_target_id)
     {
         $part_target = PartTarget::where('part_target_id', $part_target_id)->get();
-        // $part_target_sub = PartTargetSub::where('part_target_id', $part_target_id)->get();
+        
         $part_target_sub = DB::select("
         SELECT 
             part_target_sub_id
@@ -383,7 +391,6 @@ class EvaluateController extends Controller
             , part_target_sub_name
             , part_target_sub_order
             , part_target_sub_desc 
-            , ROW_NUMBER() OVER(PARTITION BY part_target_id ORDER BY part_target_sub_id) AS rowNum
         FROM part_target_sub
         WHERE part_target_id = $part_target_id
         ");
