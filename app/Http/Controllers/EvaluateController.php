@@ -79,7 +79,7 @@ class EvaluateController extends Controller
             , part_target_sub_name
             , part_target_sub_order
             , part_target_sub_desc 
-            , ROW_NUMBER() OVER(PARTITION BY part_target_id ORDER BY part_target_sub_id) AS rowNum
+            , (SELECT COUNT(*) FROM part_target WHERE part_target.part_target_id <= part_target_sub.part_target_sub_id) AS rowNum
         FROM part_target_sub
         WHERE part_target_id = $part_target_id
         ");
@@ -131,7 +131,7 @@ class EvaluateController extends Controller
             , part_target_sub_name
             , part_target_sub_order
             , part_target_sub_desc 
-            , ROW_NUMBER() OVER(PARTITION BY part_target_id ORDER BY part_target_sub_id) AS rowNum
+            , (SELECT COUNT(*) FROM part_target WHERE part_target.part_target_id <= part_target_sub.part_target_sub_id) AS rowNum
         FROM part_target_sub
         WHERE part_target_id = $part_target_id
         ");
@@ -256,7 +256,7 @@ class EvaluateController extends Controller
             , part_target_sub_name
             , part_target_sub_order
             , part_target_sub_desc 
-            , ROW_NUMBER() OVER(PARTITION BY part_target_id ORDER BY part_target_sub_id) AS rowNum
+            , (SELECT COUNT(*) FROM part_target WHERE part_target.part_target_id <= part_target_sub.part_target_sub_id) AS rowNum
         FROM part_target_sub
         WHERE part_target_id = $part_target_id
         ");
@@ -383,7 +383,7 @@ class EvaluateController extends Controller
             , part_target_sub_name
             , part_target_sub_order
             , part_target_sub_desc 
-            , ROW_NUMBER() OVER(PARTITION BY part_target_id ORDER BY part_target_sub_id) AS rowNum
+            , (SELECT COUNT(*) FROM part_target WHERE part_target.part_target_id <= part_target_sub.part_target_sub_id) AS rowNum
         FROM part_target_sub
         WHERE part_target_id = $part_target_id
         ");
