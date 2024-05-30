@@ -72,10 +72,17 @@ class EvaluateController extends Controller
     public function form($part_target_id) //ฟอร์มประเมิน
     {
         $part_target = PartTarget::where('part_target_id', $part_target_id)->get();
-        $part_target_sub = DB::table('part_target_sub')
-                                ->select('part_target_sub_id', 'part_target_sub_name', 'part_target_id', 'part_target_sub_order', 'part_target_sub_desc', DB::raw('ROW_NUMBER() OVER(PARTITION BY part_target_id ORDER BY part_target_sub_id) AS rowNum'))
-                                ->where('part_target_id', '=', $part_target_id)
-                                ->get();
+        $part_target_sub = DB::select("
+        SELECT 
+            part_target_sub_id
+            , part_target_id
+            , part_target_sub_name
+            , part_target_sub_order
+            , part_target_sub_desc 
+        FROM part_target_sub
+        WHERE part_target_id = $part_target_id
+        ");
+        
         // dd($part_target_sub);
         $part = Part::where('part_id', $part_target[0]->part_id)->get();
         $part_index_score = PartIndexScore::orderBy('part_index_score_order', 'desc')->get();

@@ -43,7 +43,7 @@
                                 <div class="stepwizard-row setup-panel">
                                     @for ($i=1; $i <= count($part_target_sub); $i++)
                                     <div class="stepwizard-step">
-                                        <a id="btn-step-{{$i}}" class="btn btn-primary" href="#step-{{$i}}">ข้อ {{$i}}</a>
+                                        <a id="btn-step-{{$i}}" class="btn btn-primary" href="#step-{{$i}}">ข้อ {{$i + $part_target_sub[0]->part_target_sub_order - 1}}</a>
                                     </div>
                                     @endfor
                                 </div>
@@ -52,7 +52,7 @@
                             @foreach ($part_target_sub as $target_sub)
 
                                 @for ($i=1; $i <= count($part_target_sub); $i++)
-                                    @if ($target_sub->rowNum == $i)
+                                    @if ($target_sub->part_target_sub_order == ($i + $part_target_sub[0]->part_target_sub_order - 1))
                                     <div class="setup-content" id="step-{{$i}}">
                                         <div class="row mt-3">
                                             <div class="col-xs-12">
