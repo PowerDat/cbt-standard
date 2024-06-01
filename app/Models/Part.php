@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\PartType;
 use App\Models\PartTarget;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +18,11 @@ class Part extends Model
     public function partTarget()
     {
         return $this->hasMany(PartTarget::class, 'part_id');
+    }
+
+    public function partType()
+    {
+        return $this->belongsTo(PartType::class, 'part_type_id');
     }
 
 }

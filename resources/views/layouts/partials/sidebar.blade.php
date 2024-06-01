@@ -84,12 +84,12 @@
 
                     @if (Auth::user()->role_id == 3)
                     <li class="dropdown">
-                        <a class="nav-link menu-title link-nav" href="{{route('part.index')}}">
+                        <a class="nav-link menu-title link-nav" href="{{route('part-type.index')}}">
                             <i data-feather="circle"></i>ข้อมูลเกณฑ์มาตรฐาน
                         </a>
                     </li>
 
-                    <li class="dropdown">
+                    {{-- <li class="dropdown">
                         <a class="nav-link" href="javascript:void(0)">
                             <i data-feather="circle"></i><span>ตั้งค่าระบบ</span>
                         </a>
@@ -98,7 +98,7 @@
                                     <i class="fa fa-circle"></i> จัดการสิทธิ์
                                 </a>
                             </li>
-                    </li>
+                    </li> --}}
                     @endif
                 </ul>
             </div>

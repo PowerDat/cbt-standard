@@ -6,7 +6,8 @@
     
                     <div class="card-header text-end">
                         <div class="col-sm-9 offset-sm-3">
-                            <a href="{{route('part.create')}}" class="btn btn-primary">เพิ่มข้อมูล</a>
+                            <a href="{{route('part-type.create')}}" class="btn btn-primary">เพิ่มข้อมูล</a>
+                            {{-- <a href="{{route('part.create')}}" class="btn btn-primary">เพิ่มข้อมูล</a> --}}
                         </div>
                     </div>
     
@@ -15,7 +16,8 @@
                             <table class="table table-bordered ">
                                 <thead class="bg-light text-center">
                                     <tr>
-                                        <th>ลำดับ</th>
+                                        <th>ประเภทเกณฑ์มาตรฐาน</th>
+                                        <th>ลำดับเกณฑ์มาตรฐาน</th>
                                         <th>ด้านเกณฑ์มาตรฐาน</th>
                                         <th>จำนวนเป้าประสงค์</th>
                                         <th>แก้ไข</th>
@@ -25,6 +27,13 @@
                                 <tbody>
                                     @foreach ($model as $item)
                                     <tr>
+                                        <td class="text-center">
+                                            @foreach ($type as $value)
+                                                @if ($value->part_type_id == $item->part_type_id)
+                                                {{$value->part_type_name}}
+                                                @endif
+                                            @endforeach
+                                        </td>
                                         <td class="text-center">{{$item->part_order}}</td>
                                         <td>{{$item->part_name}}</td>
                                         <td class="text-center">{{$item->partTarget->count()}}</td>

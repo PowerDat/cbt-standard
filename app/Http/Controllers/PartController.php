@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Part;
+use App\Models\PartType;
 use App\Models\PartTarget;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,9 +31,24 @@ class PartController extends Controller
     {
         $order = Part::all()->count();
         $count_order = $order + 1;
+        $partType = PartType::all();
 
         return view('part.form', [
-            'count_order' => $count_order
+            'count_order' => $count_order,
+            'partType' => $partType
+        ]);
+    }
+
+    public function createByPartTypeId($id)
+    {
+        $order = Part::all()->count();
+        $count_order = $order + 1;
+        $partType = PartType::all();
+
+        return view('part.form', [
+            'count_order' => $count_order,
+            'partType' => $partType,
+            'part_type_id' => $id,
         ]);
     }
 
@@ -42,12 +58,11 @@ class PartController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'part_order' => 'required|numeric|unique:part',
+            'part_order' => 'required|numeric',
             'part_name' => 'required',
         ], [
             'part_order.required' => 'กรอกลำดับเกณฑ์มาตรฐาน',
             'part_order.numeric' => 'กรอกลำดับเกณฑ์มาตรฐาน(เฉพาะตัวเลข)',
-            'part_order.unique' => 'ลำดับเกณฑ์มาตรฐานมีอยู่แล้วในระบบ(ห้ามซ้ำ)',
             'part_name.required' => 'กรอกชื่อลำดับเกณฑ์มาตรฐาน',
         ]);
 
@@ -59,6 +74,7 @@ class PartController extends Controller
         } 
         else {
             $model = new Part();
+            $model->part_type_id = $request->part_type_id;
             $model->part_order = $request->part_order;
             $model->part_name = $request->part_name;
             $model->part_detail = $request->part_detail;
@@ -89,10 +105,12 @@ class PartController extends Controller
     {
         $model = Part::find($id);
         $partTarget = PartTarget::where('part_id', $id)->get();
+        $partType = PartType::all();
 
         return view('part.form-edit', [
             'model' => $model,
             'partTarget' => $partTarget,
+            'partType' => $partType,
         ]);
     }
 
@@ -118,6 +136,7 @@ class PartController extends Controller
         } 
         else {
             $model = Part::find($id);
+            $model->part_type_id = $request->part_type_id;
             $model->part_order = $request->part_order;
             $model->part_name = $request->part_name;
             $model->part_detail = $request->part_detail;

@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">ข้อมูลเกณฑ์มาตรฐาน</li>
-                    <li class="breadcrumb-item">ข้อมูลลำดับเกณฑ์มาตรฐาน</li>
+                    <li class="breadcrumb-item">ประเภทเกณฑ์มาตรฐาน</li>
                     <li class="breadcrumb-item active">แก้ไขข้อมูล</li>
                 </ol>
             </div>
@@ -20,7 +20,6 @@
 <!-- content -->
 <div class="container-fluid">
     <div class="row">
-
         <div class="col-sm-12">
             <form id="form" method="POST">
                 @csrf
@@ -28,28 +27,17 @@
                 @method('put')
                 @endif
 
-                <div class="alert alert-danger print-error-msg" style="display:none">
-                    <ul></ul>
-                </div>
-
                 <div class="card">
+                    
                     <div class="card-body">
 
                         <div class="row mt-3">
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label">ประเภทเกณฑ์มาตรฐาน <span class="text-danger" style="font-size: 20px;">*</span></label>
-                                    <select  class="form-control" disabled>
-                                        <option value="" selected disabled>เลือกประเภทเกณฑ์มาตรฐาน</option>
-                                        @foreach ($partType as $item)
-                                            <option value="{{$item->part_type_id}}"
-                                            @if ($model->part_type_id == $item->part_type_id)
-                                                selected
-                                            @endif
-                                            >{{$item->part_type_name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <input type="hidden" name="part_type_id" id="part_type_id" value="{{$model->part_type_id}}">
+                                    <input class="form-control" id="part_type_name" name="part_type_name" type="text"
+                                    value="{{$model->part_type_name}}"> 
+                                    <span class="text-danger error-text part_type_name_error"></span>
                                 </div>
                             </div>
                         </div>
@@ -57,29 +45,8 @@
                         <div class="row">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label">ลำดับเกณฑ์มาตรฐาน <span class="text-danger" style="font-size: 20px;">*</span></label>
-                                    <input class="form-control" id="part_order" name="part_order" type="text"
-                                        value="{{ $model->part_order}}">
-                                    <span class="text-danger error-text part_order_error"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="mb-3">
-                                    <label class="form-label">ชื่อลำดับเกณฑ์มาตรฐาน <span class="text-danger" style="font-size: 20px;">*</span></label>
-                                    <input class="form-control" id="part_name" name="part_name" type="text"
-                                        value="{{$model->part_name}}">
-                                    <span class="text-danger error-text part_name_error"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="mb-3">
-                                    <label class="form-label">รายละเอียดลำดับเกณฑ์มาตรฐาน(เพิ่มเติม)</label>
-                                    <textarea class="form-control" id="part_detail" name="part_detail"
-                                        rows="3">{{$model->part_detail}}</textarea>
+                                    <label class="form-label">รายละเอียดประเภทเกณฑ์มาตรฐาน(เพิ่มเติม)</label>
+                                    <textarea class="form-control" id="part_type_detail" name="part_type_detail"rows="3">{{ $model->part_type_detail}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -87,14 +54,14 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-6">
-                                <a href="{{route('part-target.createByPartId', $model->part_id)}}"
+                                <a href="{{route('part.createByPartTypeId', $model->part_type_id)}}"
                                     class="btn btn-secondary">
-                                    <i class="fa fa-plus" aria-hidden="true"></i> เป้าประสงค์
+                                    <i class="fa fa-plus" aria-hidden="true"></i> เกณฑ์มาตรฐาน
                                 </a>
                             </div>
                             <div class="col-6 text-end">
                                 <button class="btn btn-primary" type="submit">บันทึก</button>
-                                <a class="btn btn-light" href="{{route('part-type.edit', $model->part_type_id)}}">กลับหน้าประเภทเกณฑ์มาตรฐาน</a>
+                                <a class="btn btn-light" href="{{route('part-type.index')}}">ยกเลิก</a>
                             </div>
                         </div>
                     </div>
@@ -102,50 +69,41 @@
             </form>
         </div>
 
-        @if ($partTarget->count() > 0)
+        @if ($part->count() > 0)
         <div class="col-sm-12">
 
             <div class="card">
                 <div class="card-body">
-                    <h5>รายการเป้าประสงค์</h5>
+                    <h5>รายการเกณฑ์มาตรฐาน</h5>
                     <p class="card-text">
-                        <strong>เกณฑ์มาตรฐาน</strong> {{$partTarget[0]->part->part_order.' '.$partTarget[0]->part->part_name}}
+                        <strong>ประเภทเกณฑ์มาตรฐาน</strong> {{$model->part_type_name}}
                     </p>
 
-                    @foreach ($partTarget as $item)
+                    @foreach ($part as $item)
                     <ul class="list-group">
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-sm-10">
-                                    <strong>เป้าประสงค์</strong> {{$item->part_target_order.'
-                                    '.$item->part_target_name}}
+                                    <strong>เกณฑ์มาตรฐาน</strong> {{$item->part_order.' '.$item->part_name}}
                                 </div>
                                 <div class="col-sm-1">
-                                    <a href="{{route('part-target.edit', $item->part_target_id)}}"
-                                        class="btn btn-primary">
+                                    <a href="{{route('part.edit', $item->part_id)}}"
+                                        class="btn btn-primary btn-sm">
                                         <i class="fa fa-pencil"></i>
                                     </a>
                                 </div>
                                 <div class="col-sm-1">
-                                    <a onclick="deleteById({{$item->part_target_id}})" class="btn btn-light">
+                                    <a onclick="deleteById({{$item->part_id}})" class="btn btn-light btn-sm">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </a>
-                                    {{-- <a href="{{route('part-target.destroy', $item->part_target_id)}}"
-                                        class="btn btn-light ">
-                                        <i class="fa fa-trash"></i>
-                                    </a> --}}
                                 </div>
                             </div>
                         </li>
                     </ul>
                     @endforeach
-
                 </div>
             </div>
-
-        </div>
         @endif
-
 
     </div>
 </div>
@@ -170,7 +128,7 @@
 
             $.ajax({
                 type: 'post',
-                url: "{{ route('part.update', $model->part_id) }}",
+                url: "{{ route('part-type.update', $model->part_type_id) }}",
                 data: formData,
                 contentType: false,
                 processData: false,
@@ -191,7 +149,7 @@
                             icon: 'success',
                             width: '450px',
                             showConfirmButton: false,
-                            timer: 3000
+                            timer: 5000
                         });
 
                         window.location.reload();
@@ -213,7 +171,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'post',
-                    url: "{{ route('part-target.delete') }}",
+                    url: "{{ route('part.delete') }}",
                     data: {
                         part_target_id: id,
                     },
@@ -245,6 +203,5 @@
             } 
         });
     }
-
 </script>
 @endpush

@@ -12,6 +12,7 @@ use App\Http\Controllers\PartIndexController;
 use App\Http\Controllers\PartDetailController;
 use App\Http\Controllers\PartTargetController;
 use App\Http\Controllers\PartTargetSubController;
+use App\Http\Controllers\PartTypeController;
 use App\Http\Controllers\RoleController;
 
 // Route::get('/', function () {
@@ -39,7 +40,11 @@ Route::middleware(['auth'])->group(function(){
     Route::post('evaluate/save-draft', [EvaluateController::class, 'saveDraft'])->name('evaluate.save-draft');
     Route::get('evaluate/getPartType/{part_type_id?}', [EvaluateController::class, 'getPartType'])->name('evaluate.getPartType');
 
+    //ประเภทเกณฑ์มาตรฐาน
+    Route::resource('part-type', PartTypeController::class);
+    Route::post('part-type/delete', [PartTypeController::class, 'delete'])->name('part-type.delete');
     //ข้อมูลเกณฑ์มาตรฐาน
+    Route::get('part/createByPartTypeId/{id?}', [PartController::class, 'createByPartTypeId'])->name('part.createByPartTypeId');
     Route::post('part/delete', [PartController::class, 'delete'])->name('part.delete');
     Route::resource('part', PartController::class);
     
