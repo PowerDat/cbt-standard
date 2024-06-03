@@ -42,8 +42,9 @@
             <!-- Page Sidebar Ends-->
             <div class="page-body">
 
-                {{-- flash message --}}
-                {{-- @include('flash-message') --}}
+                <section id="loading">
+                    <div id="loading-content"></div>
+                </section>
 
                 @yield('content')
             </div>

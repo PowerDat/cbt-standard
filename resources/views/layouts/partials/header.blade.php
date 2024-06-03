@@ -2,14 +2,10 @@
     <div class="main-header-right row m-0">
         <div class="main-header-left">
             <div class="logo-wrapper">
-                <a href="index.html">
-                    <img class="img-fluid" src="{{ asset('images/logo/logo.png') }}" alt="">
-                </a>
+                <img src="{{ asset('images/logo/icon-logo.png') }}" alt=""> <strong>RCBT-SIP</strong>
             </div>
             <div class="dark-logo-wrapper">
-                <a href="index.html">
-                    <img class="img-fluid" src="{{ asset('images/logo/dark-logo.png') }}" alt="">
-                </a>
+                <img src="{{ asset('images/logo/icon-logo.png') }}" alt=""> <strong>RCBT-SIP</strong>
             </div>
             <div class="toggle-sidebar">
                 <i class="status_toggle middle" data-feather="align-center" id="sidebar-toggle"></i>
