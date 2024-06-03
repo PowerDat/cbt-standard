@@ -183,12 +183,12 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbody_question">
-                                                        <tr>
+                                                        {{-- <tr>
                                                             <td>
                                                                 <input class="form-control" type="text" name="name_question[]">
                                                             </td>
                                                             <td style="width: 50px;"></td>
-                                                        </tr>
+                                                        </tr> --}}
                                                     </tbody>
                                                 </table>
                                             </div>

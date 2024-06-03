@@ -32,6 +32,11 @@
     <!-- Loader ends-->
     <!-- page-wrapper Start-->
     <div class="page-wrapper" id="pageWrapper">
+
+        <section id="loading">
+            <div id="loading-content"></div>
+        </section>
+
         <!-- Page Header Start-->
         @include('layouts.partials.header')
         <!-- Page Header Ends -->
@@ -41,10 +46,6 @@
             @include('layouts.partials.sidebar')
             <!-- Page Sidebar Ends-->
             <div class="page-body">
-
-                <section id="loading">
-                    <div id="loading-content"></div>
-                </section>
 
                 @yield('content')
             </div>
