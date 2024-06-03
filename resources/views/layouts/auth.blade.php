@@ -18,6 +18,7 @@
     <title>CBT Standard</title>
 
     @include('layouts.partials.css')
+
 </head>
 
 <body>
@@ -30,11 +31,15 @@
     <!-- Loader ends-->
 
     <section>
+
+        <section id="loading">
+            <div id="loading-content"></div>
+        </section>
         
         @yield('content')
         
     </section>
-
+   
     @include('layouts.partials.js')
 
 </body>

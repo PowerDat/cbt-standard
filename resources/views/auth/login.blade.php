@@ -1,5 +1,9 @@
 @extends('layouts.auth')
 
+{{-- @push('css')
+<link rel="stylesheet" type="text/css" href="{{ asset('css/loading.css') }}">
+@endpush --}}
+
 @section('content')
 <div class="container-fluid p-0">
     <div class="row">
@@ -11,36 +15,31 @@
                     <h4>ยินดีต้อนรับ</h4>
                     <h6>ระบบประเมินมาตรฐานการบริหารจัดการแหล่งท่องเที่ยวโดยชุมชน</h6>
 
-                    <div id="errors-list"></div>
+                    <section id="loading">
+                        <div id="loading-content"></div>
+                    </section>
 
-                    <div class="form-group">
-                        <label>ชื่อผู้ใช้</label>
-                        <div class="input-group">
-                            <input 
-                                id="user_login" 
-                                type="text"
-                                class="form-control" 
-                                name="user_login"
-                                required
-                            >
-                            @if ($errors->has('user_login'))
-                                <span class="text-danger">{{ $errors->first('user_login') }}</span>
-                            @endif
+                    <div class="alert alert-danger" id="login_error">
+                        ชื่อหรือรหัสผ่านไม่ถูกต้อง
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-label">ชื่อผู้ใช้</label>
+                                <input class="form-control" id="user_login" name="user_login" type="text"> 
+                                <span class="text-danger error-text user_login_error"></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>รหัสผ่าน</label>
-                        <div class="input-group">
-                            <input 
-                                id="password" 
-                                type="password"
-                                class="form-control" 
-                                name="password"
-                                required 
-                            >
-                            @if ($errors->has('password'))
-                                <span class="text-danger">{{ $errors->first('password') }}</span>
-                            @endif
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-label">รหัสผ่าน</label>
+                                <input type="password" class="form-control" id="password" name="password">
+                                <span class="text-danger error-text password_error"></span>
+                            </div>
                         </div>
                     </div>
 
@@ -65,36 +64,45 @@
 
     $(document).ready(function() {
 
+        $('#login_error').hide();
+
         $(document).on("submit", "#form", function() {
           var e = this;
   
-          $(this).find("[type='submit']").html("เข้าสู่ระบบ...");
+            // $('#loading').addClass('loading');
+            // $('#loading-content').addClass('loading-content');
   
-          $.ajax({
-              url: "{{route('auth.post-login')}}",
-              data: $(this).serialize(),
-              type: "POST",
-              dataType: 'json',
-              success: function (data) {
-  
-                $(e).find("[type='submit']").html("เข้าสู่ระบบ");
-  
-                if (data.status) 
-                {
-                    window.location = data.redirect;
-                }
-                else
-                {
-                    $(".alert").remove();
-                    $.each(data.errors, function (key, val) 
+            $.ajax({
+                url: "{{route('auth.post-login')}}",
+                data: $(this).serialize(),
+                type: "POST",
+                dataType: 'json',
+                beforeSend:function(){
+                    $(document).find('span.error-text').text('');
+                },
+                success: function (response) {
+
+                    // $('#loading').removeClass('loading');
+                    // $('#loading-content').removeClass('loading-content');
+
+                    if(response.status == 0)
                     {
-                        $("#errors-list").append("<div class='alert alert-danger'>" + val + "</div>");
-                    });
+                        $.each(response.error, function(prefix, val){
+                            $('span.'+prefix+'_error').text(val[0]);
+                        });
+                    }
+                    else if(response.status == 403)
+                    {
+                        $('#login_error').show();
+                    }
+                    else if(response.status == 1)
+                    {
+                        window.location = response.redirect;
+                    }
                 }
-              }
-          });
+            });
   
-          return false;
+            return false;
       });
 
     });

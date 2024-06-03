@@ -17,5 +17,26 @@
 <script src="{{ asset('js/theme-customizer/customizer.js') }}"></script>
 <!-- login js-->
 <!-- Plugin used-->
-{{-- toastr --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script>
+  
+    /*------------------------------------------
+    --------------------------------------------
+    Add Loading When fire Ajax Request
+    --------------------------------------------
+    --------------------------------------------*/
+    $(document).ajaxStart(function() {
+        $('#loading').addClass('loading');
+        $('#loading-content').addClass('loading-content');
+    });
+  
+    /*------------------------------------------
+    --------------------------------------------
+    Remove Loading When fire Ajax Request
+    --------------------------------------------
+    --------------------------------------------*/
+    $(document).ajaxStop(function() {
+        $('#loading').removeClass('loading');
+        $('#loading-content').removeClass('loading-content');
+    });
+      
+</script>
