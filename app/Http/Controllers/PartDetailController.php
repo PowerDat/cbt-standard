@@ -162,7 +162,7 @@ class PartDetailController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if ($request->ajax()) {
+        // if ($request->ajax()) {
 
             $validator = Validator::make($request->all(), [
                 'part_target_sub_order' => 'required|numeric',
@@ -238,7 +238,7 @@ class PartDetailController extends Controller
                     'msg' => 'แก้ไขข้อมูลสำเร็จ',
                 ]);
             }
-        }
+        // }
     }
 
     /**
