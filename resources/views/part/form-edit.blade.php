@@ -130,10 +130,6 @@
                                     <a onclick="deleteById({{$item->part_target_id}})" class="btn btn-light">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </a>
-                                    {{-- <a href="{{route('part-target.destroy', $item->part_target_id)}}"
-                                        class="btn btn-light ">
-                                        <i class="fa fa-trash"></i>
-                                    </a> --}}
                                 </div>
                             </div>
                         </li>

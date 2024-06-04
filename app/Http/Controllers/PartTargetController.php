@@ -166,7 +166,7 @@ class PartTargetController extends Controller
     {
         $id = $request->part_target_id;
 
-        if (PartTargetSub::count() > 0) 
+        if (PartTargetSub::where('part_target_id', $id)->count() > 0) 
         {
             return response()->json([
                 'status' => 0,

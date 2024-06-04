@@ -116,6 +116,7 @@
                     </p>
                     @if ($partTargetByPartId->count() > 0)
                         @foreach ($partTargetByPartId as $item)
+                        @if (isset($item->part_target_sub_id))
                         <ul class="list-group">
                             <li class="list-group-item">
                                 <div class="row">
@@ -123,12 +124,10 @@
                                         <strong>เกณฑ์พิจารณา</strong> {{$item->part_target_sub_order.' '.$item->part_target_sub_name}}
                                     </div>
                                     <div class="col-sm-1 text-end">
-                                        @if (isset($item->part_target_sub_id))
                                         <a href="{{route('part-detail.edit', $item->part_target_sub_id)}}"
                                             class="btn btn-primary btn-sm">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
-                                        @endif
                                     </div>
                                     <div class="col-sm-1">
                                         <a onclick="deleteById({{$item->part_target_sub_id}})" class="btn btn-light">
@@ -138,6 +137,7 @@
                                 </div>
                             </li>
                         </ul>
+                        @endif
                         @endforeach
                     @endif
                 </div>

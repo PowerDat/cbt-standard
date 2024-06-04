@@ -173,7 +173,7 @@
                     type: 'post',
                     url: "{{ route('part.delete') }}",
                     data: {
-                        part_target_id: id,
+                        part_id: id,
                     },
                     success: (result) => {
                         if(result.status == 0){
