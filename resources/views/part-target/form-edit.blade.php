@@ -137,53 +137,6 @@
                     @endif
                 </div>
             </div>
-            
-            {{-- <div class="card">
-                <div class="card-body">
-                    
-                    <div class="table-responsive mt-3">
-                        <table class="table table-bordered">
-                            <thead class="text-center">
-                                <tr>
-                                    <th>ลำดับเกณฑ์มาตรฐาน</th>
-                                    <th>ชื่อลำดับเกณฑ์มาตรฐาน</th>
-                                    <th>ลำดับเป้าประสงค์</th>
-                                    <th>ชื่อลำดับเป้าประสงค์</th>
-                                    <th>ลำดับเกณฑ์พิจารณา</th>
-                                    <th>ชื่อลำดับเกณฑ์พิจารณา</th>
-                                    <th>แก้ไข</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if ($partTargetByPartId->count() > 0)
-                                @foreach ($partTargetByPartId as $item)
-                                <tr>
-                                    <td class="text-center">{{$item->part_order}}</td>
-                                    <td>{{$item->part_name}}</td>
-                                    <td class="text-center">{{$item->part_target_order}}</td>
-                                    <td>{{$item->part_target_name}}</td>
-                                    <td class="text-center">{{$item->part_target_sub_order}}</td>
-                                    <td>{{$item->part_target_sub_name}}</td>
-                                    <td class="text-center">
-                                        @if (isset($item->part_target_sub_id))
-                                        <a href="{{route('part-detail.edit', $item->part_target_id)}}"
-                                            class="btn btn-primary btn-sm">
-                                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                                        </a>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @endforeach 
-                                @endif
-                                
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="m-t-30 text-end">
-                        {{$partTargetByPartId->links()}}
-                    </div>
-                </div>
-            </div> --}}
 
         </div>
 
