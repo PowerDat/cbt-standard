@@ -85,43 +85,43 @@ class PartDetailController extends Controller
             } 
             else 
             {
-            //ข้อมูลเกณฑ์พิจารณา
-            $partTargetSub = new PartTargetSub();
-            $partTargetSub->part_target_sub_order = $request->part_target_sub_order;
-            $partTargetSub->part_target_id = $request->part_target_id;
-            $partTargetSub->part_target_sub_name = $request->part_target_sub_name;
-            $partTargetSub->part_target_sub_desc = $request->part_target_sub_desc;
-            $partTargetSub->created_by = Auth::user()->id;
-            $partTargetSub->updated_by = Auth::user()->id;
-            $partTargetSub->save();
+                //ข้อมูลเกณฑ์พิจารณา
+                $partTargetSub = new PartTargetSub();
+                $partTargetSub->part_target_sub_order = $request->part_target_sub_order;
+                $partTargetSub->part_target_id = $request->part_target_id;
+                $partTargetSub->part_target_sub_name = $request->part_target_sub_name;
+                $partTargetSub->part_target_sub_desc = $request->part_target_sub_desc;
+                $partTargetSub->created_by = Auth::user()->id;
+                $partTargetSub->updated_by = Auth::user()->id;
+                $partTargetSub->save();
 
-            // คำถามในการประเมิน
-            foreach ($request->name_question as $key => $value) 
-            {
-                $question = new PartIndexQuestion();
-                $question->part_index_question_order = ($key + 1);
-                $question->part_index_question_desc = $value;
-                $question->part_target_sub_id = $partTargetSub->part_target_sub_id;
-                $question->created_by = Auth::user()->id;
-                $question->updated_by = Auth::user()->id;
-                $question->save();
-            }
-
-            //เกณฑ์การให้คะแนน
-            foreach ($request->inputs_score as $key => $items) 
-            {
-                foreach ($items as $item) 
+                // คำถามในการประเมิน
+                foreach ($request->name_question as $key => $value) 
                 {
-                    $score = new PartIndexScore();
-                    $score->part_target_sub_id = $question->part_target_sub_id;
-                    $score->part_index_score_order = ($key + 1);
-                    $score->part_index_score_desc = $item;
-                    $score->created_by = Auth::user()->id;
-                    $score->updated_by = Auth::user()->id;
-                    $score->save();
+                    $question = new PartIndexQuestion();
+                    $question->part_index_question_order = ($key + 1);
+                    $question->part_index_question_desc = $value;
+                    $question->part_target_sub_id = $partTargetSub->part_target_sub_id;
+                    $question->created_by = Auth::user()->id;
+                    $question->updated_by = Auth::user()->id;
+                    $question->save();
                 }
-            }
-    
+
+                //เกณฑ์การให้คะแนน
+                foreach ($request->inputs_score as $key => $items) 
+                {
+                    foreach ($items as $item) 
+                    {
+                        $score = new PartIndexScore();
+                        $score->part_target_sub_id = $question->part_target_sub_id;
+                        $score->part_index_score_order = ($key + 1);
+                        $score->part_index_score_desc = $item;
+                        $score->created_by = Auth::user()->id;
+                        $score->updated_by = Auth::user()->id;
+                        $score->save();
+                    }
+                }
+        
                 return response()->json([
                     'status' => 1,
                     'msg' => 'เพิ่มข้อมูลสำเร็จ',

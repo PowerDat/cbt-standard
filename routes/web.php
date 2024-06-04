@@ -21,7 +21,6 @@ use App\Http\Controllers\RoleController;
 
 Route::get('/', [AuthController::class, 'login'])->name('auth.login');
 Route::post('auth/post-login', [AuthController::class, 'postLogin'])->name('auth.post-login'); 
-Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('logs');
 Route::get('auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 Auth::routes();
@@ -71,5 +70,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('report/part-fifth', [ReportController::class, 'partFifth'])->name('report.part-fifth');
 
     Route::resource('role', RoleController::class);
+
+    Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('logs');
 });
 
