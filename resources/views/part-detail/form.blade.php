@@ -310,7 +310,7 @@
                                 $('span.'+prefix+'_error').text(val[0]);
                             });
                         }
-                        else
+                        else if(response.status == 1)
                         {
                             Swal.fire({
                                 title: 'สำเร็จ',
