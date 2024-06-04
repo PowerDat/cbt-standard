@@ -296,4 +296,51 @@ class PartDetailController extends Controller
             ]);
         }
     }
+
+    public function delete(Request $request)
+    {
+        $id = $request->part_target_sub_id;
+        // dd($id);
+        $score = PartIndexScore::where('part_target_sub_id', $id)->count();
+        if($score > 0)
+        {
+            DB::table('part_index_score')->where('part_target_sub_id', $id)->delete();
+        }
+
+        $question = PartIndexQuestion::where('part_target_sub_id', $id)->count();
+        if($question > 0)
+        {
+            DB::table('part_index_question')->where('part_target_sub_id', $id)->delete();
+        }
+
+        $targetSub = PartTargetSub::find($id);
+        if($targetSub->count() > 0)
+        {
+            $targetSub->delete();
+
+            return response()->json([
+                'status' => 1,
+                'msg' => 'ลบข้อมูลสำเร็จ',
+            ]);
+        }
+
+        // if (PartTargetSub::count() > 0) 
+        // {
+        //     return response()->json([
+        //         'status' => 0,
+        //         'msg' => 'ไม่สามารถลบข้อมูลได้ เนื่องจากมีรายการเกณฑ์พิจารณาใช้งานอยู่',
+        //     ]);
+        //     // return redirect()->back()->with('info', 'ไม่สามารถลบข้อมูลได้ เนื่องจากมีข้อมูลเกณฑ์ย่อยใช้งานอยู่');
+        // } 
+        // else 
+        // {
+        //     $model = PartTarget::find($id);
+        //     $model->delete();
+
+        //     return response()->json([
+        //         'status' => 1,
+        //         'msg' => 'ลบข้อมูลสำเร็จ',
+        //     ]);
+        // }
+    }
 }

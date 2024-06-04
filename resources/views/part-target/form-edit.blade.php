@@ -122,13 +122,18 @@
                                     <div class="col-sm-10">
                                         <strong>เกณฑ์พิจารณา</strong> {{$item->part_target_sub_order.' '.$item->part_target_sub_name}}
                                     </div>
-                                    <div class="col-sm-2 text-end">
+                                    <div class="col-sm-1 text-end">
                                         @if (isset($item->part_target_sub_id))
                                         <a href="{{route('part-detail.edit', $item->part_target_sub_id)}}"
                                             class="btn btn-primary btn-sm">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
                                         @endif
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <a onclick="deleteById({{$item->part_target_sub_id}})" class="btn btn-light">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </li>
@@ -189,5 +194,51 @@
             });
         });
     });
+
+    function deleteById(id)
+    {
+        // console.log('part_target_sub_id: ', id);
+        Swal.fire({
+            title: "ต้องการลบข้อมูลหรือไม่?",
+            showCancelButton: true,
+            confirmButtonText: "ลบข้อมูล",
+            cancelButtonText: `ยกเลิก`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'post',
+                    url: "{{ route('part-detail.delete') }}",
+                    data: {
+                        part_target_sub_id: id,
+                    },
+                    success: (result) => {
+                        if(result.status == 0){
+                            Swal.fire({
+                                title: 'ไม่สำเร็จ',
+                                text: result.msg,
+                                icon: 'error',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 5000
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                title: 'สำเร็จ',
+                                text: result.msg,
+                                icon: 'success',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 5000
+                            });
+
+                            window.location.reload();
+                        }
+                    },
+                });
+            } 
+        });
+    }
+
 </script>
 @endpush

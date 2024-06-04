@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function(){
     Route::post('part-detail/fetchPartTargetById', [PartDetailController::class, 'fetchPartTargetById'])->name('part-detail.fetchPartTargetById');
     Route::resource('part-detail', PartDetailController::class);
     Route::post('part-detail/saveTargetSub', [PartDetailController::class, 'saveTargetSub'])->name('part-detail.saveTargetSub');
+    Route::post('part-detail/delete', [PartDetailController::class, 'delete'])->name('part-detail.delete');
     
     //report
     Route::get('report/part', [ReportController::class, 'part'])->name('report.part');

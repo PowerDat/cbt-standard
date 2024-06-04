@@ -172,7 +172,6 @@ class PartTargetController extends Controller
                 'status' => 0,
                 'msg' => 'ไม่สามารถลบข้อมูลได้ เนื่องจากมีรายการเกณฑ์พิจารณาใช้งานอยู่',
             ]);
-            // return redirect()->back()->with('info', 'ไม่สามารถลบข้อมูลได้ เนื่องจากมีข้อมูลเกณฑ์ย่อยใช้งานอยู่');
         } 
         else 
         {
@@ -184,22 +183,5 @@ class PartTargetController extends Controller
                 'msg' => 'ลบข้อมูลสำเร็จ',
             ]);
         }
-
-        // if (PartTarget::where('part_id', $id)->count() > 0) {
-
-        //     return response()->json([
-        //         'status' => 0,
-        //         'msg' => 'ไม่สามารถลบข้อมูลได้ เนื่องจากมีข้อมูลเป้าประสงค์ใช้งานอยู่',
-        //     ]);
-        // } 
-        // else {
-        //     $model = Part::find($id);
-        //     $model->delete();
-
-        //     return response()->json([
-        //         'status' => 1,
-        //         'msg' => 'ลบข้อมูลสำเร็จ',
-        //     ]);
-        // }
     }
 }
