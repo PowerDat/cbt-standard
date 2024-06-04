@@ -12,9 +12,4 @@ class PartIndexScore extends Model
     protected $table = 'part_index_score';
     protected $primaryKey = 'part_index_score_id';
 
-    protected $fillable = [
-        'part_target_sub_id',
-        'part_index_score_order',
-        'part_index_score_desc',
-    ];
 }

@@ -12,9 +12,4 @@ class PartIndexQuestion extends Model
     protected $table = 'part_index_question';
     protected $primaryKey = 'part_index_question_id';
 
-    protected $fillable = [
-        'part_target_sub_id',
-        'part_index_question_order',
-        'part_index_question_desc',
-    ];
 }
