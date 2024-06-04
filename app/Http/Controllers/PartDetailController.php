@@ -60,74 +60,71 @@ class PartDetailController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->ajax()) 
-        {
+        // if ($request->ajax()) 
+        // {
+        $validator = Validator::make($request->all(), [
+            'part_target_sub_order' => 'required|numeric',
+            'part_target_sub_name' => 'required',
+            'part_target_sub_desc' => 'required',
+            'name_question' => 'required',
+            'inputs_score.*.name_score' => 'required'
+        ], [
+            'part_target_sub_order.numeric' => 'ลำดับเกณฑ์พิจารณา ต้องใส่เป็นตัวเลขเท่านั้น',
+            'part_target_sub_order.required' => 'กรอกลำดับเกณฑ์พิจารณา',
+            'part_target_sub_name.required' => 'กรอกข้อมูลเกณฑ์พิจารณา',
+            'part_target_sub_desc.required' => 'กรอกคำอธิบาย',
+        ]);
 
-            $validator = Validator::make($request->all(), [
-                'part_target_sub_order' => 'required|numeric',
-                'part_target_sub_name' => 'required',
-                'part_target_sub_desc' => 'required',
-                'name_question' => 'required',
-                'inputs_score.*.name_score' => 'required'
-            ], [
-                'part_target_sub_order.numeric' => 'ลำดับเกณฑ์พิจารณา ต้องใส่เป็นตัวเลขเท่านั้น',
-                'part_target_sub_order.required' => 'กรอกลำดับเกณฑ์พิจารณา',
-                'part_target_sub_name.required' => 'กรอกข้อมูลเกณฑ์พิจารณา',
-                'part_target_sub_desc.required' => 'กรอกคำอธิบาย',
+        if (!$validator->passes()) {
+            return response()->json([
+                'status' => 0,
+                'error' => $validator->errors()->toArray()
             ]);
-    
-            if (!$validator->passes()) 
-            {
-                return response()->json([
-                    'status' => 0,
-                    'error' => $validator->errors()->toArray()
-                ]);
-            } 
-            else 
-            {
-                //ข้อมูลเกณฑ์พิจารณา
-                $partTargetSub = new PartTargetSub();
-                $partTargetSub->part_target_sub_order = $request->part_target_sub_order;
-                $partTargetSub->part_target_id = $request->part_target_id;
-                $partTargetSub->part_target_sub_name = $request->part_target_sub_name;
-                $partTargetSub->part_target_sub_desc = $request->part_target_sub_desc;
-                $partTargetSub->created_by = Auth::user()->id;
-                $partTargetSub->updated_by = Auth::user()->id;
-                $partTargetSub->save();
+        } 
+        else 
+        {
+            //ข้อมูลเกณฑ์พิจารณา
+            $partTargetSub = new PartTargetSub();
+            $partTargetSub->part_target_sub_order = $request->part_target_sub_order;
+            $partTargetSub->part_target_id = $request->part_target_id;
+            $partTargetSub->part_target_sub_name = $request->part_target_sub_name;
+            $partTargetSub->part_target_sub_desc = $request->part_target_sub_desc;
+            $partTargetSub->created_by = Auth::user()->id;
+            $partTargetSub->updated_by = Auth::user()->id;
+            $partTargetSub->save();
 
-                // คำถามในการประเมิน
-                foreach ($request->name_question as $key => $value) 
-                {
-                    $question = new PartIndexQuestion();
-                    $question->part_index_question_order = ($key + 1);
-                    $question->part_index_question_desc = $value;
-                    $question->part_target_sub_id = $partTargetSub->part_target_sub_id;
-                    $question->created_by = Auth::user()->id;
-                    $question->updated_by = Auth::user()->id;
-                    $question->save();
-                }
-
-                //เกณฑ์การให้คะแนน
-                foreach ($request->inputs_score as $key => $items) 
-                {
-                    foreach ($items as $item) 
-                    {
-                        $score = new PartIndexScore();
-                        $score->part_target_sub_id = $question->part_target_sub_id;
-                        $score->part_index_score_order = ($key + 1);
-                        $score->part_index_score_desc = $item;
-                        $score->created_by = Auth::user()->id;
-                        $score->updated_by = Auth::user()->id;
-                        $score->save();
-                    }
-                }
-        
-                return response()->json([
-                    'status' => 1,
-                    'msg' => 'เพิ่มข้อมูลสำเร็จ',
-                ]);
+            // คำถามในการประเมิน
+            foreach ($request->name_question as $key => $value) 
+            {
+                $question = new PartIndexQuestion();
+                $question->part_index_question_order = ($key + 1);
+                $question->part_index_question_desc = $value;
+                $question->part_target_sub_id = $partTargetSub->part_target_sub_id;
+                $question->created_by = Auth::user()->id;
+                $question->updated_by = Auth::user()->id;
+                $question->save();
             }
+
+            //เกณฑ์การให้คะแนน
+            foreach ($request->inputs_score as $key => $items) 
+            {
+                foreach ($items as $item) {
+                    $score = new PartIndexScore();
+                    $score->part_target_sub_id = $question->part_target_sub_id;
+                    $score->part_index_score_order = ($key + 1);
+                    $score->part_index_score_desc = $item;
+                    $score->created_by = Auth::user()->id;
+                    $score->updated_by = Auth::user()->id;
+                    $score->save();
+                }
+            }
+
+            return response()->json([
+                'status' => 1,
+                'msg' => 'เพิ่มข้อมูลสำเร็จ',
+            ]);
         }
+        // }
     }
 
     /**
@@ -179,66 +176,63 @@ class PartDetailController extends Controller
                 'part_target_sub_name.required' => 'กรอกข้อมูลเกณฑ์พิจารณา',
                 'part_target_sub_desc.required' => 'กรอกคำอธิบาย',
             ]);
-    
-            if (!$validator->passes()) 
-                {
-                    return response()->json([
-                        'status' => 0,
-                        'error' => $validator->errors()->toArray()
-                    ]);
-                } 
-            else
-            {
+
+            if (!$validator->passes()) {
+                return response()->json([
+                    'status' => 0,
+                    'error' => $validator->errors()->toArray()
+                ]);
+            } else {
                 //ข้อมูลเกณฑ์พิจารณา
-            $partTargetSub = PartTargetSub::find($id);
-            $partTargetSub->part_target_sub_order = $request->part_target_sub_order;
-            $partTargetSub->part_target_id = $request->part_target_id;
-            $partTargetSub->part_target_sub_name = $request->part_target_sub_name;
-            $partTargetSub->part_target_sub_desc = $request->part_target_sub_desc;
-            $partTargetSub->created_by = Auth::user()->id;
-            $partTargetSub->updated_by = Auth::user()->id;
-            $partTargetSub->save();
+                $partTargetSub = PartTargetSub::find($id);
+                $partTargetSub->part_target_sub_order = $request->part_target_sub_order;
+                $partTargetSub->part_target_id = $request->part_target_id;
+                $partTargetSub->part_target_sub_name = $request->part_target_sub_name;
+                $partTargetSub->part_target_sub_desc = $request->part_target_sub_desc;
+                $partTargetSub->created_by = Auth::user()->id;
+                $partTargetSub->updated_by = Auth::user()->id;
+                $partTargetSub->save();
 
-            // คำถามในการประเมิน
-            //delete old data question
-            $question_count = DB::table('part_index_question')->select('part_index_question_desc')->where('part_target_sub_id', $id)->get();
+                // คำถามในการประเมิน
+                //delete old data question
+                $question_count = DB::table('part_index_question')->select('part_index_question_desc')->where('part_target_sub_id', $id)->get();
 
-            if ($question_count->count() > 0) {
-                PartIndexQuestion::where('part_target_sub_id', $id)->delete();
-            }
-
-            // เพิ่มข้อมูลคำถามในการประเมิน
-            foreach ($request->name_question as $key => $value) {
-                $question = new PartIndexQuestion();
-                $question->part_index_question_order = ($key + 1);
-                $question->part_index_question_desc = $value;
-                $question->part_target_sub_id = $id;
-                $question->created_by = Auth::user()->id;
-                $question->updated_by = Auth::user()->id;
-                $question->save();
-            }
-
-            //เกณฑ์การให้คะแนน
-            //delete old data score
-            $score_count = DB::table('part_index_score')->select('part_index_score_desc')->where('part_target_sub_id', $id)->get();
-
-            if ($score_count->count() > 0) {
-                PartIndexScore::where('part_target_sub_id', $id)->delete();
-            }
-
-            //เพิ่มข้อมูลเกณฑ์การให้คะแนน
-            foreach ($request->inputs_score as $key => $items) {
-                foreach ($items as $item) {
-                    $score = new PartIndexScore();
-                    $score->part_target_sub_id = $id;
-                    $score->part_index_score_order = ($key + 1);
-                    $score->part_index_score_desc = $item;
-                    $score->created_by = Auth::user()->id;
-                    $score->updated_by = Auth::user()->id;
-                    $score->save();
+                if ($question_count->count() > 0) {
+                    PartIndexQuestion::where('part_target_sub_id', $id)->delete();
                 }
-            }
-        
+
+                // เพิ่มข้อมูลคำถามในการประเมิน
+                foreach ($request->name_question as $key => $value) {
+                    $question = new PartIndexQuestion();
+                    $question->part_index_question_order = ($key + 1);
+                    $question->part_index_question_desc = $value;
+                    $question->part_target_sub_id = $id;
+                    $question->created_by = Auth::user()->id;
+                    $question->updated_by = Auth::user()->id;
+                    $question->save();
+                }
+
+                //เกณฑ์การให้คะแนน
+                //delete old data score
+                $score_count = DB::table('part_index_score')->select('part_index_score_desc')->where('part_target_sub_id', $id)->get();
+
+                if ($score_count->count() > 0) {
+                    PartIndexScore::where('part_target_sub_id', $id)->delete();
+                }
+
+                //เพิ่มข้อมูลเกณฑ์การให้คะแนน
+                foreach ($request->inputs_score as $key => $items) {
+                    foreach ($items as $item) {
+                        $score = new PartIndexScore();
+                        $score->part_target_sub_id = $id;
+                        $score->part_index_score_order = ($key + 1);
+                        $score->part_index_score_desc = $item;
+                        $score->created_by = Auth::user()->id;
+                        $score->updated_by = Auth::user()->id;
+                        $score->save();
+                    }
+                }
+
                 return response()->json([
                     'status' => 1,
                     'msg' => 'แก้ไขข้อมูลสำเร็จ',
@@ -288,15 +282,12 @@ class PartDetailController extends Controller
             'part_target_sub_desc.required' => 'กรอกคำอธิบาย',
         ]);
 
-        if (!$validator->passes()) 
-            {
-                return response()->json([
-                    'status' => 0,
-                    'error' => $validator->errors()->toArray()
-                ]);
-            } 
-        else
-        {    
+        if (!$validator->passes()) {
+            return response()->json([
+                'status' => 0,
+                'error' => $validator->errors()->toArray()
+            ]);
+        } else {
             //ข้อมูลเกณฑ์พิจารณา
             $partTargetSub = PartTargetSub::find($part_target_sub_id);
             $partTargetSub->part_target_sub_order = $part_target_sub_order;
@@ -304,7 +295,7 @@ class PartDetailController extends Controller
             $partTargetSub->part_target_sub_desc = $part_target_sub_desc;
             $partTargetSub->updated_by = Auth::user()->id;
             $partTargetSub->save();
-    
+
             return response()->json([
                 'status' => 1,
                 'msg' => 'แก้ไขข้อมูลสำเร็จ',
