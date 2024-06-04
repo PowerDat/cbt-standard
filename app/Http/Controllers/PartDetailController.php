@@ -60,8 +60,6 @@ class PartDetailController extends Controller
      */
     public function store(Request $request)
     {
-        // if ($request->ajax()) 
-        // {
         $validator = Validator::make($request->all(), [
             'part_target_sub_order' => 'required|numeric',
             'part_target_sub_name' => 'required',
@@ -124,7 +122,6 @@ class PartDetailController extends Controller
                 'msg' => 'เพิ่มข้อมูลสำเร็จ',
             ]);
         }
-        // }
     }
 
     /**
@@ -162,8 +159,6 @@ class PartDetailController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // if ($request->ajax()) {
-
             $validator = Validator::make($request->all(), [
                 'part_target_sub_order' => 'required|numeric',
                 'part_target_sub_name' => 'required',
@@ -238,7 +233,6 @@ class PartDetailController extends Controller
                     'msg' => 'แก้ไขข้อมูลสำเร็จ',
                 ]);
             }
-        // }
     }
 
     /**
