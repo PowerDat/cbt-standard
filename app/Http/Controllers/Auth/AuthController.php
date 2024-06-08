@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\UserRole;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -76,7 +77,7 @@ class AuthController extends Controller
                 session()->put('user_surname', $response->json('user_surname'));
                 session()->put('user_image_cover', $response->json('user_image_cover'));
 
-                $user = User::select('role_id', 'email')->where('name', $request->user_login)->get();
+                $user = User::select('email')->where('name', $request->user_login)->get();
                 //มีข้อมูลในฐานข้อมูล
                 if($user->count() > 0)
                 {
@@ -91,13 +92,19 @@ class AuthController extends Controller
                 else
                 {
                     $role = Role::select('id')->where('name', $response->json('role_name'))->get();
-    
+                    
+                    //create user
                     $user = new User();
                     $user->name = $request->user_login;
                     $user->email = $response->json('user_email');
                     $user->password = Hash::make($request->password);
-                    $user->role_id = $role[0]->id;
                     $user->save();
+
+                    //create user_role
+                    $user_role = new UserRole();
+                    $user_role->user_id = $user->id;
+                    $user_role->role_id = $role[0]->id;
+                    $user_role->save();
 
                     if (Auth::attempt(["email" => $response->json('user_email'), "password" => $request->password])) 
                     {

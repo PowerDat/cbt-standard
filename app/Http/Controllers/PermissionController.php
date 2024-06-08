@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use App\Models\UserRole;
 use App\Models\Permission;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class RoleController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $roles = Role::all();
+        $permission = Permission::paginate(10);
 
-        return view('role.index', [
-            'roles' => $roles,
+        return view('permission.index', [
+            'permission' => $permission,
             'n' => 1,
         ]);
     }
@@ -29,7 +26,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('role.create');
+        return view('permission.create');
     }
 
     /**
@@ -38,10 +35,10 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:roles',
+            'name' => 'required|unique:permissions',
         ], [
-            'name.required' => 'กรอกชื่อบทบาท',
-            'name.unique' => 'ชื่อบทบาทมีอยู่แล้วในระบบ(ห้ามซ้ำ)',
+            'name.required' => 'กรอกชื่อสิทธิ์',
+            'name.unique' => 'ชื่อสิทธิ์มีอยู่แล้วในระบบ(ห้ามซ้ำ)',
         ]);
 
         if (!$validator->passes()) 
@@ -53,10 +50,9 @@ class RoleController extends Controller
         } 
         else
         {
-            $model = new Role();
-            $model->name = $request->name;
-            $model->detail = $request->detail;
-            $model->save();
+            $permission = new Permission();
+            $permission->name = $request->name;
+            $permission->save();
 
             return response()->json([
                 'status' => 1,
@@ -78,13 +74,10 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
-        $role = Role::find($id);
+        $permission = Permission::find($id);
 
-        $permisson = Permission::all();
-
-        return view('role.edit', [
-            'role' => $role,
-            'permisson' => $permisson,
+        return view('permission.edit', [
+            'permission' => $permission,
         ]);
     }
 
@@ -96,7 +89,7 @@ class RoleController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
         ], [
-            'name.required' => 'กรอกชื่อบทบาท',
+            'name.required' => 'กรอกชื่อสิทธิ์',
         ]);
 
         if (!$validator->passes()) 
@@ -108,10 +101,9 @@ class RoleController extends Controller
         } 
         else
         {
-            $model = Role::find($id);
-            $model->name = $request->name;
-            $model->detail = $request->detail;
-            $model->save();
+            $permission = Permission::find($id);
+            $permission->name = $request->name;
+            $permission->save();
 
             return response()->json([
                 'status' => 1,
@@ -130,18 +122,13 @@ class RoleController extends Controller
 
     public function delete(Request $request)
     {
-        $id = $request->role_id;
+        $id = $request->permission_id;
 
-        $role_id = UserRole::where('role_id', $id)->count(); 
-        if($role_id > 0)
-        {
-            DB::table('user_role')->where('role_id', $id)->delete();
-        }
+        $permission = Permission::find($id);
 
-        $role = Role::find($id);
-        if($role->count() > 0)
+        if($permission->count() > 0)
         {
-            $role->delete();
+            $permission->delete();
 
             return response()->json([
                 'status' => 1,
@@ -149,15 +136,4 @@ class RoleController extends Controller
             ]);
         }
     }
-
-    public function assignPermission(Request $request, Role $role)
-    {
-        $role->permission()->sync($request->permission);
-
-        return response()->json([
-            'status' => 1,
-            'msg' => 'Permission added',
-        ]);
-    }
-
 }

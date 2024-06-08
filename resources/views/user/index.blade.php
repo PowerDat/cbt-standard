@@ -8,7 +8,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">ตั้งค่าระบบ</li>
-                    <li class="breadcrumb-item">จัดการบทบาท</li>
+                    <li class="breadcrumb-item">จัดการผู้ใช้</li>
                     <li class="breadcrumb-item active">หน้าแรก</li>
                 </ol>
             </div>
@@ -23,47 +23,49 @@
         <div class="col-sm-12">
             <div class="card">
 
-                @can('create', \App\Models\Role::class)
                 <div class="card-header text-end">
                     <div class="col-sm-9 offset-sm-3">
-                        <a href="{{route('role.create')}}" class="btn btn-primary">เพิ่มข้อมูล</a>
+                        <a href="{{route('user.create')}}" class="btn btn-primary">เพิ่มข้อมูล</a>
                     </div>
                 </div>
-                @endcan
 
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered ">
                             <thead class="bg-light text-center">
                                 <tr>
-                                    <th>ลำดับ</th>
-                                    <th>ชื่อบทบาท</th>
-                                    <th>รายละเอียด</th>
-                                    <th>ชื่อสิทธิ์</th>
+                                    <th>ชื่อผู้ใช้</th>
+                                    <th>อีเมล</th>
+                                    {{-- <th>บทบาท</th> --}}
+                                    <th>เปลี่ยนรหัสผ่าน</th>
                                     <th>แก้ไข</th>
                                     <th>ลบ</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($roles as $role)
+                                @foreach ($users as $item)
                                 <tr>
-                                    <td class="text-center">{{$n++}}</td>
-                                    <td>{{$role->name}}</td>
-                                    <td>{{$role->detail}}</td>
-                                    <td>
-                                        @forelse ($role->permission as $item)
-                                            <span class="badge bg-success">{{$item->name}}</span>
-                                        @empty
-                                        <span class="badge bg-danger">No Permission</span>
-                                        @endforelse
+                                    <td>{{$item->name}}</td>
+                                    <td>{{$item->email}}</td>
+                                    {{-- <td>
+                                        @foreach ($roles as $role)
+                                            @if ($role->id == $item->role_id)
+                                                {{$role->name}}
+                                            @endif
+                                        @endforeach
+                                    </td> --}}
+                                    <td class="text-center"> 
+                                        <a href="{{route('user.change-password', $item->id)}}" class="btn btn-light">
+                                            <i class="fa fa-key"></i>
+                                        </a>
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{route('role.edit', $role->id)}}" class="btn btn-primary ">
+                                        <a href="{{route('user.edit', $item->id)}}" class="btn btn-primary ">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        <a onclick="deleteById({{$role->id}})" class="btn btn-light">
+                                        <a onclick="deleteById({{$item->id}})" class="btn btn-light">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
                                     </td>
@@ -73,9 +75,9 @@
                         </table>
                     </div>
                     {{-- Pagination Links --}}
-                    {{-- <div class="m-t-30">
-                        {{$roles->links()}}
-                    </div> --}}
+                    <div class="m-t-30">
+                        {{$users->links()}}
+                    </div>
                 </div>
 
             </div>
@@ -105,9 +107,9 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'post',
-                    url: "{{ route('role.delete') }}",
+                    url: "{{ route('user.delete') }}",
                     data: {
-                        role_id: id,
+                        user_id: id,
                     },
                     success: (result) => {
                         if(result.status == 0){

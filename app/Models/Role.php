@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Permission;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Role extends Model
 {
@@ -11,8 +13,20 @@ class Role extends Model
 
     protected $fillable = ['name'];
 
+    //1 Role ก็มีได้หลาย Users → `1 Role belongs to many Users`
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class, 'user_role', 'role_id', 'user_id');
     }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'permission_role', 'role_id', 'permission_id');
+    }
+
+    public function hasPermission($name)
+    {
+        return $this->permissions()->where('name', $name)->exists();
+    }
+
 }

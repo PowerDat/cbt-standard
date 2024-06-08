@@ -3,11 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use App\Models\Role;
+use App\Models\UserRole;
+use App\Models\UserProfile;
 use Laravel\Sanctum\HasApiTokens;
 use PhpParser\Node\Expr\FuncCall;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -22,7 +25,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id'
     ];
 
     /**
@@ -45,14 +47,21 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public Function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-
+    //เช็ค role 
     public function hasRole($name) : bool
     {
-        return $this->role()->where('name', $name)->exists();
+        return $this->roles()->where('name', $name)->exists();
+    }
+
+    //1 User มีได้หลาย Roles → จะได้เป็น `1 User belongs to many Roles`
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_role', 'user_id', 'role_id');
+    }
+
+    public function userProfile()
+    {
+        return $this->hasOne(UserProfile::class, 'user_id');
     }
 
 }

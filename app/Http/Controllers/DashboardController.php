@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Helper\Helper;
 
 class DashboardController extends Controller
 {
@@ -15,10 +13,8 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $role_id = Auth::user()->role_id;
-        $role = Role::select('name')->where('id', $role_id)->get();
-        $role_name = $role[0]->name;
-
+        $role_name = Helper::getRoleName();
+        
         return view('dashboard.dashboard', [
             'role_name' => $role_name,
         ]);

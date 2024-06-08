@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class HasRoleMiddleware
@@ -15,7 +16,7 @@ class HasRoleMiddleware
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        if(!auth()->user() || !auth()->user()->hasRole($role))
+        if(!Auth::user() || !Auth::user()->hasRole($role))
         {
             abort(403);
         }
