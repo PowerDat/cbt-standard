@@ -81,7 +81,7 @@ class AuthController extends Controller
                 //มีข้อมูลในฐานข้อมูล
                 if($user->count() > 0)
                 {
-                    if (Auth::attempt(["email" => $response->json('user_email'), "password" => $request->password])) 
+                    if (Auth::attempt(["email" => $user[0]->email, "password" => $request->password])) 
                     {
                         return response()->json([
                             "status" => 1, 

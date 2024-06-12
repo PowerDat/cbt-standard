@@ -65,29 +65,101 @@
 
                         <div class="row mt-3">
                             <div class="col">
-                                <div class="mb-3">
-                                    @foreach ($role->permission as $item)
-                                        <span class="badge bg-danger">{{$item->name}}</span>
-                                    @endforeach
-                                </div>
+                                <h5>กำหนดสิทธิ์</h5>
+                                <table class="table table-bordered">
+                                    <thead class="text-center">
+                                      <tr>
+                                        <th>เมนู</th>
+                                        <th>View</th>
+                                        <th>Create</th>
+                                        <th>Update</th>
+                                        <th>Delete</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($menus as $item)
+                                            @if (count($item->submenus) > 0)
+                                                @foreach ($item->submenus as $submenu)
+                                                <tr>
+                                                    <td><p>{{$item->menu_name.' - '.$submenu->sub_menu_name}}</p></td>
+                                                    <td class="text-center">
+                                                        <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'view'.'-'.$submenu->sub_menu_route}}"
+                                                        @checked($role->hasPermission('view-'.str_replace('.index', '', $submenu->sub_menu_route)))>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'create'.'-'.$submenu->sub_menu_route}}"
+                                                        @checked($role->hasPermission('create-'.str_replace('.index', '', $submenu->sub_menu_route)))>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'update'.'-'.$submenu->sub_menu_route}}"
+                                                        @checked($role->hasPermission('update-'.str_replace('.index', '', $submenu->sub_menu_route)))>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'delete'.'-'.$submenu->sub_menu_route}}"
+                                                        @checked($role->hasPermission('delete-'.str_replace('.index', '', $submenu->sub_menu_route)))>
+                                                    </td>
+                                                    {{-- <td class="text-center">
+                                                        <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'view-'.str_replace('.index', '', $submenu->sub_menu_route)}}"
+                                                        @checked($role->hasPermission('view-'.str_replace('.index', '', $submenu->sub_menu_route)))>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'create-'.str_replace('.index', '', $submenu->sub_menu_route)}}"
+                                                        @checked($role->hasPermission('create-'.str_replace('.index', '', $submenu->sub_menu_route)))>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'update-'.str_replace('.index', '', $submenu->sub_menu_route)}}"
+                                                        @checked($role->hasPermission('update-'.str_replace('.index', '', $submenu->sub_menu_route)))>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'delete-'.str_replace('.index', '', $submenu->sub_menu_route)}}"
+                                                        @checked($role->hasPermission('delete-'.str_replace('.index', '', $submenu->sub_menu_route)))>
+                                                    </td> --}}
+                                                </tr>
+                                                @endforeach
+                                            @else
+                                            <tr>
+                                                <td><p>{{$item->menu_name}}</p></td>
+                                                {{-- <td class="text-center">
+                                                    <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'view-'.$item->menu_route}}"
+                                                    @checked($role->hasPermission('view-'.$item->menu_route))>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'create-'.$item->menu_route}}"
+                                                    @checked($role->hasPermission('create-'.$item->menu_route))>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'update-'.$item->menu_route}}"
+                                                    @checked($role->hasPermission('update-'.$item->menu_route))>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'delete-'.$item->menu_route}}"
+                                                    @checked($role->hasPermission('delete-'.$item->menu_route))>
+                                                </td> --}}
+                                                <td class="text-center">
+                                                    <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'view-'.$item->menu_route}}"
+                                                    @checked($role->hasPermission('view-'.str_replace('.index', '', $item->menu_route)))>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'create-'.$item->menu_route}}"
+                                                    @checked($role->hasPermission('create-'.str_replace('.index', '', $item->menu_route)))>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'update-'.$item->menu_route}}"
+                                                    @checked($role->hasPermission('update-'.str_replace('.index', '', $item->menu_route)))>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input class="form-check-input" type="checkbox"  name="permission_name[]" value="{{'delete-'.$item->menu_route}}"
+                                                    @checked($role->hasPermission('delete-'.str_replace('.index', '', $item->menu_route)))>
+                                                </td>
+                                            </tr>
+                                            @endif
+                                        @endforeach
+                                      
+                                    </tbody>
+                                  </table>
                             </div>
                         </div>
 
-                        <div class="row mt-3">
-                            <div class="col">
-                                <div class="mb-3">
-                                    <label class="form-label">Permission <span class="text-danger" style="font-size: 20px;">*</span></label>
-                                    <select class="form-select digits" id="" name="permission[]" multiple="">
-                                        @foreach ($permisson as $item)
-                                        <option value="{{$item->id}}" @selected($role->hasPermission($item->name))>
-                                            {{$item->name}}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    <span class="text-danger error-text name_error"></span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="card-footer text-end">
                         <button class="btn btn-primary" type="submit">Assign Permissions</button>

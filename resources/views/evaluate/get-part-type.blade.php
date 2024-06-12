@@ -30,8 +30,9 @@
                         <div class="row">
                             <div class="col-6">
                                 @if (session()->has('community_name'))
-                                <h5>แบบประเมิน {{$part_type_name . ' ' . 'ชุมชน'.session()->get('community_name')}} </h5>
+                                <h5>ชุมชนที่ประเมิน: {{'ชุมชน'.session()->get('community_name')}}</h5>
                                 @endif
+                                <h5>ประเภทเกณฑ์มาตรฐาน: {{$part_type_name}} </h5>
                             </div>
                             <div class="col-6 text-end">
                                 <a href="{{route('evaluate.index')}}" class="btn btn-light">กลับหน้ามาตรฐาน</a>

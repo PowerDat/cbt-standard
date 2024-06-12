@@ -28,6 +28,10 @@
                     <div class="card-header pb-0">
                         <div class="row">
                             <div class="col-sm-9">
+                                @if (session()->has('community_name'))
+                                <h5>ชุมชนที่ประเมิน: {{session()->get('community_name')}}</h5>
+                                @endif
+                                <h5>ประเภทเกณฑ์มาตรฐาน: {{$part_type_name}} </h5>
                                 <h5>{{'ด้าน '.$part->part_order.' '.$part->part_name}}</h5>
                             </div>
                             <div class="col-sm-3 text-end">
@@ -55,7 +59,15 @@
                                         <td>{{$item->part_target_name}}</td>
                                         <td class="text-center">
                                             @php
-                                                $status = DB::select("SELECT appraisal_transaction_status FROM appraisal_transaction WHERE part_target_id = $item->part_target_id");
+                                                $community_name = session()->get('community_name');
+                                                $user_id = Auth::user()->id;
+                                                $status = DB::select("
+                                                    SELECT appraisal_transaction_status 
+                                                    FROM appraisal_transaction 
+                                                    WHERE part_target_id = $item->part_target_id
+                                                        AND community_name = '$community_name' 
+                                                        AND created_by = $user_id
+                                                ");
                                                 if(!empty($status)){
                                                     foreach ($status as $value) {
                                                         if($value->appraisal_transaction_status == '2'){
@@ -73,7 +85,15 @@
                                         </td>
                                         <td class="text-center">
                                             @php
-                                                $status = DB::select("SELECT appraisal_transaction_status FROM appraisal_transaction WHERE part_target_id = $item->part_target_id");
+                                                $community_name = session()->get('community_name');
+                                                $user_id = Auth::user()->id;
+                                                $status = DB::select("
+                                                    SELECT appraisal_transaction_status 
+                                                    FROM appraisal_transaction 
+                                                    WHERE part_target_id = $item->part_target_id
+                                                        AND community_name = '$community_name'
+                                                        AND created_by = $user_id
+                                                    ");
                                                 if(!empty($status)){
                                                     foreach ($status as $value) {
                                                         if($value->appraisal_transaction_status == '1'){
@@ -91,16 +111,18 @@
                                         </td>
                                         <td class="text-center">
                                             @php
-                                                // if($item->part_target_id == ){
-                                                $value = DB::select("   SELECT sum(appraisal_score_score) as score 
-                                                                        FROM appraisal_score 
-                                                                        INNER JOIN appraisal_transaction ON appraisal_score.part_target_id = appraisal_transaction.part_target_id
-                                                                        WHERE appraisal_score.part_target_id = $item->part_target_id 
-                                                                            AND appraisal_transaction.appraisal_transaction_status = 2
-                                                                    ");
+                                                $community_name = session()->get('community_name');
+                                                $user_id = Auth::user()->id;
+                                                $value = DB::select("   
+                                                    SELECT sum(appraisal_score_score) as score 
+                                                    FROM appraisal_score 
+                                                    INNER JOIN appraisal_transaction ON appraisal_score.part_target_id = appraisal_transaction.part_target_id
+                                                    WHERE appraisal_score.part_target_id = $item->part_target_id 
+                                                        AND appraisal_transaction.appraisal_transaction_status = 2
+                                                        AND appraisal_transaction.community_name = '$community_name'
+                                                        AND appraisal_score.created_by = $user_id
+                                                ");
                                                 echo $value[0]->score;
-                                                // }
-                                                
                                             @endphp 
                                         </td>
                                     </tr>

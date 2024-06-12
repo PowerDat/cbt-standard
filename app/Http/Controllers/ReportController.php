@@ -14,10 +14,58 @@ class ReportController extends Controller
     // {
     //     $this->middleware('auth');
     // }
-    
-    public function part()
+
+    public function index()
     {
-        return view('report.part');
+        return view('report.index');
+    }
+
+    public function self()
+    {
+        $part = Part::all();
+
+        return view('report.self', [
+            'part' => $part,
+        ]);
+    }
+    
+    public function part($id)
+    {
+        $part = Part::all();
+        $score = DB::select("
+        SELECT 
+            part_target.part_target_order
+            , part_target.part_target_name
+            , sum(appraisal_score_score) / COUNT(appraisal_score.part_target_id) AS sum_score
+        FROM part_target
+        LEFT JOIN appraisal_score ON part_target.part_target_id = appraisal_score.part_target_id
+        WHERE part_id = $id
+        GROUP BY 1,2
+        ");
+        
+        $total = 0;
+        $arrLabels = [];
+        $arrSumScore = [];
+
+        foreach ($score as $value) {
+            $total += $value->sum_score;
+
+            array_push($arrLabels, $value->part_target_order);
+            array_push($arrSumScore, $value->sum_score);
+        }
+
+        $data = [
+            'labels' => $arrLabels,
+            'data' => $arrSumScore,
+        ];
+
+        return view('report.self', [
+            'part' => $part,
+            'total' => $total,
+            'score' => $score,
+            'data' => $data,
+            'part_id' => $id,
+        ]);
     }
 
     public function partFirst()

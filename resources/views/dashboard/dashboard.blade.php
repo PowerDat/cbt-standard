@@ -2,17 +2,17 @@
 
 @section('content')
 
-        {{-- @if (Auth::user()->role_id == 1) --}}
+        @if ($role_name == 'community')
             @include('dashboard.community-dashboard')
-        {{-- @endif --}}
+        @endif
 
-        {{-- @if (Auth::user()->role_id == 2) --}}
+        @if ($role_name == 'researcher')
             @include('dashboard.researcher-dashboard')
-        {{-- @endif --}}
+        @endif
 
-        {{-- @if (Auth::user()->role_id == 3) --}}
+        @if ($role_name == 'administrator')
             @include('dashboard.admin-dashboard')
-        {{-- @endif --}}
+        @endif
 
 @endsection
 

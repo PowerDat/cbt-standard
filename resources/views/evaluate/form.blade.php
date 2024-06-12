@@ -23,19 +23,19 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
+                <div class="card">
 
+                    <div class="card-header pb-0">
+                        <p><strong>{{ 'ด้าน ' . $part[0]->part_order . ' ' . $part[0]->part_name }}</strong></p>
+                        <p><strong>{{ 'เป้าประสงค์ ' . $part_target[0]->part_target_order . ' ' . $part_target[0]->part_target_name }}</strong></p>
+                    </div>
                 <form id="form" enctype="multipart/form-data" method="POST">
                     @csrf
 
                     <input type="hidden" name="part_target_id" value="{{$part_target_id}}">
                     <input type="hidden" name="part_id" value="{{$part_target[0]->part_id}}">
 
-                    <div class="card">
-
-                        <div class="card-header pb-0">
-                            <p><strong>{{ 'ด้าน ' . $part[0]->part_order . ' ' . $part[0]->part_name }}</strong></p>
-                            <p><strong>{{ 'เป้าประสงค์ ' . $part_target[0]->part_target_order . ' ' . $part_target[0]->part_target_name }}</strong></p>
-                        </div>
+                    
 
                         <div class="card-body">
                             

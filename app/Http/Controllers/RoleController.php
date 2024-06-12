@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use App\Models\Role;
 use App\Models\UserRole;
 use App\Models\Permission;
@@ -16,8 +17,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
-
+        $roles = Role::paginate(10);
+        
         return view('role.index', [
             'roles' => $roles,
             'n' => 1,
@@ -29,6 +30,8 @@ class RoleController extends Controller
      */
     public function create()
     {
+        // $this->authorize('create', Role::class);
+
         return view('role.create');
     }
 
@@ -61,6 +64,7 @@ class RoleController extends Controller
             return response()->json([
                 'status' => 1,
                 'msg' => 'เพิ่มข้อมูลสำเร็จ',
+                'id' => $model->id,
             ]);
         }
     }
@@ -79,13 +83,14 @@ class RoleController extends Controller
     public function edit(string $id)
     {
         $role = Role::find($id);
-
+        $menus = Menu::where('menu_status', 'Y')->orderBy('menu_order', 'asc')->get();
         $permisson = Permission::all();
 
         return view('role.edit', [
             'role' => $role,
             'permisson' => $permisson,
-        ]);
+            'menus' => $menus,
+        ]);        
     }
 
     /**
@@ -132,6 +137,12 @@ class RoleController extends Controller
     {
         $id = $request->role_id;
 
+        $permission = DB::table('permission_role')->where('role_id', $id)->get();
+        if($permission->count() > 0)
+        {
+            DB::table('permission_role')->where('role_id', $id)->delete();
+        }
+
         $role_id = UserRole::where('role_id', $id)->count(); 
         if($role_id > 0)
         {
@@ -152,11 +163,65 @@ class RoleController extends Controller
 
     public function assignPermission(Request $request, Role $role)
     {
-        $role->permission()->sync($request->permission);
+        // dd($request->permission_name);
+        $permission_role = DB::table('permission_role')->where('role_id', $role->id)->get();
+        
+        //ลบข้อมูล
+        if($permission_role->count() > 0)
+        {
+            DB::table('permission_role')->where('role_id', $role->id)->delete();
+
+            foreach($permission_role as $a)
+            {
+                DB::table('permissions')->where('id', $a->permission_id)->delete();
+            }
+        }
+
+        // เพิ่มข้อมูล
+        foreach ($request->permission_name as $value) 
+        {
+            $name_replace = str_replace('.index', '', $value);
+
+            $permission = new Permission();
+            $permission->name = $name_replace;
+
+            $explode = explode("-", $value);
+            // dd($explode);
+            $action = ($explode[0]);
+
+            $str_view = str_replace('view-', '', $value);
+            $str_create = str_replace('create-', '', $value);
+            $str_update = str_replace('update-', '', $value);
+            $str_delete = str_replace('delete-', '', $value);
+
+            if($str_view != ""){
+                $permission->route = $str_view;
+            }
+            elseif ($str_create != "") {
+                $permission->route = $str_create;
+            }
+            elseif ($str_update != "") {
+                $permission->route = $str_update;
+            }
+            elseif ($str_delete != "") {
+                $permission->route = $str_delete;
+            }
+            
+            $permission->action = $action;
+
+            $permission->save();
+
+            $permission_id = $permission->id;
+                
+            DB::table('permission_role')->insert([
+                'role_id' => $role->id,
+                'permission_id' => $permission_id,
+            ]);
+        }
 
         return response()->json([
             'status' => 1,
-            'msg' => 'Permission added',
+            'msg' => 'กำหนดสิทธิ์สำเร็จ',
         ]);
     }
 

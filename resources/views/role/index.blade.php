@@ -18,12 +18,12 @@
 </div>
 
 <!-- content -->
-<div class="container-fluid">
+ <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
 
-                @can('create', \App\Models\Role::class)
+                @can('create', \App\Modles\Role::class)
                 <div class="card-header text-end">
                     <div class="col-sm-9 offset-sm-3">
                         <a href="{{route('role.create')}}" class="btn btn-primary">เพิ่มข้อมูล</a>
@@ -36,10 +36,8 @@
                         <table class="table table-bordered ">
                             <thead class="bg-light text-center">
                                 <tr>
-                                    <th>ลำดับ</th>
                                     <th>ชื่อบทบาท</th>
                                     <th>รายละเอียด</th>
-                                    <th>ชื่อสิทธิ์</th>
                                     <th>แก้ไข</th>
                                     <th>ลบ</th>
                                 </tr>
@@ -47,41 +45,36 @@
                             <tbody>
                                 @foreach ($roles as $role)
                                 <tr>
-                                    <td class="text-center">{{$n++}}</td>
                                     <td>{{$role->name}}</td>
                                     <td>{{$role->detail}}</td>
-                                    <td>
-                                        @forelse ($role->permission as $item)
-                                            <span class="badge bg-success">{{$item->name}}</span>
-                                        @empty
-                                        <span class="badge bg-danger">No Permission</span>
-                                        @endforelse
-                                    </td>
                                     <td class="text-center">
+                                        @can('update', $role)
                                         <a href="{{route('role.edit', $role->id)}}" class="btn btn-primary ">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
+                                        @endcan
                                     </td>
                                     <td class="text-center">
+                                        @can('delete', $role)
                                         <a onclick="deleteById({{$role->id}})" class="btn btn-light">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
+                                        @endcan
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                    {{-- Pagination Links --}}
-                    {{-- <div class="m-t-30">
+                    <div class="m-t-30">
                         {{$roles->links()}}
-                    </div> --}}
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
-</div>
+</div> 
 
 @endsection
 

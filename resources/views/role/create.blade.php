@@ -102,7 +102,9 @@
                             timer: 5000
                         });
 
-                        let url = "{{route('role.index')}}";
+                        let id = response.id;
+                        let url = "{{route('role.edit', ':id')}}";
+                        url = url.replace(':id', id);
                         window.location = url;
                     }
                 },

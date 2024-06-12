@@ -8,6 +8,11 @@
                 <div class="col-sm-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">แบบประเมิน</li>
+                        <li class="breadcrumb-item active">
+                            @if (session()->has('community_name'))
+                            {{'ชุมชน'.session()->get('community_name')}}
+                            @endif
+                        </li>
                     </ol>
                 </div>
             </div>
@@ -23,10 +28,16 @@
                     <div class="card-header pb-0">
                         <div class="row">
                             <div class="col-sm-6">
+                                @if (session()->has('community_name'))
+                                <p><strong>ชุมชนที่ประเมิน: {{'ชุมชน'.session()->get('community_name')}}</strong></p>
+                                @endif
+                                <p><strong>ประเภทเกณฑ์มาตรฐาน: {{$part_type_name}}</strong></p>
                                 <p><strong>{{ 'ด้าน ' . $part[0]->part_order . ' ' . $part[0]->part_name }}</strong></p>
                                 <p><strong>{{ 'เป้าประสงค์ ' . $part_target[0]->part_target_order . ' ' . $part_target[0]->part_target_name }}</strong></p>
                             </div>
-                            <div class="col-sm-6 text-end"></div>
+                            <div class="col-sm-6 text-end">
+                                <p><span class="badge badge-info">ดูข้อมูล</span></p>
+                            </div>
                         </div>
                     </div>
 
@@ -81,6 +92,38 @@
                                                                 <label for="">
                                                                     {{$index_question->part_index_question_desc}}
                                                                 </label>        
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-4">
+                                                                <div>
+                                                                    <label class="form-label text-danger">แนบเอกสาร (นามสกุล .pdf เท่านั้น)</label>
+                                                                    @foreach ($ap_question as $question)
+                                                                        @if ($index_question->part_index_question_id == $question->part_index_question_id)
+                                                                            <p><a class="text-danger" href="{{asset('uploads/files/'.$question->file)}}" target="_blank"><u>{{$question->file}}</u> </a></p>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div>
+                                                                    <label class="form-label text-danger">รูปภาพ (นามสกุล .png, .jpg เท่านั้น)</label>
+                                                                    @foreach ($ap_question as $question)
+                                                                    @if ($index_question->part_index_question_id == $question->part_index_question_id)
+                                                                        <p><a class="text-danger" href="{{asset('uploads/files/'.$question->image)}}" target="_blank"><u>{{$question->image}}</u></a></p>
+                                                                    @endif
+                                                                @endforeach
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div>
+                                                                    <label class="form-label text-danger">ลิงค์วีดีโอ (youtube เท่านั้น)</label>
+                                                                    @foreach ($ap_question as $question)
+                                                                    @if ($index_question->part_index_question_id == $question->part_index_question_id)
+                                                                        <p><a class="text-danger" href="{{asset('uploads/files/'.$question->link_url)}}" target="_blank"><u>{{$question->link_url}}</u></a></p>
+                                                                    @endif
+                                                                @endforeach
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     @endif
@@ -198,12 +241,13 @@
 
        $(document).ready(function(){
 
-           $('#btn-step-1').removeClass( "btn-primary btn" ).addClass( "btn-primary btn btn-light" );
-           $('#btn-step-5').removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
+        let count = "{{count($part_target_sub)}}";
 
-           $('#step-1').css('display', 'block');
-           $('#step-5').css('display', 'none');
+        $('#btn-step-1').removeClass( "btn-primary btn" ).addClass( "btn-primary btn btn-light" );
+        $('#btn-step-' + count).removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
 
+        $('#step-1').css('display', 'block');
+        $('#step-' + count).css('display', 'none');
        });
 
    </script>

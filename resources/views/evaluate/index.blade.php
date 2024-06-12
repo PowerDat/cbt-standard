@@ -30,11 +30,46 @@
                         <h5>มาตรฐานการประเมิน</h5>
                     </div>
                     <div class="card-body">
-                        @foreach ($part_type as $type)
-                            <a href="{{route('evaluate.getPartType', $type->part_type_id)}}" class="btn btn-light">
-                                {{$type->part_type_name}}
-                            </a>
-                        @endforeach
+                        <div class="row mt-3">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label">ชุมชนทีประเมิน</label>
+                                    <select  class="form-control" id="evaluate_community" 
+                                    @if ($session_api_community_id != "")
+                                        disabled
+                                    @endif
+                                    >
+                                        <option value="" selected disabled>เลือกชุมชน</option>
+                                       @for ($i=0; $i < count($response_community); $i++)
+                                       <option value="{{$response_community[$i]['community_id']}}"
+                                       @if ($session_api_community_id != "")
+                                            @if ($session_api_community_id == $response_community[$i]['community_id'])
+                                                selected
+                                            @endif
+                                       @endif
+                                       >
+                                            {{$response_community[$i]['community_name']}}
+                                        </option>
+                                       @endfor
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label">ประเภทเกณฑ์มาตรฐานทีประเมิน</label>
+                                    <br>
+                                    @foreach ($part_type as $type)
+                                        <a href="{{route('evaluate.getPartType', $type->part_type_id)}}" class="btn btn-light">
+                                            {{$type->part_type_name}}
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -53,12 +88,19 @@
 
     $(document).ready(function(){
 
-
+        $('#evaluate_community').change(function(){           
+            $.ajax({
+                type: 'post',
+                url: "{{ route('evaluate.save-community') }}",
+                data: {
+                    evaluate_community:  $('#evaluate_community').val()
+                },
+                success: (response) => {
+                    
+                },
+            });
+        });
 
     });
-
-    
-
-    
 </script>
 @endpush

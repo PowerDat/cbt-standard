@@ -40,7 +40,7 @@
                         
                     </div>
 
-                    <form id="form" enctype="multipart/form-data">
+                    <form id="form" enctype="multipart/form-data" method="POST">
                         @csrf
 
                         <input type="hidden" name="part_target_id" value="{{$part_target_id}}">
@@ -148,7 +148,7 @@
                                                     <div class="col">
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="4"
-                                                            @if ($score->appraisal_score_score == 4)
+                                                            @if ($score->appraisal_score_score == 4 )
                                                                 checked
                                                             @endif>
                                                             <label class="form-check-label" for="inlineRadio1">4</label>
@@ -176,7 +176,7 @@
                                                         </div>
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="0"
-                                                            @if ($score->appraisal_score_score == 0)
+                                                            @if ($score->appraisal_score_score == 0 && $score->appraisal_score_score != null)
                                                                 checked
                                                             @endif>
                                                             <label class="form-check-label" for="inlineRadio2">0</label>
@@ -323,7 +323,6 @@
             });
 
             let count = "{{count($part_target_sub)}}";
-            // console.log('count: ', count);
 
             $('#btn-step-1').removeClass( "btn-primary btn" ).addClass( "btn-primary btn btn-light" );
             $('#btn-step-' + count).removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );

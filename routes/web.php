@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function(){
     Route::post('evaluate/store', [EvaluateController::class, 'store'])->name('evaluate.store');
     Route::post('evaluate/save-draft', [EvaluateController::class, 'saveDraft'])->name('evaluate.save-draft');
     Route::get('evaluate/getPartType/{part_type_id?}', [EvaluateController::class, 'getPartType'])->name('evaluate.getPartType');
+    Route::post('evaluate/save-community', [EvaluateController::class, 'saveCommunity'])->name('evaluate.save-community');
     
     //สร้างจากหน้า part target
     Route::resource('part-target', PartTargetController::class);
@@ -61,7 +62,9 @@ Route::middleware(['auth'])->group(function(){
     Route::post('part-detail/delete', [PartDetailController::class, 'delete'])->name('part-detail.delete');
     
     //report
-    Route::get('report/part', [ReportController::class, 'part'])->name('report.part');
+    Route::get('report', [ReportController::class, 'index'])->name('report.index');
+    Route::get('report/self', [ReportController::class, 'self'])->name('report.self');
+    Route::get('report/part/{id?}', [ReportController::class, 'part'])->name('report.part');
     Route::get('report/part-first', [ReportController::class, 'partFirst'])->name('report.part-first');
     Route::get('report/part-second', [ReportController::class, 'partSecond'])->name('report.part-second');
     Route::get('report/part-third', [ReportController::class, 'partThird'])->name('report.part-third');
