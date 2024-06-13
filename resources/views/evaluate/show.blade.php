@@ -10,7 +10,7 @@
                         <li class="breadcrumb-item">แบบประเมิน</li>
                         <li class="breadcrumb-item active">
                             @if (session()->has('community_name'))
-                            {{'ชุมชน'.session()->get('community_name')}}
+                            {{session()->get('community_name')}}
                             @endif
                         </li>
                     </ol>
@@ -29,7 +29,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 @if (session()->has('community_name'))
-                                <p><strong>ชุมชนที่ประเมิน: {{'ชุมชน'.session()->get('community_name')}}</strong></p>
+                                <p><strong>ชุมชนที่ประเมิน: {{session()->get('community_name')}}</strong></p>
                                 @endif
                                 <p><strong>ประเภทเกณฑ์มาตรฐาน: {{$part_type_name}}</strong></p>
                                 <p><strong>{{ 'ด้าน ' . $part[0]->part_order . ' ' . $part[0]->part_name }}</strong></p>
