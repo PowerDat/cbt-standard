@@ -12,6 +12,10 @@
                             @if (session()->has('community_name'))
                             {{session()->get('community_name')}}
                             @endif
+
+                            @if (session()->has('evaluate_community'))
+                            {{session()->get('evaluate_community')}}
+                            @endif
                         </li>
                     </ol>
                 </div>
@@ -26,6 +30,11 @@
                 <div class="card">
 
                     <div class="card-header pb-0">
+                        @if (session()->has('session_community_by_select_option'))
+                        <p><strong>ชุมชนที่ประเมิน: {{session()->get('session_community_by_select_option')}}</strong></p>
+                        @elseif (session()->has('community_name'))
+                        <p><strong>ชุมชนที่ประเมิน: {{session()->get('community_name')}}</strong></p>
+                        @endif
                         <p><strong>{{ 'ด้าน ' . $part[0]->part_order . ' ' . $part[0]->part_name }}</strong></p>
                         <p><strong>{{ 'เป้าประสงค์ ' . $part_target[0]->part_target_order . ' ' . $part_target[0]->part_target_name }}</strong></p>
                     </div>

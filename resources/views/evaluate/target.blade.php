@@ -12,6 +12,10 @@
                             @if (session()->has('community_name'))
                             {{session()->get('community_name')}}
                             @endif
+
+                            @if (session()->has('session_community_by_select_option'))
+                            {{session()->get('session_community_by_select_option')}}
+                            @endif
                         </li>
                     </ol>
                 </div>
@@ -28,7 +32,9 @@
                     <div class="card-header pb-0">
                         <div class="row">
                             <div class="col-sm-9">
-                                @if (session()->has('community_name'))
+                                @if (session()->has('session_community_by_select_option'))
+                                <h5>ชุมชนที่ประเมิน: {{session()->get('session_community_by_select_option')}}</h5>
+                                @elseif (session()->has('community_name'))
                                 <h5>ชุมชนที่ประเมิน: {{session()->get('community_name')}}</h5>
                                 @endif
                                 <h5>ประเภทเกณฑ์มาตรฐาน: {{$part_type_name}} </h5>
@@ -59,60 +65,66 @@
                                         <td>{{$item->part_target_name}}</td>
                                         <td class="text-center">
                                             @php
-                                                $community_name = session()->get('community_name');
-                                                $user_id = Auth::user()->id;
                                                 $status = DB::select("
-                                                    SELECT appraisal_transaction_status 
-                                                    FROM appraisal_transaction 
-                                                    WHERE part_target_id = $item->part_target_id
-                                                        AND community_name = '$community_name' 
-                                                        AND created_by = $user_id
+                                                SELECT appraisal_transaction_status 
+                                                FROM appraisal_transaction 
+                                                WHERE part_target_id = $item->part_target_id
+                                                    AND community_name = '$community_name' 
+                                                    AND created_by = $user_id
                                                 ");
-                                                if(!empty($status)){
-                                                    foreach ($status as $value) {
-                                                        if($value->appraisal_transaction_status == '2'){
+
+                                                if(!empty($status))
+                                                {
+                                                    foreach ($status as $value) 
+                                                    {
+                                                        if($value->appraisal_transaction_status == '2')
+                                                        {
                                                             echo "<a href='/evaluate/show/$item->part_target_id' class='btn btn-primary btn-xs'><i data-feather='eye'></i></a>";
                                                         }
-                                                        elseif($value->appraisal_transaction_status == '1'){
+                                                        elseif($value->appraisal_transaction_status == '1')
+                                                        {
                                                             echo "<a href='/evaluate/form/$item->part_target_id' class='btn btn-info btn-xs'><i data-feather='edit'></i></a>";
                                                         }
                                                     }
                                                 }
-                                                else{
+                                                else
+                                                {
                                                     echo "<a href='/evaluate/form/$item->part_target_id' class='btn btn-warning btn-xs'><i data-feather='edit'></i></a>";
                                                 }
                                             @endphp
                                         </td>
                                         <td class="text-center">
                                             @php
-                                                $community_name = session()->get('community_name');
-                                                $user_id = Auth::user()->id;
                                                 $status = DB::select("
-                                                    SELECT appraisal_transaction_status 
-                                                    FROM appraisal_transaction 
-                                                    WHERE part_target_id = $item->part_target_id
-                                                        AND community_name = '$community_name'
-                                                        AND created_by = $user_id
-                                                    ");
-                                                if(!empty($status)){
-                                                    foreach ($status as $value) {
-                                                        if($value->appraisal_transaction_status == '1'){
+                                                SELECT appraisal_transaction_status 
+                                                FROM appraisal_transaction 
+                                                WHERE part_target_id = $item->part_target_id
+                                                    AND community_name = '$community_name'
+                                                    AND created_by = $user_id
+                                                ");
+
+                                                if(!empty($status))
+                                                {
+                                                    foreach ($status as $value) 
+                                                    {
+                                                        if($value->appraisal_transaction_status == '1')
+                                                        {
                                                             echo '<span class="badge badge-info">แบบร่าง</span>';
                                                         }
-                                                        elseif($value->appraisal_transaction_status == '2'){
+                                                        elseif($value->appraisal_transaction_status == '2')
+                                                        {
                                                             echo "<span class='badge badge-primary'>สำเร็จ</span>";
                                                         }
                                                     }
                                                 }
-                                                else{
+                                                else
+                                                {
                                                     echo "<span class='badge badge-warning'>ยังไม่ทำ</span>";
                                                 }
                                             @endphp
                                         </td>
                                         <td class="text-center">
                                             @php
-                                                $community_name = session()->get('community_name');
-                                                $user_id = Auth::user()->id;
                                                 $value = DB::select("   
                                                     SELECT sum(appraisal_score_score) as score 
                                                     FROM appraisal_score 
@@ -122,6 +134,7 @@
                                                         AND appraisal_transaction.community_name = '$community_name'
                                                         AND appraisal_score.created_by = $user_id
                                                 ");
+
                                                 echo $value[0]->score;
                                             @endphp 
                                         </td>

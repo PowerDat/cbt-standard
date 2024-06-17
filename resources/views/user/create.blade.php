@@ -1,5 +1,9 @@
 @extends('layouts.master')
 
+@push('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />   
+@endpush
+
 @section('content')
 <!-- breadcrumb -->
 <div class="container-fluid">
@@ -52,13 +56,38 @@
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label">บทบาท <span class="text-danger" style="font-size: 20px;">*</span></label>
+                                    @if ($role_name == 'researcher')
+                                    <select  class="form-control" name="role_id" id="role_id">
+                                        @foreach ($roleCommittee as $item)
+                                            <option value="{{$item->id}}" selected>{{$item->name.' - '.$item->detail}}</option>
+                                        @endforeach
+                                    </select>
+                                    @else
                                     <select  class="form-control" name="role_id" id="role_id">
                                         <option value="" selected disabled>เลือกบทบาท</option>
                                         @foreach ($roles as $item)
                                             <option value="{{$item->id}}">{{$item->name.' - '.$item->detail}}</option>
                                         @endforeach
                                     </select>
+                                    @endif
+                                    
                                     <span class="text-danger error-text role_id_error"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label">ชุมชนที่ประเมิน</label>
+                                    <select  class="form-control select2" id="community" name="community[]" multiple>
+                                        {{-- <option value="" selected disabled>เลือกชุมชน</option> --}}
+                                        @for ($i=0; $i < count($response_community_by_api); $i++)
+                                        <option value="{{$response_community_by_api[$i]['community_id']}}">
+                                        {{$response_community_by_api[$i]['community_name']}}
+                                        </option>
+                                       @endfor
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -97,6 +126,7 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $.ajaxSetup({
         headers: {
@@ -105,6 +135,8 @@
     });
 
     $(document).ready(function() {
+
+        $('.select2').select2();
 
         $('#form').submit(function(e) {
             e.preventDefault();

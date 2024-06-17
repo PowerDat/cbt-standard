@@ -23,11 +23,13 @@
         <div class="col-sm-12">
             <div class="card">
 
+                @can('create', \App\Modles\User::class)
                 <div class="card-header text-end">
                     <div class="col-sm-9 offset-sm-3">
                         <a href="{{route('user.create')}}" class="btn btn-primary">เพิ่มข้อมูล</a>
                     </div>
                 </div>
+                @endcan
 
                 <div class="card-body">
                     <div class="table-responsive">

@@ -25,6 +25,7 @@ class ReportController extends Controller
         ]);
     }
 
+    //ชุมชนประเมินตนเอง
     public function self()
     {
         $parts = Part::all();
@@ -36,7 +37,7 @@ class ReportController extends Controller
         $part_target_fifth = PartTarget::where('part_id', 5)->get();
         
         /* ----- ด้าน 1 ----- */
-        $score_first = $this->getScore(1);
+        $score_first = $this->getScoreCommunity(1);
         
         $total_first = 0;
         $arrLabels_first = [];
@@ -52,7 +53,7 @@ class ReportController extends Controller
         $data_first = $this->dataArr($arrLabels_first, $arrSumScore_first);
 
         /* ----- ด้าน 2 ----- */
-        $score_second = $this->getScore(2); 
+        $score_second = $this->getScoreCommunity(2); 
         
         $total_second = 0;
         $arrLabels_second = [];
@@ -68,7 +69,7 @@ class ReportController extends Controller
         $data_second = $this->dataArr($arrLabels_second, $arrSumScore_second);
 
         /* ----- ด้าน 3 ----- */
-        $score_third = $this->getScore(3);
+        $score_third = $this->getScoreCommunity(3);
         
         $total_third = 0;
         $arrLabels_third = [];
@@ -84,7 +85,7 @@ class ReportController extends Controller
         $data_third = $this->dataArr($arrLabels_third, $arrSumScore_third);
 
         /* ----- ด้าน 4 ----- */
-        $score_fourth = $this->getScore(4);
+        $score_fourth = $this->getScoreCommunity(4);
         
         $total_fourth = 0;
         $arrLabels_fourth = [];
@@ -100,7 +101,7 @@ class ReportController extends Controller
         $data_fourth = $this->dataArr($arrLabels_fourth, $arrSumScore_fourth);
 
         /* ----- ด้าน 5 ----- */
-        $score_fifth = $this->getScore(5);
+        $score_fifth = $this->getScoreCommunity(5);
         
         $total_fifth = 0;
         $arrLabels_fifth = [];
@@ -151,7 +152,7 @@ class ReportController extends Controller
         $part_target_fifth = PartTarget::where('part_id', 5)->get();
         
         /* ----- ด้าน 1 ----- */
-        $score_first = $this->getScore(1);
+        $score_first = $this->getScoreCommittee(1);
         
         $total_first = 0;
         $arrLabels_first = [];
@@ -167,7 +168,7 @@ class ReportController extends Controller
         $data_first = $this->dataArr($arrLabels_first, $arrSumScore_first);
 
         /* ----- ด้าน 2 ----- */
-        $score_second = $this->getScore(2); 
+        $score_second = $this->getScoreCommittee(2); 
         
         $total_second = 0;
         $arrLabels_second = [];
@@ -183,7 +184,7 @@ class ReportController extends Controller
         $data_second = $this->dataArr($arrLabels_second, $arrSumScore_second);
 
         /* ----- ด้าน 3 ----- */
-        $score_third = $this->getScore(3);
+        $score_third = $this->getScoreCommittee(3);
         
         $total_third = 0;
         $arrLabels_third = [];
@@ -199,7 +200,7 @@ class ReportController extends Controller
         $data_third = $this->dataArr($arrLabels_third, $arrSumScore_third);
 
         /* ----- ด้าน 4 ----- */
-        $score_fourth = $this->getScore(4);
+        $score_fourth = $this->getScoreCommittee(4);
         
         $total_fourth = 0;
         $arrLabels_fourth = [];
@@ -215,7 +216,7 @@ class ReportController extends Controller
         $data_fourth = $this->dataArr($arrLabels_fourth, $arrSumScore_fourth);
 
         /* ----- ด้าน 5 ----- */
-        $score_fifth = $this->getScore(5);
+        $score_fifth = $this->getScoreCommittee(5);
         
         $total_fifth = 0;
         $arrLabels_fifth = [];
@@ -484,14 +485,77 @@ class ReportController extends Controller
         ]);
     }
 
-    public function getScore($part_id)
+    //ดูข้อมูลของชุมชนที่ประเมินตนเอง
+    public function getScoreCommunity($part_id)
     {
         $community_name = "";
+        $score = "";
+
         if (session()->has('community_name'))
         {
             $community_name = session()->get('community_name');
         }
 
+        if (session()->has('session_community_by_select_option')){
+            $community_name = session()->get('session_community_by_select_option');
+        }
+
+        $users = DB::select("
+        SELECT created_by AS user_id /*คนที่ทำเเบบประเมิน*/
+        FROM appraisal_transaction 
+        WHERE appraisal_transaction_status = 2
+            AND community_name = '$community_name'
+        ");
+
+        foreach ($users as $item) {
+            //check role community
+            $user_role = DB::select("
+            SELECT role_id 
+            FROM user_role
+            WHERE user_id = $item->user_id
+            ");
+
+            foreach ($user_role as $role) {
+                if($role->role_id === 1)
+                {
+                    $score = DB::select("
+                        SELECT part_target.part_target_id
+                        , part_target.part_target_order
+                            , part_target.part_target_name
+                            , sum(appraisal_score_score) / COUNT(appraisal_score.part_target_id) AS sum_score
+                        FROM part_target
+                        LEFT JOIN appraisal_score ON part_target.part_target_id = appraisal_score.part_target_id
+                        INNER JOIN appraisal_transaction ON part_target.part_target_id = appraisal_transaction.part_target_id 
+                        WHERE part_id = $part_id
+                            AND appraisal_transaction.community_name =  '$community_name'
+                            AND appraisal_transaction_status = 2
+                            AND appraisal_transaction.created_by = $item->user_id
+                            AND appraisal_score.created_by = $item->user_id
+                        GROUP BY  part_target.part_target_id, part_target.part_target_order, part_target.part_target_name
+                    ");
+
+                    return $score;
+                }
+            }
+        }
+    }
+
+    public function getScoreCommittee($part_id)
+    {
+        $community_name = "";
+        $user_id = Auth::user()->id;
+
+        if (session()->has('community_name'))
+        {
+            $community_name = session()->get('community_name');
+        }
+
+        if (session()->has('session_community_by_select_option')){
+            $community_name = session()->get('session_community_by_select_option');
+        }
+
+        //เรียกข้อมูลของชุมชนที่ประเมิน 
+                   
         $score = DB::select("
         SELECT part_target.part_target_id
            , part_target.part_target_order
@@ -501,12 +565,11 @@ class ReportController extends Controller
         LEFT JOIN appraisal_score ON part_target.part_target_id = appraisal_score.part_target_id
         INNER JOIN appraisal_transaction ON part_target.part_target_id = appraisal_transaction.part_target_id 
         WHERE part_id = $part_id
-		  	and appraisal_transaction.community_name =  '$community_name'
+		  	AND appraisal_transaction.community_name =  '$community_name'
 		  	AND appraisal_transaction_status = 2
-        GROUP BY  part_target.part_target_id
-           ,part_target.part_target_order
-            , part_target.part_target_name
-            
+            AND appraisal_transaction.created_by = $user_id
+		  	AND appraisal_score.created_by = $user_id
+        GROUP BY  part_target.part_target_id, part_target.part_target_order, part_target.part_target_name
         ");
 
         return $score;

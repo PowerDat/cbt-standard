@@ -12,6 +12,10 @@
                             @if (session()->has('community_name'))
                             {{session()->get('community_name')}}
                             @endif
+
+                            @if (session()->has('session_community_by_select_option'))
+                            {{session()->get('session_community_by_select_option')}}
+                            @endif
                         </li>
                     </ol>
                 </div>
@@ -24,7 +28,7 @@
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-sm-12 col-xl-6 xl-100">
+            <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header pb-0">
                         <h5>มาตรฐานการประเมิน</h5>
@@ -33,25 +37,53 @@
                         <div class="row mt-3">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label">ชุมชนทีประเมิน</label>
-                                    <select  class="form-control" id="evaluate_community" 
-                                    @if ($session_api_community_id != "")
-                                        disabled
-                                    @endif
-                                    >
-                                        <option value="" selected disabled>เลือกชุมชน</option>
-                                       @for ($i=0; $i < count($response_community); $i++)
-                                       <option value="{{$response_community[$i]['community_id']}}"
-                                       @if ($session_api_community_id != "")
-                                            @if ($session_api_community_id == $response_community[$i]['community_id'])
-                                                selected
+                                    <label class="form-label">ชุมชนที่ประเมิน</label>
+                                    {{--ชุมชน --}}
+                                    @if ($role_name == 'community') 
+                                        <select  class="form-control" id="evaluate_community" 
+                                        {{-- ถ้าเป็นผู้ใช้ประเภทชุมชน --}}
+                                        @if ($session_community_id_by_api != "") 
+                                            disabled
+                                        @endif
+                                        >
+                                            <option value="" selected disabled>เลือกชุมชน</option>
+                                            @for ($i=0; $i < count($response_community_by_api); $i++)
+                                            <option value="{{$response_community_by_api[$i]['community_id']}}"
+                                            {{-- ถ้าเป็นผู้ใช้ประเภทชุมชน --}}
+                                            @if ($session_community_id_by_api != "")
+                                                @if ($session_community_id_by_api == $response_community_by_api[$i]['community_id'])
+                                                    selected
+                                                @endif
                                             @endif
-                                       @endif
-                                       >
-                                            {{$response_community[$i]['community_name']}}
-                                        </option>
-                                       @endfor
-                                    </select>
+                                            >
+                                            {{$response_community_by_api[$i]['community_name']}}
+                                            </option>
+                                        @endfor
+                                        </select>
+                                    @endif
+
+                                    {{-- กรรมการ --}}
+                                    @if ($role_name == 'committee')
+                                        <select  class="form-control" id="evaluate_community">
+                                            <option value="" selected disabled>เลือกชุมชน</option>
+                                            @foreach ($array_community as $com)
+                                                @for ($i=0; $i < count($response_community_by_api); $i++)
+                                                    @if ($com == $response_community_by_api[$i]['community_id'])
+                                                    <option value="{{$response_community_by_api[$i]['community_id']}}"
+                                                    @if (session()->has('session_community_by_select_option')) 
+                                                        @if (session()->get('session_community_by_select_option') == $response_community_by_api[$i]['community_name'])
+                                                        selected
+                                                        @endif
+                                                    @endif
+                                                    >
+                                                    {{$response_community_by_api[$i]['community_name']}}
+                                                    </option>
+                                                    @endif
+                                                @endfor
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                    
                                 </div>
                             </div>
                         </div>
@@ -96,7 +128,9 @@
                     evaluate_community:  $('#evaluate_community').val()
                 },
                 success: (response) => {
-                    
+                    if(response.status == 1){
+                        window.location.reload();
+                    }
                 },
             });
         });

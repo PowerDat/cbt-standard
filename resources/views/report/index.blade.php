@@ -12,6 +12,10 @@
                         @if (session()->has('community_name'))
                         {{session()->get('community_name')}}
                         @endif
+
+                        @if (session()->has('session_community_by_select_option'))
+                        {{session()->get('session_community_by_select_option')}}
+                        @endif
                     </li>
                 </ol>
             </div>
@@ -22,6 +26,23 @@
 <!-- content -->
 <div class="container-fluid">
     <div class="row">
+
+        <div class="col-sm-12 col-xl-6 xl-100">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label class="form-label">ชุมชนที่ประเมิน</label>
+                                <select  class="form-control" id="evaluate_community">
+                                    <option value="" selected disabled>เลือกชุมชน</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="col-sm-12 col-xl-6 xl-100">
             <div class="card">

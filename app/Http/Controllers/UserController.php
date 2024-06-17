@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Helper\Helper;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
-use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
@@ -22,10 +22,28 @@ class UserController extends Controller
     
     public function index()
     {
-        $users = DB::table('users')
-                    ->join('user_role', 'users.id', '=', 'user_role.user_id')
-                    ->select('users.id', 'users.name', 'users.email', 'user_role.role_id')
-                    ->paginate(10);
+        foreach (Auth::user()->roles as $key => $value) {
+            $role_name = $value->name;
+        }
+
+        if ($role_name == 'researcher')
+        {
+            $users = DB::table('users')
+            ->join('user_role', 'users.id', '=', 'user_role.user_id')
+            ->select('users.id', 'users.name', 'users.email', 'user_role.role_id')
+            ->where('created_by', Auth::user()->id)
+            ->paginate(10);
+        }
+        else
+        {
+            $users = DB::table('users')
+            ->select('*')
+            ->paginate(10);
+            // $users = DB::table('users')
+            // ->join('user_role', 'users.id', '=', 'user_role.user_id')
+            // ->select('users.id', 'users.name', 'users.email', 'user_role.role_id')
+            // ->paginate(10);
+        }
 
         $roles = Role::all();
 
@@ -40,10 +58,16 @@ class UserController extends Controller
      */
     public function create()
     {
+        $role_name = Helper::getRoleName();
         $roles = Role::all();
+        $roleCommittee = Role::where('detail', 'like',  "%กรรมการ%")->get();
+        $response_community_by_api = Helper::getCommunityByApi();
 
         return view('user.create', [
             'roles' => $roles,
+            'roleCommittee' => $roleCommittee,
+            'role_name' => $role_name,
+            'response_community_by_api' => $response_community_by_api,
         ]);
     }
 
@@ -58,6 +82,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
             'confirm_password' => 'required|min:6|same:password',
+            'community' => 'required',
         ], [
             'role_id.required' => 'กรอกบทบาท',
             'name.required' => 'กรอกชื่อผู้ใช้',
@@ -68,6 +93,7 @@ class UserController extends Controller
             'confirm_password.required' => 'กรอกยืนยันรหัสผ่าน',
             'confirm_password.min' => 'ยืนยันรหัสผ่านต้องไม่ต่ำกว่า 6 ตัวอักษร',
             'confirm_password.same' => 'ตัวอักษรไม่เหมือนกับรหัสผ่าน',
+            'community.required' => 'กรอกชุมชนที่ประเมิน',
         ]);
 
         if (!$validator->passes()) 
@@ -83,6 +109,8 @@ class UserController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
+            $user->created_by = Auth::user()->id;
+            $user->updated_by = Auth::user()->id;
             $user->save();
 
             //create user_role
@@ -90,6 +118,14 @@ class UserController extends Controller
             $user_role->user_id = $user->id;
             $user_role->role_id = $request->role_id;
             $user_role->save();
+
+            foreach($request->community as $value)
+            {
+                DB::select("
+                INSERT INTO user_community (users_id, community_id)
+                VALUES ($user->id, $value);
+                ");
+            }
 
             return response()->json([
                 'status' => 1,
@@ -112,15 +148,26 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
+        $array_community = [];
         $user = User::find($id);
         $roles = Role::all();
         $user_role = UserRole::where('user_id', $id)->get();
         $user_role_id = $user_role[0]->role_id;
+        $community = DB::select("
+        select community_id from user_community where users_id = $id
+        ");
+        foreach ($community as $key => $value) {
+            array_push($array_community, $value->community_id);
+        }
+        // dd($array_community);
+        $response_community_by_api = Helper::getCommunityByApi();
 
         return view('user.edit', [
             'user' => $user,
             'roles' => $roles,
             'user_role_id' => $user_role_id,
+            'response_community_by_api' => $response_community_by_api,
+            'array_community' => $array_community,
         ]);
     }
 
@@ -129,14 +176,17 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // dd($request->community);
         $validator = Validator::make($request->all(), [
             'role_id' => 'required',
             'name' => 'required',
             'email' => 'required|email',
+            'community' => 'required',
         ], [
             'role_id.required' => 'กรอกบทบาท',
             'name.required' => 'กรอกชื่อผู้ใช้',
             'email.required' => 'กรอกอีเมล',
+            'community.required' => 'กรอกชุมชนที่ประเมิน',
         ]);
 
         if (!$validator->passes()) 
@@ -148,11 +198,11 @@ class UserController extends Controller
         } 
         else
         {
-            $model = User::find($id);
-            $model->name = $request->name;
-            $model->email = $request->email;
-            $model->password = Hash::make($request->password);
-            $model->save();
+            $user = User::find($id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->updated_by = Auth::user()->id;
+            $user->save();
 
             //create user_role
             $user_role = UserRole::where('user_id', $id)->get();
@@ -161,6 +211,22 @@ class UserController extends Controller
             {
                 $item->role_id = $request->role_id;
                 $item->save();
+            }
+            //delect community evaluate
+            $count_community = DB::select("SELECT COUNT(*) as num FROM user_community WHERE users_id = $id");
+            // $deleted_community = DB::select("DELETE FROM user_community WHERE users_id = $id");
+            //create community evaluate
+            if($count_community[0]->num > 0)
+            {
+                DB::select("DELETE FROM user_community WHERE users_id = $id");
+                
+                foreach($request->community as $value)
+                {
+                    DB::select("
+                    INSERT INTO user_community (users_id, community_id)
+                    VALUES ($id, $value);
+                    ");
+                }
             }
 
             return response()->json([

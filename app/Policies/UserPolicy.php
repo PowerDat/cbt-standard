@@ -6,17 +6,8 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class RolePolicy
+class UserPolicy
 {
-    public function before(User $user, string $ability): bool|null
-    {
-        if ($user->hasRole('administrator')) {
-            return true;
-        }
-
-        return null;
-    }
-
     /**
      * Determine whether the user can view any models.
      */
@@ -28,19 +19,9 @@ class RolePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Role $role)
+    public function view(User $user, User $model)
     {
-        try 
-        {
-            $user_role_id = $user->roles[0]->id;
-
-            $role = Role::find($user_role_id);
-            return $role->hasPermission('view-role');
-        } 
-        catch (\Throwable $th) 
-        {
-            dd($th);
-        }
+        //
     }
 
     /**
@@ -52,7 +33,7 @@ class RolePolicy
             $user_role_id = $user->roles[0]->id;
 
             $role = Role::find($user_role_id);
-            return $role->hasPermission('create-role');
+            return $role->hasPermission('create-user');
         } 
         catch (\Throwable $th) 
         {
@@ -63,14 +44,13 @@ class RolePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Role $role): bool
+    public function update(User $user, User $model)
     {
-        try 
-        {
+        try {
             $user_role_id = $user->roles[0]->id;
 
             $role = Role::find($user_role_id);
-            return $role->hasPermission('update-role');
+            return $role->hasPermission('update-user');
         } 
         catch (\Throwable $th) 
         {
@@ -81,14 +61,13 @@ class RolePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Role $role)
+    public function delete(User $user, User $model)
     {
-        try 
-        {
+        try {
             $user_role_id = $user->roles[0]->id;
 
             $role = Role::find($user_role_id);
-            return $role->hasPermission('delete-role');
+            return $role->hasPermission('delete-user');
         } 
         catch (\Throwable $th) 
         {
@@ -99,7 +78,7 @@ class RolePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Role $role)
+    public function restore(User $user, User $model)
     {
         //
     }
@@ -107,7 +86,7 @@ class RolePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Role $role)
+    public function forceDelete(User $user, User $model)
     {
         //
     }

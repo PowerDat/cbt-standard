@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Part;
 use App\Models\User;
+use App\Helper\Helper;
 use App\Models\PartType;
 use App\Models\PartTarget;
 use Illuminate\Http\Request;
@@ -30,31 +31,41 @@ class EvaluateController extends Controller
 
     public function index() //เกณฑ์การประเมิน ข้อมูลด้าน
     {
+        $role_name = Helper::getRoleName();
         $part_type = PartType::all();
         $part = Part::all();
 
-        $link = DB::select("select config_value from config where config_key = 'community-all'");
-        $api_community = Http::get($link[0]->config_value);
-        $response_community = $api_community->json('data');
-        $session_api_community_name = session()->get('community_name');
-        $session_api_community_id = "";
+        $response_community_by_api = Helper::getCommunityByApi();;//ข้อมูลชุมชนที่มาจาก 
+        $session_community_name_by_api = session()->get('community_name'); //เก็บจากผู้ใช้ประเภทชุมชน
+        $session_community_id_by_api = "";
 
-        if($session_api_community_name != "")
+        if($session_community_name_by_api != "")
         {
-            for ($i=0; $i < count($response_community); $i++) { 
-                if($session_api_community_name == $response_community[$i]['community_name'])
+            for ($i=0; $i < count($response_community_by_api); $i++) { 
+                if($session_community_name_by_api == $response_community_by_api[$i]['community_name'])
                 {
-                    $session_api_community_id = $response_community[$i]['community_id'];
-                    session()->put('session_api_community_id', $session_api_community_id);
+                    $session_community_id_by_api = $response_community_by_api[$i]['community_id'];
+                    session()->put('session_community_id_by_api', $session_community_id_by_api);
                 }
             }
+        }
+
+        $user_id = Auth::user()->id;
+        $array_community = [];
+        $community = DB::select("
+        select community_id from user_community where users_id = $user_id
+        ");
+        foreach ($community as $key => $value) {
+            array_push($array_community, $value->community_id);
         }
         
         return view('evaluate.index', [
             'part' => $part,
             'part_type' => $part_type,
-            'response_community' => $response_community,
-            'session_api_community_id' => $session_api_community_id,
+            'response_community_by_api' => $response_community_by_api,
+            'session_community_id_by_api' => $session_community_id_by_api,//เก็บจากผู้ใช้ประเภทชุมชน
+            'array_community' => $array_community,
+            'role_name' => $role_name,
         ]);
     }
 
@@ -77,11 +88,46 @@ class EvaluateController extends Controller
         $part_type = PartType::where('part_type_id', $part_type_id)->get();
         $part_type_name = $part_type[0]->part_type_name;
         $part_target = PartTarget::where('part_id', $part_id)->get();
+        $user_id = Auth::user()->id;
+        $community_name = "";
+                                                
+        if(session()->has('community_name'))
+        {
+            $community_name = session()->get('community_name');
+        }
+        elseif (session()->has('session_community_by_select_option')) 
+        {
+            $community_name = session()->get('session_community_by_select_option');
+        }
+
+        // $part_target_id = $part_target[0]->part_target_id;
+        
+        // $status = DB::select("
+        // SELECT appraisal_transaction_status 
+        // FROM appraisal_transaction 
+        // WHERE part_target_id = $part_target_id
+        //     AND community_name = '$community_name' 
+        //     AND created_by = $user_id
+        // ");
+
+        // $score = DB::select("   
+        // SELECT sum(appraisal_score_score) as score 
+        // FROM appraisal_score 
+        // INNER JOIN appraisal_transaction ON appraisal_score.part_target_id = appraisal_transaction.part_target_id
+        // WHERE appraisal_score.part_target_id = $part_target_id 
+        //     AND appraisal_transaction.appraisal_transaction_status = 2
+        //     AND appraisal_transaction.community_name = '$community_name'
+        //     AND appraisal_score.created_by = $user_id
+        // ");
         
         return view('evaluate.target', [
             'part' => $part,
             'part_target' => $part_target,
             'part_type_name' => $part_type_name,
+            'community_name' => $community_name,
+            'user_id' => $user_id,
+            // 'status' => $status,
+            // 'score' => $score,
         ]);
     }
 
@@ -258,13 +304,33 @@ class EvaluateController extends Controller
                 }
             }           
         }    
+
+        $community_name = "";
+        if(session()->has('community_name'))
+        {
+            $community_name = session()->get('community_name');
+        }
+        elseif (session()->has('session_community_by_select_option')) 
+        {
+            $community_name = session()->get('session_community_by_select_option');
+        }
+
+        $community_id = "";
+        if(session()->has('session_community_id_by_api'))
+        {
+            $community_id = session()->get('session_community_id_by_api');
+        }
+        elseif(session()->has('session_community_id_by_select_option'))
+        {
+            $community_id = session()->get('session_community_id_by_select_option');
+        }
         
         $transaction = new AppraisalTransaction();
         $transaction->part_target_id = $part_target_id;
         $transaction->appraisal_transaction_date = date('Y-m-d');
         $transaction->appraisal_transaction_status = '2';
-        $transaction->community_id = session()->get('session_api_community_id');
-        $transaction->community_name = session()->get('community_name');
+        $transaction->community_id = $community_id;
+        $transaction->community_name = $community_name;
         $transaction->created_by = Auth::user()->id;
         $transaction->updated_by = Auth::user()->id;
         $transaction->save();
@@ -384,12 +450,32 @@ class EvaluateController extends Controller
             }
         }
 
+        $community_name = "";
+        if(session()->has('community_name'))
+        {
+            $community_name = session()->get('community_name');
+        }
+        elseif (session()->has('session_community_by_select_option')) 
+        {
+            $community_name = session()->get('session_community_by_select_option');
+        }
+
+        $community_id = "";
+        if(session()->has('session_community_id_by_api'))
+        {
+            $community_id = session()->get('session_community_id_by_api');
+        }
+        elseif(session()->has('session_community_id_by_select_option'))
+        {
+            $community_id = session()->get('session_community_id_by_select_option');
+        }
+
         $transaction = new AppraisalTransaction();
         $transaction->part_target_id = $part_target_id;
         $transaction->appraisal_transaction_date = date('Y-m-d');
         $transaction->appraisal_transaction_status = '1';
-        $transaction->community_id = session()->get('session_api_community_id');
-        $transaction->community_name = session()->get('community_name');
+        $transaction->community_id = $community_id;
+        $transaction->community_name = $community_name;
         $transaction->created_by = Auth::user()->id;
         $transaction->updated_by = Auth::user()->id;
         $transaction->save();
@@ -450,11 +536,23 @@ class EvaluateController extends Controller
 
     public function saveCommunity(Request $request)
     {
-        $community = $request->evaluate_community;
-        $request->session()->put('evaluate_community', $community);
+        $community_id = $request->evaluate_community;
+        
+        $link = DB::select("select config_value from config where config_key = 'community-all'");
+        $api_community = Http::get($link[0]->config_value);
+        $response_community_by_api = $api_community->json('data');
+
+        for ($i=0; $i < count($response_community_by_api); $i++) { 
+            if($community_id == $response_community_by_api[$i]['community_id'])
+            {
+                $community_name = $response_community_by_api[$i]['community_name'];
+                session()->put('session_community_by_select_option', $community_name);
+                session()->put('session_community_id_by_select_option', $community_id);
+            }
+        }
 
         return response()->json([
-            'success' => true,
+            'status' => 1,
         ]);
     }
 
