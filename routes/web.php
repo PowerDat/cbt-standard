@@ -40,15 +40,14 @@ Route::middleware(['auth'])->group(function(){
     //report
     Route::get('report', [ReportController::class, 'index'])->name('report.index');
     Route::get('report/self', [ReportController::class, 'self'])->name('report.self');
+    Route::get('report/committee', [ReportController::class, 'committee'])->name('report.committee');
     Route::get('report/part/{id?}', [ReportController::class, 'part'])->name('report.part');
     Route::get('report/part-first', [ReportController::class, 'partFirst'])->name('report.part-first');
     Route::get('report/part-second', [ReportController::class, 'partSecond'])->name('report.part-second');
     Route::get('report/part-third', [ReportController::class, 'partThird'])->name('report.part-third');
     Route::get('report/part-fourth', [ReportController::class, 'partFourth'])->name('report.part-fourth');
     Route::get('report/part-fifth', [ReportController::class, 'partFifth'])->name('report.part-fifth');
-});
 
-Route::middleware(['auth', 'role:researcher'])->group(function(){
     //จัดการผู้ใช้งาน
     Route::resource('user', UserController::class);
     Route::post('user/delete', [UserController::class, 'delete'])->name('user.delete');
@@ -79,14 +78,14 @@ Route::middleware(['auth', 'role:administrator'])->group(function(){
     Route::post('permission/delete', [PermissionController::class, 'delete'])->name('permission.delete');
 
     //จัดการผู้ใช้งาน
-    Route::resource('user', UserController::class);
-    Route::post('user/delete', [UserController::class, 'delete'])->name('user.delete');
-    Route::get('user/change-password/{id?}', [UserController::class, 'changePassword'])->name('user.change-password');
-    Route::post('user/save-change-password', [UserController::class, 'saveChangePassword'])->name('user.save-change-password');
+    // Route::resource('user', UserController::class);
+    // Route::post('user/delete', [UserController::class, 'delete'])->name('user.delete');
+    // Route::get('user/change-password/{id?}', [UserController::class, 'changePassword'])->name('user.change-password');
+    // Route::post('user/save-change-password', [UserController::class, 'saveChangePassword'])->name('user.save-change-password');
 
-    Route::get('user-profile/createById/{id?}', [UserProfileController::class, 'createById'])->name('user-profile.createById');
-    Route::resource('user-profile', UserProfileController::class);
-    Route::post('user-profile/delete', [UserProfileController::class, 'delete'])->name('user-profile.delete');
+    // Route::get('user-profile/createById/{id?}', [UserProfileController::class, 'createById'])->name('user-profile.createById');
+    // Route::resource('user-profile', UserProfileController::class);
+    // Route::post('user-profile/delete', [UserProfileController::class, 'delete'])->name('user-profile.delete');
 
     Route::resource('menu', MenuController::class);
     Route::get('sub-menu/createByMenuId/{id?}', [SubMenuController::class, 'createByMenuId'])->name('sub-menu.createByMenuId');
@@ -94,3 +93,15 @@ Route::middleware(['auth', 'role:administrator'])->group(function(){
 
     Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('logs');
 });
+
+// Route::middleware(['auth', 'role:researcher', 'role:administrator'])->group(function(){
+//     //จัดการผู้ใช้งาน
+//     Route::resource('user', UserController::class);
+//     Route::post('user/delete', [UserController::class, 'delete'])->name('user.delete');
+//     Route::get('user/change-password/{id?}', [UserController::class, 'changePassword'])->name('user.change-password');
+//     Route::post('user/save-change-password', [UserController::class, 'saveChangePassword'])->name('user.save-change-password');
+
+//     Route::get('user-profile/createById/{id?}', [UserProfileController::class, 'createById'])->name('user-profile.createById');
+//     Route::resource('user-profile', UserProfileController::class);
+//     Route::post('user-profile/delete', [UserProfileController::class, 'delete'])->name('user-profile.delete');
+// });
