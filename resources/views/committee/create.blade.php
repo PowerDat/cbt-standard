@@ -11,8 +11,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item">ตั้งค่าระบบ</li>
-                    <li class="breadcrumb-item">จัดการผู้ใช้</li>
+                    <li class="breadcrumb-item">จัดการข้อมูลผู้ประเมิน</li>
                     <li class="breadcrumb-item active">เพิ่มข้อมูล</li>
                 </ol>
             </div>
@@ -57,9 +56,8 @@
                                 <div class="mb-3">
                                     <label class="form-label">บทบาท <span class="text-danger" style="font-size: 20px;">*</span></label>
                                     <select  class="form-control" name="role_id" id="role_id">
-                                        <option value="" selected disabled>เลือกบทบาท</option>
-                                        @foreach ($roles as $item)
-                                            <option value="{{$item->id}}">{{$item->name.' - '.$item->detail}}</option>
+                                        @foreach ($roleCommittee as $item)
+                                            <option value="{{$item->id}}" selected>{{$item->name.' - '.$item->detail}}</option>
                                         @endforeach
                                     </select>
                                     
@@ -72,7 +70,7 @@
                             <div class="row" >
                                 <div class="col">
                                     <div class="mb-3" id="div_community">
-                                        <label class="form-label">ชุมชนที่ประเมิน</label>
+                                        <label class="form-label">ชุมชนที่ประเมิน <span class="text-danger" style="font-size: 20px;">*</span></label>
                                         <select  class="form-control select2" id="community" name="community[]" multiple>
                                             {{-- <option value="" selected disabled>เลือกชุมชน</option> --}}
                                             @for ($i=0; $i < count($response_community_by_api); $i++)
@@ -81,6 +79,8 @@
                                             </option>
                                            @endfor
                                         </select>
+
+                                        <span class="text-danger error-text community_error"></span>
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                     </div>
                     <div class="card-footer text-end">
                         <button class="btn btn-primary" type="submit">บันทึก</button>
-                        <a class="btn btn-light" href="{{route('user.index')}}">ยกเลิก</a>
+                        <a class="btn btn-light" href="{{route('committee.index')}}">ยกเลิก</a>
                     </div>
                 </div>
             </form>
@@ -131,18 +131,7 @@
 
     $(document).ready(function() {
 
-        $('#div_community').hide();
-
         $('.select2').select2();
-
-        $('#role_id').change(function(){
-            if($('#role_id').val() != '3'){
-                $('#div_community').show();
-            }
-            else{
-                $('#div_community').hide();
-            }
-        });
 
         $('#form').submit(function(e) {
             e.preventDefault();
@@ -152,7 +141,7 @@
 
             $.ajax({
                 type: 'post',
-                url: "{{ route('user.store') }}",
+                url: "{{ route('committee.store') }}",
                 data: formData,
                 contentType: false,
                 processData: false,
@@ -177,7 +166,7 @@
                         });
 
                         let id = response.id;
-                        let url = "{{route('user.edit', ':id')}}";
+                        let url = "{{route('committee.edit', ':id')}}";
                         url = url.replace(':id', id);
                         window.location = url;
                     }

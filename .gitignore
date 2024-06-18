@@ -19,4 +19,4 @@ yarn-error.log
 /.vscode
 composer.lock
 /public/uploads
-/config/database.php
+config/database.php

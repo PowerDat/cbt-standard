@@ -9,41 +9,26 @@ use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class UserController extends Controller
-{   
+class CommitteeController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        foreach (Auth::user()->roles as $key => $value) {
-            $role_name = $value->name;
-        }
-
-        if ($role_name == 'researcher')
-        {
-            $users = DB::table('users')
+        $committees = DB::table('users')
             ->join('user_role', 'users.id', '=', 'user_role.user_id')
             ->select('users.id', 'users.name', 'users.email', 'user_role.role_id')
             ->where('created_by', Auth::user()->id)
             ->paginate(10);
-        }
-        else
-        {
-            $users = DB::table('users')
-            ->select('*')
-            ->paginate(10);
-            // $users = DB::table('users')
-            // ->join('user_role', 'users.id', '=', 'user_role.user_id')
-            // ->select('users.id', 'users.name', 'users.email', 'user_role.role_id')
-            // ->paginate(10);
-        }
-
+        
         $roles = Role::all();
 
-        return view('user.index', [
-            'users' => $users,
+        return view('committee.index', [
+            'committees' => $committees,
             'roles' => $roles,
         ]);
     }
@@ -55,10 +40,12 @@ class UserController extends Controller
     {
         $role_name = Helper::getRoleName();
         $roles = Role::all();
+        $roleCommittee = Role::where('detail', 'like',  "%กรรมการ%")->get();
         $response_community_by_api = Helper::getCommunityByApi();
 
-        return view('user.create', [
+        return view('committee.create', [
             'roles' => $roles,
+            'roleCommittee' => $roleCommittee,
             'role_name' => $role_name,
             'response_community_by_api' => $response_community_by_api,
         ]);
@@ -154,13 +141,15 @@ class UserController extends Controller
         }
         // dd($array_community);
         $response_community_by_api = Helper::getCommunityByApi();
+        $role_name = Helper::getRoleName();
 
-        return view('user.edit', [
+        return view('committee.edit', [
             'user' => $user,
             'roles' => $roles,
             'user_role_id' => $user_role_id,
             'response_community_by_api' => $response_community_by_api,
             'array_community' => $array_community,
+            'role_name' => $role_name,
         ]);
     }
 
@@ -169,7 +158,6 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // dd($request->community);
         $validator = Validator::make($request->all(), [
             'role_id' => 'required',
             'name' => 'required',
@@ -241,6 +229,7 @@ class UserController extends Controller
     {
         $id = $request->user_id;
 
+        //delect community evaluate
         $count_community = DB::select("SELECT COUNT(*) as num FROM user_community WHERE users_id = $id");
         //create community evaluate
         if($count_community[0]->num > 0)
@@ -270,7 +259,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        return view('user.change-password', [
+        return view('committee.change-password', [
             'user' => $user,
         ]);
     }
@@ -305,9 +294,7 @@ class UserController extends Controller
                 'status' => 1,
                 'msg' => 'แก้ไขรหัสผ่านสำเร็จ',
             ]);
-        }
-        
+        }      
 
     }
-
 }

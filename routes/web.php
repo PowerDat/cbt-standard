@@ -12,6 +12,7 @@ use App\Http\Controllers\SubMenuController;
 use App\Http\Controllers\EvaluateController;
 use App\Http\Controllers\PartTypeController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\PermissionController;
@@ -57,6 +58,11 @@ Route::middleware(['auth'])->group(function(){
     Route::get('user-profile/createById/{id?}', [UserProfileController::class, 'createById'])->name('user-profile.createById');
     Route::resource('user-profile', UserProfileController::class);
     Route::post('user-profile/delete', [UserProfileController::class, 'delete'])->name('user-profile.delete');
+
+    Route::resource('committee', CommitteeController::class);
+    Route::post('committee/delete', [CommitteeController::class, 'delete'])->name('committee.delete');
+    Route::get('committee/change-password/{id?}', [CommitteeController::class, 'changePassword'])->name('committee.change-password');
+    Route::post('committee/save-change-password', [CommitteeController::class, 'saveChangePassword'])->name('committee.save-change-password');
 });
 
 Route::middleware(['auth', 'role:administrator'])->group(function(){

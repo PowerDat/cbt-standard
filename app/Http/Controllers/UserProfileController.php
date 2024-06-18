@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Http\Request;
@@ -24,9 +25,11 @@ class UserProfileController extends Controller
     public function createById($id)
     {
         $user = User::find($id);
+        $role_name = Helper::getRoleName();
 
         return view('user-profile.create', [
             'user' => $user,
+            'role_name' => $role_name,
         ]);
     }
 
@@ -89,10 +92,12 @@ class UserProfileController extends Controller
     {
         $user = User::find($id);
         $user_profile = UserProfile::where('user_id', $id)->get();
+        $role_name = Helper::getRoleName();
 
         return view('user-profile.edit', [
             'user' => $user,
             'user_profile' => $user_profile,
+            'role_name' => $role_name,
         ]);
     }
 

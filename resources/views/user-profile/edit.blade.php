@@ -99,7 +99,11 @@
                     </div>
                     <div class="card-footer text-end">
                         <button class="btn btn-primary" type="submit">บันทึก</button>
+                        @if ($role_name = 'researcher')
+                        <a class="btn btn-light" href="{{route('committee.edit', $user->id)}}">กลับหน้าจัดการข้อมูลผู้ประเมิน</a>
+                        @else
                         <a class="btn btn-light" href="{{route('user.edit', $user->id)}}">กลับหน้าจัดการผู้ใช้</a>
+                        @endif
                     </div>
                 </div>
             </form>
@@ -118,6 +122,8 @@
     });
 
     $(document).ready(function() {
+
+        let role = "{{$role_name}}";
 
         $('#form').submit(function(e) {
             e.preventDefault();
@@ -151,10 +157,18 @@
                             timer: 5000
                         });
 
-                        let id = response.id;
-                        let url = "{{route('user.edit', ':id')}}";
-                        url = url.replace(':id', id);
-                        window.location = url;
+                        if(role = 'researcher'){
+                            let id = response.id;
+                            let url = "{{route('committee.edit', ':id')}}";
+                            url = url.replace(':id', id);
+                            window.location = url;
+                        }
+                        else{
+                            let id = response.id;
+                            let url = "{{route('user.edit', ':id')}}";
+                            url = url.replace(':id', id);
+                            window.location = url;
+                        }
                     }
                 },
             });
