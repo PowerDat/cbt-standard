@@ -17,28 +17,11 @@ class UserController extends Controller
 {   
     public function index()
     {
-        foreach (Auth::user()->roles as $key => $value) {
-            $role_name = $value->name;
-        }
-
-        if ($role_name == 'researcher')
-        {
             $users = DB::table('users')
             ->join('user_role', 'users.id', '=', 'user_role.user_id')
             ->select('users.id', 'users.name', 'users.email', 'user_role.role_id')
-            ->where('created_by', Auth::user()->id)
             ->paginate(10);
-        }
-        else
-        {
-            $users = DB::table('users')
-            ->select('*')
-            ->paginate(10);
-            // $users = DB::table('users')
-            // ->join('user_role', 'users.id', '=', 'user_role.user_id')
-            // ->select('users.id', 'users.name', 'users.email', 'user_role.role_id')
-            // ->paginate(10);
-        }
+        
 
         $roles = Role::all();
 
@@ -75,7 +58,6 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
             'confirm_password' => 'required|min:6|same:password',
-            'community' => 'required',
         ], [
             'role_id.required' => 'กรอกบทบาท',
             'name.required' => 'กรอกชื่อผู้ใช้',
@@ -86,7 +68,6 @@ class UserController extends Controller
             'confirm_password.required' => 'กรอกยืนยันรหัสผ่าน',
             'confirm_password.min' => 'ยืนยันรหัสผ่านต้องไม่ต่ำกว่า 6 ตัวอักษร',
             'confirm_password.same' => 'ตัวอักษรไม่เหมือนกับรหัสผ่าน',
-            'community.required' => 'กรอกชุมชนที่ประเมิน',
         ]);
 
         if (!$validator->passes()) 
@@ -174,12 +155,10 @@ class UserController extends Controller
             'role_id' => 'required',
             'name' => 'required',
             'email' => 'required|email',
-            'community' => 'required',
         ], [
             'role_id.required' => 'กรอกบทบาท',
             'name.required' => 'กรอกชื่อผู้ใช้',
             'email.required' => 'กรอกอีเมล',
-            'community.required' => 'กรอกชุมชนที่ประเมิน',
         ]);
 
         if (!$validator->passes()) 

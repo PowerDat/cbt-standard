@@ -72,7 +72,7 @@
                             <div class="row" >
                                 <div class="col">
                                     <div class="mb-3" id="div_community">
-                                        <label class="form-label">ชุมชนที่ประเมิน</label>
+                                        <label class="form-label">ชุมชนที่ประเมิน <span class="text-danger" style="font-size: 20px;">*</span></label>
                                         <select  class="form-control select2" id="community" name="community[]" multiple>
                                             {{-- <option value="" selected disabled>เลือกชุมชน</option> --}}
                                             @for ($i=0; $i < count($response_community_by_api); $i++)

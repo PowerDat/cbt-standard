@@ -38,7 +38,7 @@
                                 <tr>
                                     <th>ชื่อผู้ใช้</th>
                                     <th>อีเมล</th>
-                                    {{-- <th>บทบาท</th> --}}
+                                    <th>บทบาท</th>
                                     <th>เปลี่ยนรหัสผ่าน</th>
                                     <th>แก้ไข</th>
                                     <th>ลบ</th>
@@ -49,13 +49,13 @@
                                 <tr>
                                     <td>{{$item->name}}</td>
                                     <td>{{$item->email}}</td>
-                                    {{-- <td>
+                                    <td>
                                         @foreach ($roles as $role)
                                             @if ($role->id == $item->role_id)
                                                 {{$role->name}}
                                             @endif
                                         @endforeach
-                                    </td> --}}
+                                    </td>
                                     <td class="text-center"> 
                                         <a href="{{route('user.change-password', $item->id)}}" class="btn btn-light">
                                             <i class="fa fa-key"></i>
