@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @push('css')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />   
+<link href="{{asset('css/select2.css')}}" rel="stylesheet" />  
 @endpush
 
 @section('content')
@@ -161,7 +161,7 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{asset('js/select2.full.min.js')}}"></script>
 <script>
     $.ajaxSetup({
         headers: {
