@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('evaluate', [EvaluateController::class, 'index'])->name('evaluate.index');
     Route::get('evaluate/target/{part_id?}', [EvaluateController::class, 'target'])->name('evaluate.target');
     Route::get('evaluate/form/{part_target_id?}', [EvaluateController::class, 'form'])->name('evaluate.form');
+    Route::get('evaluate/edit/{part_target_id?}', [EvaluateController::class, 'edit'])->name('evaluate.edit');
     Route::get('evaluate/show/{part_target_id?}', [EvaluateController::class, 'show'])->name('evaluate.show');
     Route::post('evaluate/store', [EvaluateController::class, 'store'])->name('evaluate.store');
     Route::post('evaluate/save-draft', [EvaluateController::class, 'saveDraft'])->name('evaluate.save-draft');

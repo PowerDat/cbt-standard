@@ -12,10 +12,6 @@
                             @if (session()->has('community_name'))
                             {{session()->get('community_name')}}
                             @endif
-
-                            @if (session()->has('evaluate_community'))
-                            {{session()->get('evaluate_community')}}
-                            @endif
                         </li>
                     </ol>
                 </div>
@@ -27,24 +23,28 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
+
+
+
                 <div class="card">
-
                     <div class="card-header pb-0">
-                        @if (session()->has('session_community_by_select_option'))
-                        <p><strong>ชุมชนที่ประเมิน: {{session()->get('session_community_by_select_option')}}</strong></p>
-                        @elseif (session()->has('community_name'))
-                        <p><strong>ชุมชนที่ประเมิน: {{session()->get('community_name')}}</strong></p>
-                        @endif
-                        <p><strong>{{ 'ด้าน ' . $part[0]->part_order . ' ' . $part[0]->part_name }}</strong></p>
-                        <p><strong>{{ 'เป้าประสงค์ ' . $part_target[0]->part_target_order . ' ' . $part_target[0]->part_target_name }}</strong></p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p><strong>{{ 'ด้าน ' . $part[0]->part_order . ' ' . $part[0]->part_name }}</strong></p>
+                                <p><strong>{{ 'เป้าประสงค์ ' . $part_target[0]->part_target_order . ' ' . $part_target[0]->part_target_name }}</strong></p>
+                            </div>
+                            <div class="col-sm-6 text-end">
+                                <p><span class="badge badge-info">แก้ไข</span></p>
+                            </div>
+                        </div>
+                        
                     </div>
-                <form id="form" enctype="multipart/form-data" method="POST">
-                    @csrf
 
-                    <input type="hidden" name="part_target_id" value="{{$part_target_id}}">
-                    <input type="hidden" name="part_id" value="{{$part_target[0]->part_id}}">
+                    <form id="form" enctype="multipart/form-data" method="POST">
+                        @csrf
 
-                    
+                        <input type="hidden" name="part_target_id" value="{{$part_target_id}}">
+                        <input type="hidden" name="part_id" value="{{$part_target[0]->part_id}}">
 
                         <div class="card-body">
                             
@@ -82,10 +82,18 @@
                                                     @if ($index_question->part_target_sub_id == $target_sub->part_target_sub_id)
                                                         <div class="col">
                                                             <div class="form-group m-t-15">
-                                                                <input type="checkbox" name="chk_question_{{$target_sub->part_target_sub_id}}[]" value="{{$index_question->part_index_question_id}}"
-                                                                @if (in_array($index_question->part_index_question_id, old("chk_question_$target_sub->part_target_sub_id", [])))
-                                                                    checked
-                                                                @endif>
+                                                                <input 
+                                                                type="checkbox" 
+                                                                name="chk_question_{{$target_sub->part_target_sub_id}}[]" 
+                                                                value="{{$index_question->part_index_question_id}}"
+                                                                @foreach ($ap_question as $question)
+                                                                    @if ($target_sub->part_target_sub_id == $question->part_target_sub_id)
+                                                                        @if ($index_question->part_index_question_id == $question->part_index_question_id)
+                                                                            checked
+                                                                        @endif
+                                                                    @endif
+                                                                @endforeach
+                                                               >
                                                                 <label for="">
                                                                     {{$index_question->part_index_question_desc}}
                                                                 </label>        
@@ -96,14 +104,17 @@
                                                                 <div>
                                                                     <label class="form-label text-danger">แนบเอกสาร (นามสกุล .pdf เท่านั้น)</label>
                                                                     <input type="file" class="form-control" name="file_{{$index_question->part_index_question_id}}">
-                                                                    <span class="text-danger error-text file_{{$index_question->part_index_question_id}}_error"></span>
+                                                                    @foreach ($ap_question as $question)
+                                                                        @if ($index_question->part_index_question_id == $question->part_index_question_id)
+                                                                            <p class="text-danger">{{'ไฟล์แนบ : '.$question->file}}</p>
+                                                                        @endif
+                                                                    @endforeach
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-4">
                                                                 <div>
                                                                     <label class="form-label text-danger">รูปภาพ (นามสกุล .png, .jpg เท่านั้น)</label>
                                                                     <input type="file" class="form-control" name="image_{{$index_question->part_index_question_id}}">
-                                                                    <span class="text-danger error-text image_{{$index_question->part_index_question_id}}_error"></span>
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-4">
@@ -132,29 +143,47 @@
                                         <div class="row mt-3">
                                             <div class="col-xs-12">
                                                 <h5><span class="badge bg-info">คะแนนการประเมิน</span></h5>
-                                                <div class="col">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$target_sub->part_target_sub_id}}" value="4">
-                                                        <label class="form-check-label" for="inlineRadio1">4</label>
+                                                @foreach ($ap_score as $score)
+                                                    @if ($target_sub->part_target_sub_id == $score->part_target_sub_id)
+                                                    <div class="col">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="4"
+                                                            @if ($score->appraisal_score_score == 4 )
+                                                                checked
+                                                            @endif>
+                                                            <label class="form-check-label" for="inlineRadio1">4</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="3"
+                                                            @if ($score->appraisal_score_score == 3)
+                                                                checked
+                                                            @endif>
+                                                            <label class="form-check-label" for="inlineRadio2">3</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="2"
+                                                            @if ($score->appraisal_score_score == 2)
+                                                                checked
+                                                            @endif>
+                                                            <label class="form-check-label" for="inlineRadio2">2</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="1"
+                                                            @if ($score->appraisal_score_score == 1)
+                                                                checked
+                                                            @endif>
+                                                            <label class="form-check-label" for="inlineRadio2">1</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="rdo_{{$score->part_target_sub_id}}" value="0"
+                                                            @if ($score->appraisal_score_score == 0 && $score->appraisal_score_score != null)
+                                                                checked
+                                                            @endif>
+                                                            <label class="form-check-label" for="inlineRadio2">0</label>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$target_sub->part_target_sub_id}}" value="3">
-                                                        <label class="form-check-label" for="inlineRadio2">3</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$target_sub->part_target_sub_id}}" value="2">
-                                                        <label class="form-check-label" for="inlineRadio2">2</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$target_sub->part_target_sub_id}}" value="1">
-                                                        <label class="form-check-label" for="inlineRadio2">1</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="rdo_{{$target_sub->part_target_sub_id}}" value="0">
-                                                        <label class="form-check-label" for="inlineRadio2">0</label>
-                                                    </div>
-                                                </div>
-                                                <span class="text-danger error-text rdo_{{$target_sub->part_target_sub_id}}_error"></span>
+                                                    @endif
+                                                @endforeach
                                             </div>
                                         </div>
         
@@ -162,10 +191,19 @@
                                             <div class="col-xs-12">
                                                 <h5><span class="badge bg-info">ความคิดเห็นเพิ่มเติม(เชิงคุณภาพ)</span></h5>
                                                 <div class="col mb-3">
+                                                    @if ($ap_score->count() > 0)
+                                                        @foreach ($ap_score as $comment)
+                                                            @if ($target_sub->part_target_sub_id == $comment->part_target_sub_id)
+                                                            <textarea class="form-control" name="comment_{{$target_sub->part_target_sub_id}}" id="" rows="3">{{$comment->appraisal_score_comment}}</textarea>
+                                                            @endif
+                                                        @endforeach
+                                                    @else
                                                     <textarea class="form-control" name="comment_{{$target_sub->part_target_sub_id}}" id="" rows="3"></textarea>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                     @endif
                                 @endfor
@@ -177,11 +215,8 @@
                             <button class="btn btn-primary" type="submit">บันทึก</button>
                             <a class="btn btn-light" href="{{route('evaluate.target', $part[0]->part_id)}}">ยกเลิก</a>
                         </div>
-
-                    </div>
-
-                </form>
-
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -219,23 +254,11 @@
                         if(response.status == 0){
                             $.each(response.error, function(prefix, val){
                                 $('span.'+prefix+'_error').text(val[0]);
-
-                                Swal.fire({
-                                    icon: 'error',
-                                    text: val[0],
-                                    width: '450px',
-                                });
                             });
                         }
                         else if(response.status == 2){
                             $.each(response.error, function(prefix, val){
                                 $('span.'+prefix+'_error').text(val[0]);
-
-                                Swal.fire({
-                                    icon: 'error',
-                                    text: val[0],
-                                    width: '450px',
-                                });
                             });
                         }
                         else{
@@ -270,6 +293,7 @@
                     type: 'post',
                     url: "{{ route('evaluate.save-draft') }}",
                     data: data,
+                    
                     processData : false,
                     contentType:false,
                     beforeSend:function(){
@@ -310,7 +334,6 @@
 
             $('#step-1').css('display', 'block');
             $('#step-' + count).css('display', 'none');
-
         });
 
     </script>

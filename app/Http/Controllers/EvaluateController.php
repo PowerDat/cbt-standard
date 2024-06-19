@@ -99,26 +99,6 @@ class EvaluateController extends Controller
         {
             $community_name = session()->get('session_community_by_select_option');
         }
-
-        // $part_target_id = $part_target[0]->part_target_id;
-        
-        // $status = DB::select("
-        // SELECT appraisal_transaction_status 
-        // FROM appraisal_transaction 
-        // WHERE part_target_id = $part_target_id
-        //     AND community_name = '$community_name' 
-        //     AND created_by = $user_id
-        // ");
-
-        // $score = DB::select("   
-        // SELECT sum(appraisal_score_score) as score 
-        // FROM appraisal_score 
-        // INNER JOIN appraisal_transaction ON appraisal_score.part_target_id = appraisal_transaction.part_target_id
-        // WHERE appraisal_score.part_target_id = $part_target_id 
-        //     AND appraisal_transaction.appraisal_transaction_status = 2
-        //     AND appraisal_transaction.community_name = '$community_name'
-        //     AND appraisal_score.created_by = $user_id
-        // ");
         
         return view('evaluate.target', [
             'part' => $part,
@@ -255,15 +235,15 @@ class EvaluateController extends Controller
                             "$image" => 'mimes:png,jpg|max:2048',
                         ], [
                             "$file.mimes" => 'ไฟล์นามสกุล pdf เท่านั้น',
-                            "$file.max" => 'ขนาดไม่เกิน 2 MB',
+                            "$file.max" => 'เอกสารขนาดไฟล์ไม่เกิน 2 MB',
                             "$image.mimes" => 'ไฟล์นามสกุล png, jpg เท่านั้น',
-                            "$image.max" => 'ขนาดไม่เกิน 2 MB',
+                            "$image.max" => 'รูปภาพขนาดไม่เกิน 2 MB',
                         ]);
 
                         if (!$validatorFile->passes()) 
                         {
                             return response()->json([
-                                'status' => 0,
+                                'status' => 2,
                                 'error' => $validatorFile->errors()->toArray()
                             ]);
                         } 
@@ -342,6 +322,52 @@ class EvaluateController extends Controller
             'msg' => 'เพิ่มข้อมูลสำเร็จ',
         ]);
 
+    }
+
+    public function edit($part_target_id)
+    {
+        $part_target = PartTarget::where(['part_target_id' => $part_target_id])->get();
+        
+        $part_target_sub = DB::select("
+        SELECT 
+            part_target_sub_id
+            , part_target_id
+            , part_target_sub_name
+            , part_target_sub_order
+            , part_target_sub_desc 
+        FROM part_target_sub
+        WHERE part_target_id = $part_target_id
+        ");
+        
+        $part = Part::where('part_id', $part_target[0]->part_id)->get();
+        $part_index_score = PartIndexScore::orderBy('part_index_score_order', 'desc')->get();
+        $part_index_question = PartIndexQuestion::orderBy('part_index_question_order', 'asc')->get();
+        $part_type_id = $part[0]->part_type_id;
+        $part_type = PartType::where('part_type_id', $part_type_id)->get();
+        $part_type_name = $part_type[0]->part_type_name;
+
+        //status
+        $transaction = AppraisalTransaction::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->get();
+
+        if (!empty($transaction[0]->appraisal_transaction_status)) {
+            if ($transaction[0]->appraisal_transaction_status == '2') {
+                //เรียกข้อมูลแบบร่าง
+                $ap_question = AppraisalQuestion::select('*')->where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->get();
+                $ap_score = AppraisalScore::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->get();
+
+                return view('evaluate.edit', [
+                    'part' => $part,
+                    'part_target' => $part_target,
+                    'part_target_sub' => $part_target_sub,
+                    'part_index_score' => $part_index_score,
+                    'part_index_question' => $part_index_question,
+                    'part_target_id' => $part_target_id,
+                    'ap_question' => $ap_question,
+                    'ap_score' => $ap_score,
+                    'part_type_name' => $part_type_name,
+                ]);
+            }
+        }
     }
 
     public function saveDraft(Request $request)
@@ -490,7 +516,7 @@ class EvaluateController extends Controller
 
     public function show($part_target_id)
     {
-        $part_target = PartTarget::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->get();
+        $part_target = PartTarget::where(['part_target_id' => $part_target_id])->get();
         
         $part_target_sub = DB::select("
         SELECT 

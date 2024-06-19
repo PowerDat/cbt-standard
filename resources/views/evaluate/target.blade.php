@@ -54,6 +54,7 @@
                                         <th>ลำดับ</th>
                                         <th>เป้าประสงค์</th>
                                         <th>ประเมิน</th>
+                                        <th>แก้ไข</th>
                                         <th>สถานะ</th>
                                         <th>คะแนนดิบ</th>
                                     </tr>
@@ -90,6 +91,22 @@
                                                 else
                                                 {
                                                     echo "<a href='/evaluate/form/$item->part_target_id' class='btn btn-warning btn-xs'><i data-feather='edit'></i></a>";
+                                                }
+                                            @endphp
+                                        </td>
+                                        <td>
+                                            @php
+                                                $status = DB::select("
+                                                SELECT appraisal_transaction_status 
+                                                FROM appraisal_transaction 
+                                                WHERE part_target_id = $item->part_target_id
+                                                    AND community_name = '$community_name'
+                                                    AND created_by = $user_id
+                                                ");
+
+                                                if(!empty($status))
+                                                {
+                                                    echo "<a href='/evaluate/edit/$item->part_target_id' class='btn btn-info btn-xs'><i data-feather='edit'></i></a>";
                                                 }
                                             @endphp
                                         </td>
