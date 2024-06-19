@@ -22,6 +22,8 @@ class AuthController extends Controller
 
     public function postLogin(Request $request)
     {
+        $role_id = "";
+
         $validator = Validator::make($request->all(), 
             [
                 "user_login" => 'required',
@@ -56,16 +58,25 @@ class AuthController extends Controller
                 //login form database
                 if (Auth::attempt(["name" => $request->user_login, "password" => $request->password])) 
                 {
+                    
+                    foreach (Auth::user()->roles as $value) {
+                        $role_id = $value->id;
+                    }
+
+                    $route = $this->getRoute($role_id);
+
                     return response()->json([
                         "status" => 1, 
-                        "redirect" => url("dashboard")
+                        "redirect" => route($route),
                     ]);
                 } 
-
-                return response()->json([
-                    'status' => 403,
-                    'error' => 'ชื่อหรือรหัสผ่านไม่ถูกต้อง',
-                ]);
+                else
+                {
+                    return response()->json([
+                        'status' => 403,
+                        'error' => 'ชื่อหรือรหัสผ่านไม่ถูกต้อง',
+                    ]);
+                }
             }
             else //หาเจอ
             {
@@ -83,9 +94,15 @@ class AuthController extends Controller
                 {
                     if (Auth::attempt(["email" => $user[0]->email, "password" => $request->password])) 
                     {
+                        foreach (Auth::user()->roles as $value) {
+                            $role_id = $value->id;
+                        }   
+
+                        $route = $this->getRoute($role_id);
+
                         return response()->json([
                             "status" => 1, 
-                            "redirect" => url("dashboard")
+                            "redirect" => route($route),
                         ]);
                     } 
                 }
@@ -106,11 +123,17 @@ class AuthController extends Controller
                     $user_role->role_id = $role[0]->id;
                     $user_role->save();
 
+                    foreach (Auth::user()->roles as $value) {
+                        $role_id = $value->id;
+                    }
+
+                    $route = $this->getRoute($role_id);
+
                     if (Auth::attempt(["email" => $response->json('user_email'), "password" => $request->password])) 
                     {
                         return response()->json([
                             "status" => 1, 
-                            "redirect" => url("dashboard")
+                            "redirect" => route($route),
                         ]);
                     }
                 }
@@ -125,4 +148,20 @@ class AuthController extends Controller
     
         return redirect()->route('auth.login');
     }
+
+    public function getRoute($id)
+    {
+        $url = DB::select("
+        SELECT permissions.route
+        FROM permission_role 
+        INNER JOIN permissions ON permission_role.permission_id = permissions.id
+        WHERE role_id = $id
+            AND NAME LIKE '%dashboard%'
+        ");
+
+        $route = $url[0]->route;
+
+        return $route;
+    }
+
 }

@@ -1,3 +1,6 @@
+@extends('layouts.master')
+
+@section('content')
 <!-- content -->
 <div class="container-fluid">
 
@@ -24,7 +27,7 @@
                                         </div>
                                         <label class="col-sm-2 col-form-label">สิทธิ์</label>
                                         <div class="col-sm-4">
-                                            {{-- <input class="form-control" type="text" value="{{$role_name}}" readonly> --}}
+                                            <input class="form-control" type="text" value="{{$role_name}}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -49,3 +52,4 @@
         </div>
     </div>
 </div>
+@endsection

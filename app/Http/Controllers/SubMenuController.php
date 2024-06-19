@@ -77,7 +77,7 @@ class SubMenuController extends Controller
             return response()->json([
                 'status' => 1,
                 'msg' => 'เพิ่มข้อมูลสำเร็จ',
-                'id' => $model->sub_menu_id,
+                'id' => $request->menu_id,
             ]);
         }
     }

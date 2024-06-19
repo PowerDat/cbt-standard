@@ -27,6 +27,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/community', [DashboardController::class, 'community'])->name('dashboard.community');
+    Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
+    Route::get('/dashboard/researcher', [DashboardController::class, 'researcher'])->name('dashboard.researcher');
+    Route::get('/dashboard/committee', [DashboardController::class, 'committee'])->name('dashboard.committee');
     
     //เกณฑ์มาตรฐาน
     Route::get('evaluate', [EvaluateController::class, 'index'])->name('evaluate.index');
