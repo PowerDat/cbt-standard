@@ -28,7 +28,7 @@
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-sm-12 col-xl-6 xl-100" id="evaluate">
+            <div class="col-sm-12" id="evaluate">
                 <div class="card">
                     <div class="card-header pb-0">
                         <div class="row">

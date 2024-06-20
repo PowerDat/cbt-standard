@@ -24,11 +24,6 @@ use Illuminate\Support\Facades\Validator;
 
 class EvaluateController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index() //เกณฑ์การประเมิน ข้อมูลด้าน
     {
         $role_name = Helper::getRoleName();
@@ -165,6 +160,26 @@ class EvaluateController extends Controller
 
     public function store(Request $request)
     {
+        $community_name = "";
+        if(session()->has('community_name'))
+        {
+            $community_name = session()->get('community_name');
+        }
+        elseif (session()->has('session_community_by_select_option')) 
+        {
+            $community_name = session()->get('session_community_by_select_option');
+        }
+
+        $community_id = "";
+        if(session()->has('session_community_id_by_api'))
+        {
+            $community_id = session()->get('session_community_id_by_api');
+        }
+        elseif(session()->has('session_community_id_by_select_option'))
+        {
+            $community_id = session()->get('session_community_id_by_select_option');
+        }
+
         $part_target_id = $request->part_target_id;
 
         $part_target_sub = DB::select("
@@ -178,20 +193,46 @@ class EvaluateController extends Controller
         WHERE part_target_id = $part_target_id
         ");
 
-        $countQuestion = AppraisalQuestion::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->count();
-        if ($countQuestion > 0) {
-            AppraisalQuestion::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->delete();
-        }
-
-        $countScore = AppraisalScore::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->count();
-        if ($countScore > 0) {
-            AppraisalScore::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->delete();
-        }
-
-        $countTransaction = AppraisalTransaction::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->count();
+        $countTransaction = AppraisalTransaction::where([
+                                'part_target_id' => $part_target_id, 
+                                'created_by' => Auth::user()->id,
+                                'community_id' => $community_id,
+                            ])->count();
         if ($countTransaction > 0) {
-            AppraisalTransaction::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->delete();
+            AppraisalTransaction::where([
+                'part_target_id' => $part_target_id, 
+                'created_by' => Auth::user()->id,
+                'community_id' => $community_id,
+            ])->delete();
         }
+
+        $countQuestion = AppraisalQuestion::where([
+                            'part_target_id' => $part_target_id, 
+                            'created_by' => Auth::user()->id,
+                            'community_id' => $community_id,
+                        ])->count();
+        if ($countQuestion > 0) {
+            AppraisalQuestion::where([
+                'part_target_id' => $part_target_id, 
+                'created_by' => Auth::user()->id,
+                'community_id' => $community_id,
+            ])->delete();
+        }
+
+        $countScore = AppraisalScore::where([
+            'part_target_id' => $part_target_id, 
+            'created_by' => Auth::user()->id,
+            'community_id' => $community_id,
+        ])->count();
+        if ($countScore > 0) {
+            AppraisalScore::where([
+                'part_target_id' => $part_target_id, 
+                'created_by' => Auth::user()->id,
+                'community_id' => $community_id,
+            ])->delete();
+        }
+
+
 
         //save data
         foreach ($part_target_sub as $key => $item) {
@@ -219,6 +260,7 @@ class EvaluateController extends Controller
                 $score->appraisal_score_score = $request->input($rdo);
                 $score->appraisal_score_comment = $request->input($comment);
                 $score->part_target_id = $part_target_id;
+                $score->community_id = $community_id;
                 $score->created_by = Auth::user()->id;
                 $score->updated_by = Auth::user()->id;
                 $score->save();
@@ -276,6 +318,7 @@ class EvaluateController extends Controller
                             $question->part_index_question_id = $value;
                             $question->part_target_id = $part_target_id;
                             $question->link_url = $request->input($link_url);
+                            $question->community_id = $community_id;
                             $question->created_by = Auth::user()->id;
                             $question->updated_by = Auth::user()->id;
                             $question->save();
@@ -326,6 +369,16 @@ class EvaluateController extends Controller
 
     public function edit($part_target_id)
     {
+        $community_id = "";
+        if(session()->has('session_community_id_by_api'))
+        {
+            $community_id = session()->get('session_community_id_by_api');
+        }
+        elseif(session()->has('session_community_id_by_select_option'))
+        {
+            $community_id = session()->get('session_community_id_by_select_option');
+        }
+
         $part_target = PartTarget::where(['part_target_id' => $part_target_id])->get();
         
         $part_target_sub = DB::select("
@@ -347,13 +400,25 @@ class EvaluateController extends Controller
         $part_type_name = $part_type[0]->part_type_name;
 
         //status
-        $transaction = AppraisalTransaction::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->get();
+        $transaction = AppraisalTransaction::where([
+            'part_target_id' => $part_target_id, 
+            'created_by' => Auth::user()->id,
+            'community_id' => $community_id,
+        ])->get();
 
         if (!empty($transaction[0]->appraisal_transaction_status)) {
             if ($transaction[0]->appraisal_transaction_status == '2') {
                 //เรียกข้อมูลแบบร่าง
-                $ap_question = AppraisalQuestion::select('*')->where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->get();
-                $ap_score = AppraisalScore::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->get();
+                $ap_question = AppraisalQuestion::select('*')->where([
+                                    'part_target_id' => $part_target_id, 
+                                    'created_by' => Auth::user()->id,
+                                    'community_id' => $community_id,
+                                ])->get();
+                $ap_score = AppraisalScore::where([
+                                'part_target_id' => $part_target_id, 
+                                'created_by' => Auth::user()->id,
+                                'community_id' => $community_id,
+                            ])->get();
 
                 return view('evaluate.edit', [
                     'part' => $part,
@@ -372,6 +437,26 @@ class EvaluateController extends Controller
 
     public function saveDraft(Request $request)
     {
+        $community_name = "";
+        if(session()->has('community_name'))
+        {
+            $community_name = session()->get('community_name');
+        }
+        elseif (session()->has('session_community_by_select_option')) 
+        {
+            $community_name = session()->get('session_community_by_select_option');
+        }
+
+        $community_id = "";
+        if(session()->has('session_community_id_by_api'))
+        {
+            $community_id = session()->get('session_community_id_by_api');
+        }
+        elseif(session()->has('session_community_id_by_select_option'))
+        {
+            $community_id = session()->get('session_community_id_by_select_option');
+        }
+
         $part_target_id = $request->part_target_id;
 
         $part_target_sub = DB::select("
@@ -385,19 +470,44 @@ class EvaluateController extends Controller
         WHERE part_target_id = $part_target_id
         ");
 
-        $countQuestion = AppraisalQuestion::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->count();
+        $countQuestion = AppraisalQuestion::where([
+            'part_target_id' => $part_target_id, 
+            'created_by' => Auth::user()->id,
+            'community_id' => $community_id,
+        ])->count();
         if ($countQuestion > 0) {
-            AppraisalQuestion::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->delete();
+            AppraisalQuestion::where([
+                'part_target_id' => $part_target_id, 
+                'created_by' => Auth::user()->id,
+                'community_id' => $community_id,
+            ])->delete();
         }
 
-        $countScore = AppraisalScore::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->count();
+        $countScore = AppraisalScore::where([
+            'part_target_id' => $part_target_id, 
+            'created_by' => Auth::user()->id,
+            'community_id' => $community_id,
+        ])->count();
+
         if ($countScore > 0) {
-            AppraisalScore::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->delete();
+            AppraisalScore::where([
+                'part_target_id' => $part_target_id, 
+                'created_by' => Auth::user()->id,
+                'community_id' => $community_id,
+            ])->delete();
         }
 
-        $countTransaction = AppraisalTransaction::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->count();
+        $countTransaction = AppraisalTransaction::where([
+                                'part_target_id' => $part_target_id, 
+                                'created_by' => Auth::user()->id,
+                                'community_id' => $community_id,
+                            ])->count();
         if ($countTransaction > 0) {
-            AppraisalTransaction::where(['part_target_id' => $part_target_id, 'created_by' => Auth::user()->id])->delete();
+            AppraisalTransaction::where([
+                'part_target_id' => $part_target_id, 
+                'created_by' => Auth::user()->id,
+                'community_id' => $community_id,
+            ])->delete();
         }
 
         //save data
@@ -411,6 +521,7 @@ class EvaluateController extends Controller
             $score->appraisal_score_score = $request->input($rdo);
             $score->appraisal_score_comment = $request->input($comment);
             $score->part_target_id = $part_target_id;
+            $score->community_id = $community_id;
             $score->created_by = Auth::user()->id;
             $score->updated_by = Auth::user()->id;
             $score->save();
@@ -468,32 +579,13 @@ class EvaluateController extends Controller
                         $question->part_index_question_id = $value;
                         $question->part_target_id = $part_target_id;
                         $question->link_url = $request->input($link_url);
+                        $question->community_id = $community_id;
                         $question->created_by = Auth::user()->id;
                         $question->updated_by = Auth::user()->id;
                         $question->save();
                     }
                 }
             }
-        }
-
-        $community_name = "";
-        if(session()->has('community_name'))
-        {
-            $community_name = session()->get('community_name');
-        }
-        elseif (session()->has('session_community_by_select_option')) 
-        {
-            $community_name = session()->get('session_community_by_select_option');
-        }
-
-        $community_id = "";
-        if(session()->has('session_community_id_by_api'))
-        {
-            $community_id = session()->get('session_community_id_by_api');
-        }
-        elseif(session()->has('session_community_id_by_select_option'))
-        {
-            $community_id = session()->get('session_community_id_by_select_option');
         }
 
         $transaction = new AppraisalTransaction();
