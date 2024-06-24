@@ -16,6 +16,8 @@ use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\Report\CommitteeReportController;
+use App\Http\Controllers\Report\CommunityReportController;
 
 Route::get('/', [AuthController::class, 'login'])->name('auth.login');
 Route::post('auth/post-login', [AuthController::class, 'postLogin'])->name('auth.post-login'); 
@@ -26,11 +28,18 @@ Auth::routes();
 Route::middleware(['auth'])->group(function(){
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard/community', [DashboardController::class, 'community'])->name('dashboard.community');
-    Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
-    Route::get('/dashboard/researcher', [DashboardController::class, 'researcher'])->name('dashboard.researcher');
-    Route::get('/dashboard/committee', [DashboardController::class, 'committee'])->name('dashboard.committee');
+    Route::prefix('dashboard')->name('dashboard.')->group(function(){
+        Route::get('/community', [DashboardController::class, 'community'])->name('community');
+        Route::get('/admin', [DashboardController::class, 'admin'])->name('admin');
+        Route::get('/researcher', [DashboardController::class, 'researcher'])->name('researcher');
+        Route::get('/committee', [DashboardController::class, 'committee'])->name('committee');
+    });
+
+    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Route::get('/dashboard/community', [DashboardController::class, 'community'])->name('dashboard.community');
+    // Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
+    // Route::get('/dashboard/researcher', [DashboardController::class, 'researcher'])->name('dashboard.researcher');
+    // Route::get('/dashboard/committee', [DashboardController::class, 'committee'])->name('dashboard.committee');
     
     //เกณฑ์มาตรฐาน
     Route::get('evaluate', [EvaluateController::class, 'index'])->name('evaluate.index');
@@ -45,14 +54,26 @@ Route::middleware(['auth'])->group(function(){
     
     //report
     Route::get('report', [ReportController::class, 'index'])->name('report.index');
-    Route::get('report/self', [ReportController::class, 'self'])->name('report.self');
-    Route::get('report/committee', [ReportController::class, 'committee'])->name('report.committee');
+    Route::get('report/self-assessment', [ReportController::class, 'selfAssessment'])->name('report.self-assessment');
+    
+    Route::get('report/evaluation-committee', [ReportController::class, 'evaluationCommittee'])->name('report.evaluation-committee');
     Route::get('report/part/{id?}', [ReportController::class, 'part'])->name('report.part');
     Route::get('report/part-first', [ReportController::class, 'partFirst'])->name('report.part-first');
     Route::get('report/part-second', [ReportController::class, 'partSecond'])->name('report.part-second');
     Route::get('report/part-third', [ReportController::class, 'partThird'])->name('report.part-third');
     Route::get('report/part-fourth', [ReportController::class, 'partFourth'])->name('report.part-fourth');
     Route::get('report/part-fifth', [ReportController::class, 'partFifth'])->name('report.part-fifth');
+    
+    //report community
+    Route::get('report/community/index', [CommunityReportController::class, 'index'])->name('report.community.index');
+    Route::get('report/community/committee', [CommunityReportController::class, 'committee'])->name('report.community.committee');
+    Route::post('report/community/evaluation-committee', [CommunityReportController::class, 'evaluationCommittee'])->name('report.community.evaluation-committee');
+    Route::get('report/community/summary', [CommunityReportController::class, 'summary'])->name('report.community.summary');
+    Route::get('report/community/pdf', [CommunityReportController::class, 'pdf'])->name('report.community.pdf');
+    //report committee
+    Route::get('report/committee/index', [CommitteeReportController::class, 'index'])->name('report.committee.index');
+    Route::post('report/committee/get-result', [CommitteeReportController::class, 'getResult'])->name('report.committee.get-result');
+    Route::get('report/committee/summary', [CommitteeReportController::class, 'summary'])->name('report.committee.summary');
 
     //จัดการผู้ใช้งาน
     Route::resource('user', UserController::class);

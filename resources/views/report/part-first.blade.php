@@ -28,7 +28,12 @@
                 <tr>
                     <td colspan="2" class="text-end"><strong>คะแนนที่ได้</strong></td>
                     <td class="text-center">
+                        @if ($total_first != 0)
                         <strong>{{ number_format($total_first/count($score_first), 2) }}</strong>
+                        @else
+                        0
+                        @endif
+                        
                     </td>
                     <td class="text-center"></td>
                 </tr>
