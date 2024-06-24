@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Menu;
+use App\Models\MenuItem;
 use App\Models\Permission;
 use App\Policies\UserPolicy;
 use Illuminate\Pagination\Paginator;
@@ -28,5 +29,6 @@ class AppServiceProvider extends ServiceProvider
 
         $menus = Menu::where('menu_status', 'Y')->orderBy('menu_order', 'asc')->get();        
         view()->share('menus', $menus);
+        
     }
 }

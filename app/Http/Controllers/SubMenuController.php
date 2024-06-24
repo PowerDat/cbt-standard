@@ -41,13 +41,12 @@ class SubMenuController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'sub_menu_order' => 'required|unique:sub_menu|numeric|min:1',
+            'sub_menu_order' => 'required|numeric|min:1',
             'sub_menu_name' => 'required',
             'sub_menu_route' => 'required',
             'sub_menu_status' => 'required',
         ], [
             'sub_menu_order.required' => 'กรอกลำดับเมนูย่อย',
-            'sub_menu_order.unique' => 'ลำดับเมนูย่อยมีอยู่แล้วในระบบ(ห้ามซ้ำ)',
             'sub_menu_order.numeric' => 'ลำดับเมนูย่อยต้องเป็นตัวเลขเท่านั้น',
             'sub_menu_order.min' => 'ลำดับเมนูย่อยห้ามต่ำกว่า 1',
             'sub_menu_name.required' => 'กรอกชื่อเมนูย่อย',

@@ -84,6 +84,28 @@
                                         </select>
                                     @endif
                                     
+                                    {{-- นักวิจัย --}}
+                                    @if ($role_name == 'researcher')
+                                    <select  class="form-control" id="evaluate_community">
+                                        <option value="" selected disabled>เลือกชุมชน</option>
+                                        @foreach ($array_community as $com)
+                                            @for ($i=0; $i < count($response_community_by_api); $i++)
+                                                @if ($com == $response_community_by_api[$i]['community_id'])
+                                                <option value="{{$response_community_by_api[$i]['community_id']}}"
+                                                @if (session()->has('session_community_by_select_option')) 
+                                                    @if (session()->get('session_community_by_select_option') == $response_community_by_api[$i]['community_name'])
+                                                    selected
+                                                    @endif
+                                                @endif
+                                                >
+                                                {{$response_community_by_api[$i]['community_name']}}
+                                                </option>
+                                                @endif
+                                            @endfor
+                                        @endforeach
+                                    </select>
+                                    @endif
+
                                 </div>
                             </div>
                         </div>

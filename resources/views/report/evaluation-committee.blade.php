@@ -27,6 +27,38 @@
 <!-- content -->
 <div class="container-fluid">
 
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label class="form-label">ชุมชนที่ประเมิน</label>
+                            <select  class="form-control" id="evaluate_community" >
+                                <option value="" selected disabled>เลือกชุมชน</option>
+                                @for ($i=0; $i < count($response_community_by_api); $i++)
+                                    @foreach ($community as $comm)
+                                        @if ($response_community_by_api[$i]['community_id'] == $comm->community_id)
+                                        <option value="{{$comm->community_id}}"
+                                            @if (session()->has('session_community_id_by_select_option')) 
+                                            @if (session()->get('session_community_id_by_select_option') == $comm->community_id)
+                                            selected
+                                            @endif
+                                        @endif    
+                                        >
+                                            {{$response_community_by_api[$i]['community_name']}}
+                                        </option>
+                                        @endif
+                                    @endforeach
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-sm-12 col-xl-6 xl-100">
             <div class="card">
@@ -44,13 +76,13 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <a class="btn btn-primary active" href="{{route('report.self')}}">
+                            <a class="btn btn-light " href="{{route('report.self-assessment')}}">
                                 ประเมินตนเอง
                             </a>
-                            {{-- <a class="btn btn-light" href="{{route('report.committee')}}">
+                            <a class="btn btn-primary active" href="{{route('report.evaluation-committee')}}">
                                 กรรมการประเมิน
                             </a>
-                            <a class="btn btn-light" href="">
+                            {{-- <a class="btn btn-light" href="">
                                 สรุปผลการประเมิน
                             </a> --}}
                         </div>
@@ -122,5 +154,30 @@
 @endsection
 
 @push('scripts')
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
+    $(document).ready(function(){
+
+        $('#evaluate_community').change(function(){           
+            $.ajax({
+                type: 'post',
+                url: "{{ route('evaluate.save-community') }}",
+                data: {
+                    evaluate_community:  $('#evaluate_community').val()
+                },
+                success: (response) => {
+                    if(response.status == 1){
+                        window.location.reload();
+                    }
+                },
+            });
+        });
+
+    });
+</script>
 @endpush

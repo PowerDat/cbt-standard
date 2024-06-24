@@ -18,6 +18,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Report\CommitteeReportController;
 use App\Http\Controllers\Report\CommunityReportController;
+use App\Http\Controllers\Report\ResearcherReportController;
 
 Route::get('/', [AuthController::class, 'login'])->name('auth.login');
 Route::post('auth/post-login', [AuthController::class, 'postLogin'])->name('auth.post-login'); 
@@ -74,6 +75,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('report/committee/index', [CommitteeReportController::class, 'index'])->name('report.committee.index');
     Route::post('report/committee/get-result', [CommitteeReportController::class, 'getResult'])->name('report.committee.get-result');
     Route::get('report/committee/summary', [CommitteeReportController::class, 'summary'])->name('report.committee.summary');
+    //report researcher
+    Route::get('report/researcher/index', [ResearcherReportController::class, 'index'])->name('report.researcher.index');
+    Route::post('report/researcher/get-result', [ResearcherReportController::class, 'getResult'])->name('report.researcher.get-result');
+    Route::get('report/researcher/summary', [ResearcherReportController::class, 'summary'])->name('report.researcher.summary');
 
     //จัดการผู้ใช้งาน
     Route::resource('user', UserController::class);

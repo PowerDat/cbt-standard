@@ -200,6 +200,18 @@ class UserController extends Controller
                     ");
                 }
             }
+            else
+            {
+                DB::select("DELETE FROM user_community WHERE users_id = $id");
+                
+                foreach($request->community as $value)
+                {
+                    DB::select("
+                    INSERT INTO user_community (users_id, community_id)
+                    VALUES ($id, $value);
+                    ");
+                }
+            }
 
             return response()->json([
                 'status' => 1,
