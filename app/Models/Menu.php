@@ -18,4 +18,8 @@ class Menu extends Model
     {
         return $this->hasMany(SubMenu::class, 'menu_id')->where('sub_menu_status', 'Y')->orderBy('sub_menu_order', 'asc');
     }
+
+    public function permission() {
+        return $this->belongsTo(Permission::class);
+    }
 }

@@ -17,4 +17,8 @@ class SubMenu extends Model
     {
         return $this->belongsTo(Menu::class, 'menu_id');
     }
+
+    public function permission() {
+        return $this->belongsTo(Permission::class);
+    }
 }

@@ -23,7 +23,7 @@
 <div class="container-fluid">
     <div class="row">
 
-        <div class="col-sm-12 col-xl-6 xl-100">
+        <div class="col-sm-12">
             <div class="card">
                 <div class="card-header pb-0">
                     <h5>สรุปรายงานการประเมินตามเกณฑ์มาตรฐาน : @if (session()->has('community_name')) {{session()->get('community_name')}} @endif</h5>
@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-xl-6 xl-100">
+        <div class="col-sm-12">
             <div class="card">
     
                 <div class="card-body">

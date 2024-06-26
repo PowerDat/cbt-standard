@@ -6,6 +6,7 @@ use App\Models\Menu;
 use App\Models\Role;
 use App\Models\UserRole;
 use App\Models\Permission;
+use App\Models\SubMenu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -190,22 +191,37 @@ class RoleController extends Controller
             $action = ($explode[0]);
 
             $str_view = str_replace('view-', '', $value);
-            $str_create = str_replace('create-', '', $value);
-            $str_update = str_replace('update-', '', $value);
-            $str_delete = str_replace('delete-', '', $value);
+            // $str_create = str_replace('create-', '', $value);
+            // $str_update = str_replace('update-', '', $value);
+            // $str_delete = str_replace('delete-', '', $value);
 
             if($str_view != ""){
                 $permission->route = $str_view;
+
+                $menu = Menu::select('menu_id')->where('menu_route', $str_view)->get();
+                if($menu->count() > 0)
+                {
+                    $permission->menu_id = $menu[0]->menu_id;
+                }
+                
+                $sub_menu = SubMenu::select('menu_id', 'sub_menu_id')->where('sub_menu_route', $str_view)->get();
+                if($sub_menu->count() > 0)
+                {
+                    $permission->menu_id = $sub_menu[0]->menu_id;
+                    $permission->sub_menu_id = $sub_menu[0]->sub_menu_id;
+                }
+                
+
             }
-            elseif ($str_create != "") {
-                $permission->route = $str_create;
-            }
-            elseif ($str_update != "") {
-                $permission->route = $str_update;
-            }
-            elseif ($str_delete != "") {
-                $permission->route = $str_delete;
-            }
+            // elseif ($str_create != "") {
+            //     $permission->route = $str_create;
+            // }
+            // elseif ($str_update != "") {
+            //     $permission->route = $str_update;
+            // }
+            // elseif ($str_delete != "") {
+            //     $permission->route = $str_delete;
+            // }
             
             $permission->action = $action;
 

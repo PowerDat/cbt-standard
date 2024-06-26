@@ -37,6 +37,15 @@ class Helper
 
         return $response_community_by_api;
     }
+
+    public static function hasPermission($permission, $role)
+    {
+        $data = DB::select("
+            select count(*) from permission_role where permission_id = $permission and role_id = $role
+        ");
+
+        return $data;
+    }
 }
 
 ?>

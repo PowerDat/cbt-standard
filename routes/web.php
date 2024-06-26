@@ -14,6 +14,8 @@ use App\Http\Controllers\PartTypeController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PartDetailController;
+use App\Http\Controllers\PartTargetController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Report\CommitteeReportController;
@@ -104,6 +106,15 @@ Route::middleware(['auth', 'role:administrator'])->group(function(){
     Route::get('part/createByPartTypeId/{id?}', [PartController::class, 'createByPartTypeId'])->name('part.createByPartTypeId');
     Route::post('part/delete', [PartController::class, 'delete'])->name('part.delete');
     Route::resource('part', PartController::class);
+    Route::get('part-target/createByPartId/{id?}', [PartTargetController::class, 'createByPartId'])->name('part-target.createByPartId');
+    Route::resource('part-target', PartTargetController::class);
+    Route::post('part-target/delete', [PartTargetController::class, 'delete'])->name('part-target.delete');
+
+    Route::get('part-detail/createByTargetId/{id?}', [PartDetailController::class, 'createByTargetId'])->name('part-detail.createByTargetId');
+    Route::resource('part-detail', PartDetailController::class);
+    Route::post('part-detail/delete', [PartDetailController::class, 'delete'])->name('part-detail.delete');
+    Route::post('part-detail/fetchPartTargetById', [PartDetailController::class, 'fetchPartTargetById'])->name('part-detail.fetchPartTargetById');
+    Route::post('part-detail/saveTargetSub', [PartDetailController::class, 'saveTargetSub'])->name('part-detail.saveTargetSub');
 
     // ตั้งค่าระบบ
     Route::resource('role', RoleController::class);

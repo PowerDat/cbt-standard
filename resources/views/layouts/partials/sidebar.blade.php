@@ -1,3 +1,20 @@
+@php
+use App\Helper\Helper;
+use App\Models\Permission;
+
+$role_id = "";
+foreach (Auth::user()->roles as $key => $value) {
+$role_id = $value->id;
+}
+
+$permissions = DB::select("
+select menu_id, sub_menu_id
+from permissions
+INNER JOIN permission_role ON permissions.id = permission_role.permission_id
+WHERE action = 'view' AND permission_role.role_id = $role_id
+");
+@endphp
+
 <!-- Page Sidebar Start-->
 <header class="main-nav mt-2">
     <nav>
@@ -12,29 +29,42 @@
                     </li>
 
                     @foreach ($menus as $item)
-                    @if (count($item->submenus) > 0)
-                    <li class="dropdown">
-                        <a class="nav-link menu-title" href="{{ $item->menu_route }}">
-                            <i class="fa fa-circle-o"></i> <span>{{$item->menu_name}}</span>
+                        @if (count($item->submenus) > 0)
+                        <li class="dropdown">
+                            {{-- @foreach ($permissions as $permission) --}}
+                                    {{-- @if ($permission->menu_id == $item->menu_id) --}}
+                                    <a class="nav-link menu-title" href="javascript:void(0)">
+                                        <i class="fa fa-circle-o"></i> <span>{{$item->menu_name}}</span>
+                                    </a>
+                                    {{-- @endif --}}
+                            {{-- @endforeach --}}
 
-                        </a>
-                        <ul class="nav-submenu menu-content" id="menu-content">
-                            @foreach ($item->submenus as $submenu)
-                            <li>
-                                <a href="{{route($submenu->sub_menu_route)}}" id="nav-sub-menu">
-                                    <i class="fa fa-angle-right"></i> <span>{{$submenu->sub_menu_name}}</span>
+                            <ul class="nav-submenu menu-content" id="menu-content">
+                                @foreach ($item->submenus as $submenu)
+                                    @foreach ($permissions as $permission)
+                                        @if ($permission->sub_menu_id == $submenu->sub_menu_id)
+                                        <li>
+                                            <a href="{{route($submenu->sub_menu_route)}}" id="nav-sub-menu">
+                                                <i class="fa fa-angle-right"></i> <span>{{$submenu->sub_menu_name}}</span>
+                                            </a>
+                                        </li>
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            </ul>
+                        </li>
+                        @else
+                        {{-- check permission role --}}
+                        <li class="dropdown">
+                            @foreach ($permissions as $permission)
+                                @if ($permission->menu_id == $item->menu_id)
+                                <a class="nav-link menu-title link-nav" href="{{ route($item->menu_route) }}">
+                                    <i class="fa fa-circle-o"></i> <span>{{$item->menu_name}}</span>
                                 </a>
-                            </li>
+                                @endif
                             @endforeach
-                        </ul>
-                    </li>
-                    @else
-                    <li class="dropdown">
-                        <a class="nav-link menu-title link-nav" href="{{ route($item->menu_route) }}">
-                            <i class="fa fa-circle-o"></i> <span>{{$item->menu_name}}</span>
-                        </a>
-                    </li>
-                    @endif
+                        </li>
+                        @endif
                     @endforeach
 
                     <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>
@@ -53,7 +83,7 @@
     });
 
     $(document).ready(function() {
-        $("#menu-content").css("display", "block");
+        
     });
 </script>
 @endpush
