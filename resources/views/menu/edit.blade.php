@@ -188,5 +188,50 @@
             });
         });
     });
+
+    function deleteById(id)
+    {
+        Swal.fire({
+            title: "ต้องการลบข้อมูลหรือไม่?",
+            showCancelButton: true,
+            confirmButtonText: "ลบข้อมูล",
+            cancelButtonText: `ยกเลิก`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'post',
+                    url: "{{ route('sub-menu.delete') }}",
+                    data: {
+                        sub_menu_id: id,
+                    },
+                    success: (result) => {
+                        if(result.status == 0){
+                            Swal.fire({
+                                title: 'ไม่สำเร็จ',
+                                text: result.msg,
+                                icon: 'error',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 5000
+                            });
+                        }
+                        else{
+                            Swal.fire({
+                                title: 'สำเร็จ',
+                                text: result.msg,
+                                icon: 'success',
+                                width: '450px',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+
+                            window.location.reload();
+                        }
+                    },
+                });
+            } 
+        });
+    }
+
 </script>
 @endpush

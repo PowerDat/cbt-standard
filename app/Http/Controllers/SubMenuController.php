@@ -154,4 +154,21 @@ class SubMenuController extends Controller
     {
         //
     }
+
+    public function delete(Request $request)
+    {
+        $id = $request->sub_menu_id;
+
+        $submenu = SubMenu::find($id);
+
+        if($submenu->count() > 0)
+        {
+            $submenu->delete();
+
+            return response()->json([
+                'status' => 1,
+                'msg' => 'ลบข้อมูลสำเร็จ',
+            ]);
+        }
+    }
 }

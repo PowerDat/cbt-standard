@@ -1,17 +1,18 @@
 @php
-use App\Helper\Helper;
 use App\Models\Permission;
 
 $role_id = "";
+
 foreach (Auth::user()->roles as $key => $value) {
-$role_id = $value->id;
+    $role_id = $value->id;
 }
 
 $permissions = DB::select("
 select menu_id, sub_menu_id
 from permissions
 INNER JOIN permission_role ON permissions.id = permission_role.permission_id
-WHERE action = 'view' AND permission_role.role_id = $role_id
+WHERE permission_role.role_id = $role_id
+ORDER BY menu_id, sub_menu_id asc
 ");
 @endphp
 
@@ -30,35 +31,38 @@ WHERE action = 'view' AND permission_role.role_id = $role_id
 
                     @foreach ($menus as $item)
                         @if (count($item->submenus) > 0)
-                        <li class="dropdown">
-                            {{-- @foreach ($permissions as $permission) --}}
-                                    {{-- @if ($permission->menu_id == $item->menu_id) --}}
+                            <li class="dropdown">
+                                    
+                                @for ($i=0; $i < count($permissions); $i++)
+                                    @if ($permissions[$i]->sub_menu_id != "" && $i == 0)
                                     <a class="nav-link menu-title" href="javascript:void(0)">
                                         <i class="fa fa-circle-o"></i> <span>{{$item->menu_name}}</span>
                                     </a>
-                                    {{-- @endif --}}
-                            {{-- @endforeach --}}
+                                    @endif
+                                @endfor
 
-                            <ul class="nav-submenu menu-content" id="menu-content">
-                                @foreach ($item->submenus as $submenu)
-                                    @foreach ($permissions as $permission)
-                                        @if ($permission->sub_menu_id == $submenu->sub_menu_id)
-                                        <li>
-                                            <a href="{{route($submenu->sub_menu_route)}}" id="nav-sub-menu">
-                                                <i class="fa fa-angle-right"></i> <span>{{$submenu->sub_menu_name}}</span>
-                                            </a>
-                                        </li>
-                                        @endif
+                                <ul class="nav-submenu menu-content">
+                                    @foreach ($item->submenus as $submenu)
+                                        @foreach ($permissions as $permission)
+                                            @if ($permission->sub_menu_id == $submenu->sub_menu_id)
+                                            <li>
+                                                <a href="{{route($submenu->sub_menu_route)}}" 
+                                                    class="{{ (request()->route()->getName() == $submenu->sub_menu_route) ? 'active' : '' }}">
+                                                    <i class="fa fa-angle-right"></i> <span>{{$submenu->sub_menu_name}}</span>
+                                                </a>
+                                            </li>
+                                            @endif
+                                        @endforeach
                                     @endforeach
-                                @endforeach
-                            </ul>
-                        </li>
+                                </ul>
+                            </li> 
                         @else
-                        {{-- check permission role --}}
                         <li class="dropdown">
                             @foreach ($permissions as $permission)
                                 @if ($permission->menu_id == $item->menu_id)
-                                <a class="nav-link menu-title link-nav" href="{{ route($item->menu_route) }}">
+                                <a class="nav-link menu-title link-nav 
+                                {{ (request()->route()->getName() == $item->menu_route) ? 'active' : '' }}" 
+                                href="{{ route($item->menu_route) }}">
                                     <i class="fa fa-circle-o"></i> <span>{{$item->menu_name}}</span>
                                 </a>
                                 @endif

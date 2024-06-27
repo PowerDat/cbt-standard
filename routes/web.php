@@ -138,18 +138,9 @@ Route::middleware(['auth', 'role:administrator'])->group(function(){
     Route::resource('menu', MenuController::class);
     Route::get('sub-menu/createByMenuId/{id?}', [SubMenuController::class, 'createByMenuId'])->name('sub-menu.createByMenuId');
     Route::resource('sub-menu', SubMenuController::class);
+    Route::post('sub-menu/delete', [SubMenuController::class, 'delete'])->name('sub-menu.delete');
 
     Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index'])->name('logs');
 });
 
-// Route::middleware(['auth', 'role:researcher', 'role:administrator'])->group(function(){
-//     //จัดการผู้ใช้งาน
-//     Route::resource('user', UserController::class);
-//     Route::post('user/delete', [UserController::class, 'delete'])->name('user.delete');
-//     Route::get('user/change-password/{id?}', [UserController::class, 'changePassword'])->name('user.change-password');
-//     Route::post('user/save-change-password', [UserController::class, 'saveChangePassword'])->name('user.save-change-password');
 
-//     Route::get('user-profile/createById/{id?}', [UserProfileController::class, 'createById'])->name('user-profile.createById');
-//     Route::resource('user-profile', UserProfileController::class);
-//     Route::post('user-profile/delete', [UserProfileController::class, 'delete'])->name('user-profile.delete');
-// });

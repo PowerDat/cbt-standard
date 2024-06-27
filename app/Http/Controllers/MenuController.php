@@ -36,13 +36,12 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'menu_order' => 'required|unique:menu|numeric|min:1',
+            'menu_order' => 'required|numeric|min:1',
             'menu_name' => 'required',
             'menu_route' => 'required',
             'menu_status' => 'required',
         ], [
             'menu_order.required' => 'กรอกลำดับเมนู',
-            'menu_order.unique' => 'ลำดับเมนูมีอยู่แล้วในระบบ(ห้ามซ้ำ)',
             'menu_order.numeric' => 'ลำดับเมนูต้องเป็นตัวเลขเท่านั้น',
             'menu_order.min' => 'ลำดับเมนูห้ามต่ำกว่า 1',
             'menu_name.required' => 'กรอกชื่อเมนู',
