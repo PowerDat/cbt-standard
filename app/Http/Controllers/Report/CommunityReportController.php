@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Report;
 
+use PDF;
 use App\Models\Part;
+use App\Helper\Helper;
 use App\Models\PartTarget;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Carbon;
-use PDF;
 
 class CommunityReportController extends Controller
 {
@@ -128,24 +129,117 @@ class CommunityReportController extends Controller
 
     public function committee()
     {
-        if (session()->has('community_name')) {
-            $community_name = session()->get('community_name');
+        
+
+        $parts = Part::all();
+        $part_target_first = PartTarget::where('part_id', 1)->get();
+        $part_target_second = PartTarget::where('part_id', 2)->get();
+        $part_target_third = PartTarget::where('part_id', 3)->get();
+        $part_target_fourth = PartTarget::where('part_id', 4)->get();
+        $part_target_fifth = PartTarget::where('part_id', 5)->get();
+
+        /* ----- ด้าน 1 ----- */
+        $score_first = $this->getScoreCommittee(1);
+
+        $total_first = 0;
+        $arrLabels_first = [];
+        $arrSumScore_first = [];
+
+        foreach ($score_first as $value) {
+            $total_first += $value->sum_score;
+
+            array_push($arrLabels_first, $value->part_target_order);
+            array_push($arrSumScore_first, $value->sum_score);
         }
 
-        $users = DB::select("
-        SELECT 
-            user_role.user_id
-            , CONCAT(user_profile.user_profile_name, ' ', user_profile.user_profile_lastname) AS full_name
-        FROM appraisal_transaction 
-        INNER JOIN user_role ON appraisal_transaction.created_by = user_role.user_id
-        INNER JOIN user_profile ON user_role.user_id = user_profile.user_id
-        WHERE appraisal_transaction.appraisal_transaction_status = 2
-            AND appraisal_transaction.community_name = '$community_name' 
-            AND user_role.role_id = 5
-        ");
+        $data_first = $this->dataArr($arrLabels_first, $arrSumScore_first);
 
+        /* ----- ด้าน 2 ----- */
+        $score_second = $this->getScoreCommittee(2);
+
+        $total_second = 0;
+        $arrLabels_second = [];
+        $arrSumScore_second = [];
+
+        foreach ($score_second as $value) {
+            $total_second += $value->sum_score;
+
+            array_push($arrLabels_second, $value->part_target_order);
+            array_push($arrSumScore_second, $value->sum_score);
+        }
+
+        $data_second = $this->dataArr($arrLabels_second, $arrSumScore_second);
+
+        /* ----- ด้าน 3 ----- */
+        $score_third = $this->getScoreCommittee(3);
+
+        $total_third = 0;
+        $arrLabels_third = [];
+        $arrSumScore_third = [];
+
+        foreach ($score_third as $value) {
+            $total_third += $value->sum_score;
+
+            array_push($arrLabels_third, $value->part_target_order);
+            array_push($arrSumScore_third, $value->sum_score);
+        }
+
+        $data_third = $this->dataArr($arrLabels_third, $arrSumScore_third);
+
+        /* ----- ด้าน 4 ----- */
+        $score_fourth = $this->getScoreCommittee(4);
+
+        $total_fourth = 0;
+        $arrLabels_fourth = [];
+        $arrSumScore_fourth = [];
+
+        foreach ($score_fourth as $value) {
+            $total_fourth += $value->sum_score;
+
+            array_push($arrLabels_fourth, $value->part_target_order);
+            array_push($arrSumScore_fourth, $value->sum_score);
+        }
+
+        $data_fourth = $this->dataArr($arrLabels_fourth, $arrSumScore_fourth);
+
+        /* ----- ด้าน 5 ----- */
+        $score_fifth = $this->getScoreCommittee(5);
+
+        $total_fifth = 0;
+        $arrLabels_fifth = [];
+        $arrSumScore_fifth = [];
+
+        foreach ($score_fifth as $value) {
+            $total_fifth += $value->sum_score;
+
+            array_push($arrLabels_fifth, $value->part_target_order);
+            array_push($arrSumScore_fifth, $value->sum_score);
+        }
+
+        $data_fifth = $this->dataArr($arrLabels_fifth, $arrSumScore_fifth);
+        
         return view('report.community.committee', [
-            'users' => $users,
+            'parts' => $parts,
+            'part_target_first' => $part_target_first,
+            'total_first' => $total_first,
+            'score_first' => $score_first,
+            'data_first' => $data_first,
+            'part_target_second' => $part_target_second,
+            'total_second' => $total_second,
+            'score_second' => $score_second,
+            'data_second' => $data_second,
+            'part_target_third' => $part_target_third,
+            'total_third' => $total_third,
+            'score_third' => $score_third,
+            'data_third' => $data_third,
+            'part_target_fourth' => $part_target_fourth,
+            'total_fourth' => $total_fourth,
+            'score_fourth' => $score_fourth,
+            'data_fourth' => $data_fourth,
+            'part_target_fifth' => $part_target_fifth,
+            'total_fifth' => $total_fifth,
+            'score_fifth' => $score_fifth,
+            'data_fifth' => $data_fifth,
         ]);
     }
 
@@ -178,7 +272,7 @@ class CommunityReportController extends Controller
         $part_target_fifth = PartTarget::where('part_id', 5)->get();
 
         /* ----- ด้าน 1 ----- */
-        $score_first = $this->getScoreCommittee(1, $user_id);
+        $score_first = $this->getScoreCommittee(1);
 
         $total_first = 0;
         $arrLabels_first = [];
@@ -194,7 +288,7 @@ class CommunityReportController extends Controller
         $data_first = $this->dataArr($arrLabels_first, $arrSumScore_first);
 
         /* ----- ด้าน 2 ----- */
-        $score_second = $this->getScoreCommittee(2, $user_id);
+        $score_second = $this->getScoreCommittee(2);
 
         $total_second = 0;
         $arrLabels_second = [];
@@ -210,7 +304,7 @@ class CommunityReportController extends Controller
         $data_second = $this->dataArr($arrLabels_second, $arrSumScore_second);
 
         /* ----- ด้าน 3 ----- */
-        $score_third = $this->getScoreCommittee(3, $user_id);
+        $score_third = $this->getScoreCommittee(3);
 
         $total_third = 0;
         $arrLabels_third = [];
@@ -226,7 +320,7 @@ class CommunityReportController extends Controller
         $data_third = $this->dataArr($arrLabels_third, $arrSumScore_third);
 
         /* ----- ด้าน 4 ----- */
-        $score_fourth = $this->getScoreCommittee(4, $user_id);
+        $score_fourth = $this->getScoreCommittee(4);
 
         $total_fourth = 0;
         $arrLabels_fourth = [];
@@ -242,7 +336,7 @@ class CommunityReportController extends Controller
         $data_fourth = $this->dataArr($arrLabels_fourth, $arrSumScore_fourth);
 
         /* ----- ด้าน 5 ----- */
-        $score_fifth = $this->getScoreCommittee(5, $user_id);
+        $score_fifth = $this->getScoreCommittee(5);
 
         $total_fifth = 0;
         $arrLabels_fifth = [];
@@ -336,8 +430,9 @@ class CommunityReportController extends Controller
         }
     }
 
-    public function getScoreCommittee($part_id, $user_id)
+    public function getScoreCommittee($part_id)
     {
+        $community_id = "";
         $community_name = "";
         $score = "";
 
@@ -345,20 +440,33 @@ class CommunityReportController extends Controller
             $community_name = session()->get('community_name');
         }
 
+        if (session()->has('session_community_by_select_option')) {
+            $community_name = session()->get('session_community_by_select_option');
+        }
+
+        $response_community_by_api = Helper::getCommunityByApi();;//ข้อมูลชุมชนที่มาจาก 
+
+        for ($i=0; $i < count($response_community_by_api); $i++) { 
+            if($community_name == $response_community_by_api[$i]['community_name'])
+            {
+                $community_id = $response_community_by_api[$i]['community_id'];
+            }
+        }
+
         $score = DB::select("
-            SELECT part_target.part_target_id
+        SELECT 
+            sum(appraisal_score_score) AS total_score
+            , COUNT(appraisal_score.part_target_id) AS count_target
             , part_target.part_target_order
-                , part_target.part_target_name
-                , sum(appraisal_score_score) / COUNT(appraisal_score.part_target_id) AS sum_score
-            FROM part_target
-            LEFT JOIN appraisal_score ON part_target.part_target_id = appraisal_score.part_target_id
-            INNER JOIN appraisal_transaction ON part_target.part_target_id = appraisal_transaction.part_target_id 
-            WHERE part_id = $part_id
-                AND appraisal_transaction.community_name =  '$community_name'
-                AND appraisal_transaction_status = 2
-                AND appraisal_transaction.created_by = $user_id
-                AND appraisal_score.created_by = $user_id
-            GROUP BY  part_target.part_target_id, part_target.part_target_order, part_target.part_target_name
+            , part_target.part_target_name
+            , sum(appraisal_score_score) / COUNT(appraisal_score.part_target_id) AS sum_score
+        FROM appraisal_score 
+        INNER JOIN user_role ON appraisal_score.created_by = user_role.user_id
+        LEFT JOIN part_target ON part_target.part_target_id = appraisal_score.part_target_id
+        WHERE community_id = $community_id
+            AND user_role.role_id = 5
+            AND part_id = $part_id
+        GROUP BY part_target.part_target_order, part_target.part_target_name
         ");
 
         return $score;

@@ -145,10 +145,8 @@
                                                 $value = DB::select("   
                                                     SELECT sum(appraisal_score_score) as score 
                                                     FROM appraisal_score 
-                                                    INNER JOIN appraisal_transaction ON appraisal_score.part_target_id = appraisal_transaction.part_target_id
                                                     WHERE appraisal_score.part_target_id = $item->part_target_id 
-                                                        AND appraisal_transaction.appraisal_transaction_status = 2
-                                                        AND appraisal_transaction.community_name = '$community_name'
+                                                        AND appraisal_score.community_id = '$community_id'
                                                         AND appraisal_score.created_by = $user_id
                                                 ");
 

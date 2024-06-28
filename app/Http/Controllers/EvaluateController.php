@@ -94,15 +94,24 @@ class EvaluateController extends Controller
         {
             $community_name = session()->get('session_community_by_select_option');
         }
-        
+
+        $community_id = "";
+        if(session()->has('session_community_id_by_api'))
+        {
+            $community_id = session()->get('session_community_id_by_api');
+        }
+        elseif(session()->has('session_community_id_by_select_option'))
+        {
+            $community_id = session()->get('session_community_id_by_select_option');
+        }
+
         return view('evaluate.target', [
             'part' => $part,
             'part_target' => $part_target,
             'part_type_name' => $part_type_name,
             'community_name' => $community_name,
             'user_id' => $user_id,
-            // 'status' => $status,
-            // 'score' => $score,
+            'community_id' => $community_id,
         ]);
     }
 

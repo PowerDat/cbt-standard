@@ -22,7 +22,7 @@
                                     <div class="col-sm-4">
                                         <input class="form-control" type="text" value="{{ ($user_profile->count() > 0) ? $user_profile[0]->user_profile_name : '' }}" readonly>
                                     </div>
-                                    <label class="col-sm-2 col-form-label">นามสกุล</label>
+                                    <label class="col-sm-2 col-form-label text-end">นามสกุล</label>
                                     <div class="col-sm-4">
                                         <input class="form-control" type="text" value="{{ ($user_profile->count() > 0) ? $user_profile[0]->user_profile_lastname : '' }}" readonly>
                                     </div>
@@ -37,7 +37,7 @@
                                     <div class="col-sm-4">
                                         <input class="form-control" type="text" value="{{Auth::user()->email}}" readonly>
                                     </div>
-                                    <label class="col-sm-2 col-form-label">เบอร์</label>
+                                    <label class="col-sm-2 col-form-label text-end">เบอร์</label>
                                     <div class="col-sm-4">
                                         <input class="form-control" type="text" value="{{ ($user_profile->count() > 0) ? $user_profile[0]->user_profile_tel : '' }}" readonly>
                                     </div>

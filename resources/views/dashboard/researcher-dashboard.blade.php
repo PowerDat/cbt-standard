@@ -21,7 +21,7 @@
                                     <div class="col-sm-4">
                                         <input class="form-control" type="text" value="{{session()->get('user_name')}}" readonly>
                                     </div>
-                                    <label class="col-sm-2 col-form-label">นามสกุล</label>
+                                    <label class="col-sm-2 col-form-label text-end">นามสกุล</label>
                                     <div class="col-sm-4">
                                         <input class="form-control" type="text" value="{{session()->get('user_surname')}}" readonly>
                                     </div>

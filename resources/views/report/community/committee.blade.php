@@ -39,7 +39,7 @@
                                 กรรมการประเมิน
                             </a>
                             <a class="btn btn-light" href="{{route('report.community.summary')}}">
-                                สรุปผลการประเมิน
+                                รายละเอียดการตรวจประเมิน
                             </a>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
             <div class="card">
                 <div class="card-body">
 
-                    <form method="POST" action="{{route('report.community.evaluation-committee')}}">
+                    {{-- <form method="POST" action="{{route('report.community.evaluation-committee')}}">
                         @csrf
                         <div class="row">
                             <div class="col-sm-2">
@@ -77,9 +77,9 @@
                                 <button type="submit" class="btn btn-primary">ค้นหา</button>
                             </div>
                         </div>
-                    </form>
+                    </form> --}}
 
-                    @if (isset($parts))
+                    {{-- @if (isset($parts)) --}}
                     <div class="row mt-5">
                         <div class="col-sm-12">
                             <ul class="nav nav-tabs nav-primary" id="pills-warningtab" role="tablist">
@@ -135,7 +135,7 @@
                             </div>
                         </div>
                     </div>
-                    @endif
+                    {{-- @endif --}}
 
                 </div>
             </div>

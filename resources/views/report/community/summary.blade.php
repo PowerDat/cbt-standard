@@ -39,7 +39,7 @@
                                 กรรมการประเมิน
                             </a>
                             <a class="btn btn-primary active" href="{{route('report.community.summary')}}">
-                                สรุปผลการประเมิน
+                                รายละเอียดการตรวจประเมิน
                             </a>
                         </div>
                     </div>
