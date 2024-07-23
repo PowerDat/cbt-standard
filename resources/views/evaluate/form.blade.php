@@ -61,6 +61,7 @@
                             @foreach ($part_target_sub as $target_sub)
 
                                 @for ($i=1; $i <= count($part_target_sub); $i++)
+                                {{-- {{dd(count($part_target_sub))}} --}}
                                     @if ($target_sub->part_target_sub_order == ($i + $part_target_sub[0]->part_target_sub_order - 1))
                                     <div class="setup-content" id="step-{{$i}}">
                                         <div class="row mt-3">
@@ -305,11 +306,14 @@
 
             let count = "{{count($part_target_sub)}}";
 
-            $('#btn-step-1').removeClass( "btn-primary btn" ).addClass( "btn-primary btn btn-light" );
-            $('#btn-step-' + count).removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
+            if(count > 1){
+                $('#btn-step-1').removeClass( "btn-primary btn" ).addClass( "btn-primary btn btn-light" );
+                $('#btn-step-' + count).removeClass( "btn-primary btn btn-light" ).addClass( "btn-primary btn" );
 
-            $('#step-1').css('display', 'block');
-            $('#step-' + count).css('display', 'none');
+                $('#step-1').css('display', 'block');
+                $('#step-' + count).css('display', 'none');
+            }
+            
 
         });
 

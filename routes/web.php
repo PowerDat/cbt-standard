@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
+// use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PartController;
 use App\Http\Controllers\RoleController;
@@ -29,7 +29,7 @@ Route::get('auth/logout', [AuthController::class, 'logout'])->name('auth.logout'
 Auth::routes();
 
 Route::middleware(['auth'])->group(function(){
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    // Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::prefix('dashboard')->name('dashboard.')->group(function(){
         Route::get('/community', [DashboardController::class, 'community'])->name('community');
@@ -37,12 +37,6 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/researcher', [DashboardController::class, 'researcher'])->name('researcher');
         Route::get('/committee', [DashboardController::class, 'committee'])->name('committee');
     });
-
-    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    // Route::get('/dashboard/community', [DashboardController::class, 'community'])->name('dashboard.community');
-    // Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
-    // Route::get('/dashboard/researcher', [DashboardController::class, 'researcher'])->name('dashboard.researcher');
-    // Route::get('/dashboard/committee', [DashboardController::class, 'committee'])->name('dashboard.committee');
     
     //เกณฑ์มาตรฐาน
     Route::get('evaluate', [EvaluateController::class, 'index'])->name('evaluate.index');
@@ -124,16 +118,6 @@ Route::middleware(['auth', 'role:administrator'])->group(function(){
 
     Route::resource('permission', PermissionController::class);
     Route::post('permission/delete', [PermissionController::class, 'delete'])->name('permission.delete');
-
-    //จัดการผู้ใช้งาน
-    // Route::resource('user', UserController::class);
-    // Route::post('user/delete', [UserController::class, 'delete'])->name('user.delete');
-    // Route::get('user/change-password/{id?}', [UserController::class, 'changePassword'])->name('user.change-password');
-    // Route::post('user/save-change-password', [UserController::class, 'saveChangePassword'])->name('user.save-change-password');
-
-    // Route::get('user-profile/createById/{id?}', [UserProfileController::class, 'createById'])->name('user-profile.createById');
-    // Route::resource('user-profile', UserProfileController::class);
-    // Route::post('user-profile/delete', [UserProfileController::class, 'delete'])->name('user-profile.delete');
 
     Route::resource('menu', MenuController::class);
     Route::get('sub-menu/createByMenuId/{id?}', [SubMenuController::class, 'createByMenuId'])->name('sub-menu.createByMenuId');
