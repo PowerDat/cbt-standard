@@ -20,3 +20,4 @@ yarn-error.log
 composer.lock
 /public/uploads
 config/database.php
+composer.lock

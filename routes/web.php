@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function(){
     // Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::prefix('dashboard')->name('dashboard.')->group(function(){
-        Route::get('/community', [DashboardController::class, 'community'])->name('community');
+        Route::get('/ ', [DashboardController::class, 'community'])->name('community');
         Route::get('/admin', [DashboardController::class, 'admin'])->name('admin');
         Route::get('/researcher', [DashboardController::class, 'researcher'])->name('researcher');
         Route::get('/committee', [DashboardController::class, 'committee'])->name('committee');
